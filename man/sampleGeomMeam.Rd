@@ -4,12 +4,12 @@
 \alias{sampleGeomMeam}
 \title{samples from the log() of the geometric mean.}
 \usage{
-sampleGeomMeam(samples, count_sample)
+sampleGeomMeam(samples, count_sample, log_transformed = T)
 }
 \arguments{
 \item{samples}{An integer. How many samples should be taken}
 
-\item{count_samples}{A vector of count data.}
+\item{count_sample}{A vector of count data.}
 }
 \description{
 samples from the log() of the geometric mean.
