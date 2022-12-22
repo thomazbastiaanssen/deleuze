@@ -44,3 +44,50 @@ sampleCLR(1000, data) %>%
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](README_files/figure-gfm/distributions-2.png)<!-- -->
+
+``` r
+#Mean can be estimated:
+#observed
+mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
+```
+
+    ## [1] -8.644785
+
+``` r
+#estimated
+mean(getBetaMeans(data, log_transformed = T))
+```
+
+    ## [1] -8.645706
+
+``` r
+#Standard deviation less so 
+#observed
+sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
+```
+
+    ## [1] 0.08548483
+
+``` r
+#estimated
+mean(sqrt(getBetaVars(data, log_transformed = T)))
+```
+
+    ## [1] 0.8336614
+
+``` r
+#comparing the distributions
+#observed
+hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2, -8))
+```
+
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-1.png)<!-- -->
+
+``` r
+#estimated
+hist(rnorm(n = 10000, 
+           mean = mean(getBetaMeans(data, log_transformed = T)), 
+           sd = mean(sqrt(getBetaVars(data, log_transformed = T)))), xlim =c(-12,  -5.5))
+```
+
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
