@@ -4,6 +4,8 @@
 #' @param samples An integer. How many samples should be taken
 #' @param k An integer. How many counts were observerd
 #' @param n An integer. How many obserations were made
+#' 
+#' @export
 #'
 sampleBetaBinom <- function(samples, k, n){
   #wrap around rbeta for the special case of Binom()
@@ -14,6 +16,9 @@ sampleBetaBinom <- function(samples, k, n){
 #'
 #' @param samples An integer. How many samples should be taken
 #' @param count_samples A vector of count data.
+#' 
+#' @export
+#' 
 sampleGeomMeam <- function(samples, count_sample){
   #Make a matrix with resamples for each feature.
   sample_list = sapply(count_sample, FUN = function(x){sampleBetaBinom(samples = samples, k = x, n = sum(data))}, simplify = T)
