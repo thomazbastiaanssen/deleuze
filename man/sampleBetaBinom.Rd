@@ -4,10 +4,10 @@
 \alias{sampleBetaBinom}
 \title{samples from the probability density function of a feature in count data.}
 \usage{
-sampleBetaBinom(samples, k, n)
+sampleBetaBinom(draws, k, n)
 }
 \arguments{
-\item{samples}{An integer. How many samples should be taken}
+\item{draws}{An integer. How many samples should be taken}
 
 \item{k}{An integer. How many counts were observerd}
 

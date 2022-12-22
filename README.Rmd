@@ -37,3 +37,28 @@ sampleCLR(1000, data) %>%
 
 ```
 
+
+```{r estimation of the geometric mean}
+
+#Mean can be estimated:
+#observed
+mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
+#estimated
+mean(getBetaMeans(data, log_transformed = T))
+
+#Standard deviation less so 
+#observed
+sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
+#estimated
+mean(sqrt(getBetaVars(data, log_transformed = T)))
+
+#comparing the distributions
+#observed
+hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2, -8))
+
+#estimated
+hist(rnorm(n = 10000, 
+           mean = mean(getBetaMeans(data, log_transformed = T)), 
+           sd = mean(sqrt(getBetaVars(data, log_transformed = T)))), xlim =c(-12,  -5.5))
+
+```

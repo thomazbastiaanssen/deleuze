@@ -1,7 +1,7 @@
 #' samples from the probability density function of a feature in count data.  
 #'
 #' @description See rbeta.
-#' @param samples An integer. How many samples should be taken
+#' @param draws An integer. How many samples should be taken
 #' @param k An integer. How many counts were observerd
 #' @param n An integer. How many obserations were made
 #' 
