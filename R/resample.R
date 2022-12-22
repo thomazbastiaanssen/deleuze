@@ -7,9 +7,9 @@
 #' 
 #' @export
 #'
-sampleBetaBinom <- function(samples, k, n){
+sampleBetaBinom <- function(draws, k, n){
   #wrap around rbeta for the special case of Binom()
-  rbeta(n = samples, shape1 = k + 1, shape2 = n - k + 1)
+  rbeta(n = draws, shape1 = k + 1, shape2 = n - k + 1)
 }
 
 #' samples from the log() of the geometric mean.
@@ -39,7 +39,7 @@ sampleGeomMeam <- function(samples, count_sample, log_transformed = T){
 #' @export
 #' 
 sampleEachBetaBinom <- function(samples, count_sample){
-  return(sapply(count_sample, FUN = function(x){sampleBetaBinom(samples = samples, k = x, n = sum(count_sample))}, simplify = T))
+  return(sapply(count_sample, FUN = function(x){sampleBetaBinom(draws = samples, k = x, n = sum(count_sample))}, simplify = T))
 }
 
 #' samples from the probability density function of a CLR-transformed count sample.  

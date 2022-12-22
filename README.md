@@ -19,32 +19,11 @@ data
     ## [136] 3642    0
 
 ``` r
-b = log(sapply(data, FUN = function(x){sampleBetaBinom(samples = 1000, k = x, n = sum(data))}, simplify = T)) - sampleGeomMeam(samples = 1000, count_sample = data)
-
-
+#To do: estimate parameters of geometric mean distribution. 
 hist(sampleGeomMeam(samples = 10000, count_sample = data))
 ```
 
 ![](README_files/figure-gfm/distributions-1.png)<!-- -->
-
-``` r
-b %>%
-  data.frame() %>%
-  mutate(sample = as.character(1:1000)) %>%
-  pivot_longer(!sample) %>%
- 
-  filter(name %in% paste0("X", 1:30)) %>%
-  ggplot() +
-  aes(x = value) +
- 
-  geom_histogram() +
-  facet_wrap(~name, scales = "free") +
-  theme_bw()
-```
-
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-
-![](README_files/figure-gfm/distributions-2.png)<!-- -->
 
 ``` r
 #Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
@@ -53,7 +32,7 @@ sampleCLR(1000, data) %>%
   mutate(sample = as.character(1:1000)) %>%
   pivot_longer(!sample) %>%
   
-  filter(name %in% paste0("X", 1:30)) %>%
+  filter(name %in% paste0("X", 1:20)) %>%
   ggplot() +
   aes(x = value) +
   
@@ -64,4 +43,4 @@ sampleCLR(1000, data) %>%
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/distributions-3.png)<!-- -->
+![](README_files/figure-gfm/distributions-2.png)<!-- -->
