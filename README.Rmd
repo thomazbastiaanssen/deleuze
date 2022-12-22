@@ -61,4 +61,19 @@ hist(rnorm(n = 10000,
            mean = mean(getBetaMeans(data, log_transformed = T)), 
            sd = mean(sqrt(getBetaVars(data, log_transformed = T)))), xlim =c(-12,  -5.5))
 
+
+#But if we could estimate the sd it would fit really well.
+hist(rnorm(n = 10000, 
+           mean = mean(getBetaMeans(data, log_transformed = T)), 
+           sd = sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))), xlim =c(-9.2, -8))
+
+
+#Overlaid:
+plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), col = "red")
+
+lines(density(rnorm(n = 10000, 
+                    mean = mean(getBetaMeans(data, log_transformed = T)), 
+                    sd = sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)))))
+
+
 ```

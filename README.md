@@ -51,7 +51,7 @@ sampleCLR(1000, data) %>%
 mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] -8.644785
+    ## [1] -8.645313
 
 ``` r
 #estimated
@@ -66,7 +66,7 @@ mean(getBetaMeans(data, log_transformed = T))
 sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] 0.08548483
+    ## [1] 0.08635828
 
 ``` r
 #estimated
@@ -91,3 +91,23 @@ hist(rnorm(n = 10000,
 ```
 
 ![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
+
+``` r
+#But if we could estimate the sd it would fit really well.
+hist(rnorm(n = 10000, 
+           mean = mean(getBetaMeans(data, log_transformed = T)), 
+           sd = sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))), xlim =c(-9.2, -8))
+```
+
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-3.png)<!-- -->
+
+``` r
+#Overlaid:
+plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), col = "red")
+
+lines(density(rnorm(n = 10000, 
+                    mean = mean(getBetaMeans(data, log_transformed = T)), 
+                    sd = sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)))))
+```
+
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-4.png)<!-- -->
