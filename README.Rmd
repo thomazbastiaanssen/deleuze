@@ -8,105 +8,26 @@ output:
 ```{r setup}
 #devtools::install_github("thomazbastiaanssen/volatility")
 library(tidyverse)
+library(deleuze)
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
-# 
-# #colSums(volatility::vola_genus_table != 0) %% 8 == 0 &  colSums(volatility::vola_genus_table != 0) < 50
-# data = data[data!=0]
-# 
-# data = data[5:54]
-# data[45] <- 1
-# reldata = data/sum(data)
-# 
-# replicate(1000, c(table(factor(
-#   sample(x = paste("s", 1:length(reldata), data[1:length(data)], sep = "_"), size = sum(data), reldata, replace = T), 
-#   levels = paste("s", 1:length(reldata), data[1:length(data)], sep = "_"))))) %>%
-#   
-#   t() %>%
-#   data.frame() %>%
-#   rownames_to_column("resample") %>%
-#   pivot_longer(!resample) %>%
-#   
-#   #filter(name == "s_43_1") %>%
-#   
-#   ggplot() +
-#   aes(x = value) +
-#   geom_histogram(orientation = "x") + 
-#   facet_wrap(~name, scales = "free", ncol = 10) +
-#   theme_bw()
-#   
+b = log(sapply(data, FUN = function(x){sampleBetaBinom(samples = 1000, k = x, n = sum(data))}, simplify = T)) - sampleGeomMeam(samples = 1000, count_sample = data)
 
 
-#devtools::install_github("thomazbastiaanssen/volatility")
-library(tidyverse)
-data = 0:49
+hist(sampleGeomMeam(samples = 10000, count_sample = data))
 
-
-#colSums(volatility::vola_genus_table != 0) %% 8 == 0 &  colSums(volatility::vola_genus_table != 0) < 50
-
-reldata = data/sum(data)
-
-replicate(100, c(table(factor(
-  sample(x = paste("s", 1:length(reldata), data[1:length(data)], sep = "_"), size = sum(data), reldata, replace = T), 
-  levels = paste("s", 1:length(reldata), data[1:length(data)], sep = "_"))))) %>%
-  
-  t() %>%
+b %>%
   data.frame() %>%
-  rownames_to_column("resample") %>%
-  pivot_longer(!resample) %>%
-  mutate(name = factor(name, levels = paste("s", 1:length(reldata), data[1:length(data)], sep = "_"))) %>%  
-  
-  #filter(name == "s_43_1") %>%
-  
+  mutate(sample = as.character(1:1000)) %>%
+  pivot_longer(!sample) %>%
+ 
+  filter(name %in% paste0("X", 1:30)) %>%
   ggplot() +
   aes(x = value) +
-  geom_histogram(orientation = "x") + 
-  facet_wrap(~name, scales = "free", ncol = 10) +
+ 
+  geom_histogram() +
+  facet_wrap(~name, scales = "free") +
   theme_bw()
-
-
-dbinom()
-
-reldata[2]
-pbinom(0,sum(data),reldata[5])
-
-a = Map(f = function(x){pbinom(q = 0, size = 100, prob = x)}, x = seq(0, 0.1, 0.01))
-plot(log(unlist(a)))
-
-log10(unlist(a))
-
-unlist(a) %% 
-100*0.001
-log(100* exp(1))
-
-
-# x values for the
-# dbern( ) function
-x <- seq(0, 10, by = 1)
-
-# using dbern( ) function
-# to x to obtain corresponding
-# Bernoulli  PDF
-y <- dbinom(x, prob = 0.7, size = 100)  
-
-# plot dbern values
-plot(y, type = "o")
-pbinom(q = 2, size = 100, prob = 0)
-
-plot(pbinom(q = 0, size = 100, prob = seq(0, 1, 0.01), lower.tail = T), xlim = c(0, 10)) 
-points(pbinom(q = 1, size = 100, prob = 3/100, lower.tail = T), col = "red")
-points(pbinom(q = 2, size = 100, prob = seq(0, 1, 0.01), lower.tail = T), col = "orange")
-points(pbinom(q = 3, size = 100, prob = seq(0, 1, 0.01), lower.tail = T), col = "yellow")
-
-
-plot(pbinom(q = 0, size = 100, prob = seq(0, 1, 0.01), lower.tail = T))
-
-pbinom(q = 0, size = 100, prob = 0.01)
-pbinom(q = 0, size = 100, prob = 0.01)
-
-k = 0.1; n = 100; p = 0.01
-
-factorial(n)/(factorial(k)*factorial(n - k)) * (p^k) * ((1-p)^(n-k))
 
 
 ```

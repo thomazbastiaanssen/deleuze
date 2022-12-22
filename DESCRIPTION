@@ -5,8 +5,7 @@ Authors@R: person("Thomaz", "Bastiaanssen", email = "thomaz.bastiaanssen@ucc.ie"
 Description: Microbiome Oriented count data resampling framework made at the APC microbiome in Ireland. 
 Depends: R (>= 3.5.0)
 Imports:
-    stats, 
-    methods,
+    stats
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
