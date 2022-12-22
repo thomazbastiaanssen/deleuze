@@ -5,7 +5,7 @@ output:
 ---
 
 
-```{r setup}
+```{r setup, message = FALSE}
 #devtools::install_github("thomazbastiaanssen/volatility")
 library(tidyverse)
 library(deleuze)
