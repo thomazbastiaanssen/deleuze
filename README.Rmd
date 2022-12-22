@@ -11,9 +11,14 @@ library(tidyverse)
 library(deleuze)
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
+data
+
+```
+
+
+```{r distributions}
 b = log(sapply(data, FUN = function(x){sampleBetaBinom(samples = 1000, k = x, n = sum(data))}, simplify = T)) - sampleGeomMeam(samples = 1000, count_sample = data)
 
-data
 
 hist(sampleGeomMeam(samples = 10000, count_sample = data))
 
