@@ -51,7 +51,7 @@ sampleCLR(1000, data) %>%
 mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] -8.645313
+    ## [1] -8.64542
 
 ``` r
 #estimated
@@ -66,14 +66,15 @@ mean(getBetaMeans(data, log_transformed = T))
 sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] 0.08635828
+    ## [1] 0.08691682
 
 ``` r
 #estimated
-mean(sqrt(getBetaVars(data, log_transformed = T)))
+#mean(sqrt(getBetaVars(data, log_transformed = T)))
+sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)* length(data)))
 ```
 
-    ## [1] 0.8336614
+    ## [1] 0.0859221
 
 ``` r
 #comparing the distributions
@@ -87,7 +88,7 @@ hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), 
 #estimated
 hist(rnorm(n = 10000, 
            mean = mean(getBetaMeans(data, log_transformed = T)), 
-           sd = mean(sqrt(getBetaVars(data, log_transformed = T)))), xlim =c(-12,  -5.5))
+           sd = sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)* length(data)))), xlim =c(-12,  -5.5))
 ```
 
 ![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->

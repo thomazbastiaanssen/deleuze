@@ -99,3 +99,38 @@ getLogBetaMean <- function(k, n){
   return(digamma(a) - digamma(a + b))
 }
 
+
+#Leave these here for now
+#' #' Calculate the covariance of two marginals in a Dirichlet. 
+#' #'
+#' #' @description See rbeta.  
+#' #' @param k_i An integer. How many counts were observed in the first marginal
+#' #' @param k_j An integer. How many counts were observed in the first marginal
+#' #' @param n An integer. How many observations were made
+#' #' 
+#' #' @export
+#' #'
+#' getCovDirichlet <- function(k_i, k_j, n){
+#'   a_i = k_i + 1
+#'   a_j = k_j + 1
+#'   a_0 = n + 1
+#'   -(a_i)*(a_j)/(((a_0)*(a_0)) *((a_0) + 1))
+#' }
+#' 
+#' 
+#' #' Calculate the sum of all covariances between marginals in a Dirichlet. 
+#' #'
+#' #' @description See rbeta.
+#' #' @param count_sample
+#' #' 
+#' #' @export
+#' #'
+#' getCovSum <- function(count_sample){
+#'   n = sum(count_sample)
+#'   covInd <- combn(x = count_sample, m = 2)
+#'   covSum = 0
+#'   for(i in 1:ncol(covInd)){
+#'     covSum = covSum + getCovDir(k_i = covInd[1,i], k_j = covInd[2,i], n = n)
+#'   }
+#'   return(covSum*2)
+#' }
