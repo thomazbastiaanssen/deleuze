@@ -1,7 +1,8 @@
 #' Calculate by feature variance from a beta distributions
 #'
 #' @description See rbeta.
-#' @param count_sample
+#' @param count_sample A vector of count data.
+#' @param log_transformed A boolean, whether to return log-transformed values.
 #' 
 #' @export
 #'
@@ -53,7 +54,8 @@ getLogBetaVar <- function(k, n){
 #' Calculate by feature mean from a beta distributions
 #'
 #' @description See rbeta.
-#' @param count_sample
+#' @param count_sample A vector of count data.
+#' @param log_transformed A boolean, whether to return log-transformed values.
 #' 
 #' @export
 #'
@@ -72,8 +74,8 @@ getBetaMeans <- function(count_sample, log_transformed = F){
 #' Calculate the mean from a beta distribution. 
 #'
 #' @description See rbeta. Called by getBetaMeans. 
-#' @param k An integer. How many counts were observerd
-#' @param n An integer. How many obserations were made
+#' @param k An integer. How many counts were observed
+#' @param n An integer. How many observations were made
 #' 
 #' @export
 #'
@@ -121,7 +123,7 @@ getLogBetaMean <- function(k, n){
 #' #' Calculate the sum of all covariances between marginals in a Dirichlet. 
 #' #'
 #' #' @description See rbeta.
-#' #' @param count_sample
+#' #' @param count_sample A vector of count data.
 #' #' 
 #' #' @export
 #' #'

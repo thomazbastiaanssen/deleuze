@@ -16,6 +16,7 @@ sampleBetaBinom <- function(draws, k, n){
 #'
 #' @param samples An integer. How many samples should be taken
 #' @param count_sample A vector of count data.
+#' @param log_transformed A boolean, whether to return log-transformed values. 
 #' 
 #' @export
 #' 
@@ -55,17 +56,22 @@ sampleCLR <- function(samples, count_sample){
   return(log_ratios)
 }
 
-#' samples from the approximated probability density function of the geometric mean of a count sample.  
+#' samples from the approximated probability density function of the log-transformed geometric mean of a count sample.  
 #'
 #' @param samples An integer. How many samples should be taken
 #' @param count_sample A vector of count data.
-#' 
+#' @param log_transformed A boolean, whether to return log-transformed values.
+#'  
 #' @export
 #' 
-sampleGeomMeanApprox <- function(samples, count_sample){
-  #estimate mean and sd for a log-transformed normal approximation. 
+sampleGeomMeanApprox <- function(samples, count_sample, log_transformed = T){
+  #Estimate a mean and standard deviation for a log-transformed normal approximation. 
   mu_hat = mean(getBetaMeans(count_sample = count_sample, log_transformed = T))
   sd_hat = sqrt(sum(getBetaVars(count_sample = count_sample, log_transformed = T)) / (length(count_sample)* length(count_sample)))
   
-  return(rnorm(n = samples, mean = mu_hat, sd = sd_hat))
+  geom_mean = rnorm(n = samples, mean = mu_hat, sd = sd_hat)
+  
+  if(!log_transformed){geom_mean = exp(geom_mean)}
+  
+  return(geom_mean)
 }

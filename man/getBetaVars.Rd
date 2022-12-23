@@ -7,7 +7,9 @@
 getBetaVars(count_sample, log_transformed = F)
 }
 \arguments{
-\item{count_sample}{}
+\item{count_sample}{A vector of count data.}
+
+\item{log_transformed}{A boolean, whether to return log-transformed values.}
 }
 \description{
 See rbeta.

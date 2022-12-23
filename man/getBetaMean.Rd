@@ -7,9 +7,9 @@
 getBetaMean(k, n)
 }
 \arguments{
-\item{k}{An integer. How many counts were observerd}
+\item{k}{An integer. How many counts were observed}
 
-\item{n}{An integer. How many obserations were made}
+\item{n}{An integer. How many observations were made}
 }
 \description{
 See rbeta. Called by getBetaMeans.

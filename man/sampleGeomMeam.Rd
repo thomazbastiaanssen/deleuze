@@ -10,6 +10,8 @@ sampleGeomMeam(samples, count_sample, log_transformed = T)
 \item{samples}{An integer. How many samples should be taken}
 
 \item{count_sample}{A vector of count data.}
+
+\item{log_transformed}{A boolean, whether to return log-transformed values.}
 }
 \description{
 samples from the log() of the geometric mean.
