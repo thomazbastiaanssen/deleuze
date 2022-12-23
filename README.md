@@ -51,7 +51,7 @@ sampleCLR(1000, data) %>%
 mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] -8.645693
+    ## [1] -8.647065
 
 ``` r
 #estimated
@@ -66,7 +66,7 @@ mean(getBetaMeans(data, log_transformed = T))
 sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] 0.08563766
+    ## [1] 0.08702886
 
 ``` r
 #estimated
@@ -86,7 +86,7 @@ hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), 
 
 ``` r
 #estimated
-hist(sampleGeomMeanApprox(samples = 10000, count_sample = data), xlim =c(-9.2,  -8))
+hist(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2,  -8))
 ```
 
 ![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
@@ -95,7 +95,7 @@ hist(sampleGeomMeanApprox(samples = 10000, count_sample = data), xlim =c(-9.2,  
 #Overlaid:
 plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), col = "red")
 
-lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data)))
+lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T)))
 ```
 
 ![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-3.png)<!-- -->
