@@ -2,6 +2,7 @@
 #devtools::install_github("thomazbastiaanssen/volatility")
 library(tidyverse)
 library(deleuze)
+library(patchwork)
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
 data
@@ -70,7 +71,7 @@ sampleCLRApprox(samples = 10000, data) %>%
 mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] -8.64511
+    ## [1] -8.644966
 
 ``` r
 #estimated
@@ -85,7 +86,7 @@ mean(getBetaMeans(data, log_transformed = T))
 sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] 0.08651449
+    ## [1] 0.08729911
 
 ``` r
 #estimated
@@ -98,17 +99,14 @@ sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)
 ``` r
 #comparing the distributions
 #observed
+par(mfrow=c(1,2))
 hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2, -8))
-```
 
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-1.png)<!-- -->
-
-``` r
 #estimated
 hist(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2,  -8))
 ```
 
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-1.png)<!-- -->
 
 ``` r
 #Overlaid:
@@ -117,7 +115,7 @@ plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transforme
 lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T)))
 ```
 
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-3.png)<!-- -->
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
 
 ``` r
 #real sampled data
@@ -177,6 +175,6 @@ mbm
 ```
 
     ## Unit: milliseconds
-    ##    expr       min        lq      mean    median        uq      max neval cld
-    ##  sample 359.75763 370.47393 414.29945 384.92809 458.88507 524.6060   100   b
-    ##  approx  80.66361  84.27142  93.66272  85.76424  89.00359 177.0132   100  a
+    ##    expr       min        lq     mean    median        uq      max neval cld
+    ##  sample 361.15395 373.04984 434.1065 451.50079 466.99507 612.5255   100   b
+    ##  approx  80.26496  84.35167  99.4112  86.41418  91.82672 209.6700   100  a

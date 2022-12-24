@@ -9,6 +9,7 @@ output:
 #devtools::install_github("thomazbastiaanssen/volatility")
 library(tidyverse)
 library(deleuze)
+library(patchwork)
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
 data
@@ -69,6 +70,7 @@ sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)
 
 #comparing the distributions
 #observed
+par(mfrow=c(1,2))
 hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2, -8))
 
 #estimated
