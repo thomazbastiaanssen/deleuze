@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.646849 | 0.0856906 |
+| observed     | -8.646809 | 0.0858661 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -48,6 +48,7 @@ lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_tra
 
 ``` r
 #real sampled data
+
 a = sampleCLR(10000, data) %>%
   data.frame() %>%
   mutate(sample = as.character(1:10000)) %>%
@@ -56,25 +57,26 @@ a = sampleCLR(10000, data) %>%
   filter(name %in% paste0("X", 1:20)) %>%
   mutate(type = "sampled")
 
-#sampled from approximationdevtools::
+#sampled from approximation
 b = sampleCLRApprox(samples = 10000, data) %>%
   data.frame() %>%
   mutate(sample = as.character(1:10000)) %>%
   pivot_longer(!sample) %>%
   
   filter(name %in% paste0("X", 1:20)) %>%
-  
   mutate(type = "approx")
 
 #Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
 
 rbind(a, b) %>%
-  filter(name %in% paste0("X", 1:10)) %>%
-  ggplot() +
-  aes(x = value) +
   
-  geom_histogram() +
-  facet_grid(type~name, scales = "free") +
+  mutate(name = factor(name, levels = paste0("X", 1:20))) %>%
+
+  ggplot() +
+  aes(x = value, fill = type) +
+  
+  geom_histogram(alpha=0.7, position="identity") +
+  facet_wrap(~name, scales = "free", ncol = 4) +
   theme_bw()
 ```
 
