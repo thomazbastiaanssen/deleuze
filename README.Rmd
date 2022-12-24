@@ -60,7 +60,8 @@ b = sampleCLRApprox(samples = 10000, data) %>%
 #Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
 
 rbind(a, b) %>%
-  
+  filter(name %in% paste0("X", 1:15)) %>%
+
   mutate(name = factor(name, levels = paste0("X", 1:15))) %>%
 
   ggplot() +

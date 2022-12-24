@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.646344 | 0.0863698 |
+| observed     | -8.645710 | 0.0865270 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -69,7 +69,8 @@ b = sampleCLRApprox(samples = 10000, data) %>%
 #Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
 
 rbind(a, b) %>%
-  
+  filter(name %in% paste0("X", 1:15)) %>%
+
   mutate(name = factor(name, levels = paste0("X", 1:15))) %>%
 
   ggplot() +
