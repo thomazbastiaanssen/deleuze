@@ -20,58 +20,12 @@ data
     ## [136] 3642    0
 
 ``` r
-#To do: estimate parameters of geometric mean distribution. 
-hist(sampleGeomMeam(samples = 10000, count_sample = data))
-```
-
-![](README_files/figure-gfm/distributions-1.png)<!-- -->
-
-``` r
-#Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
-sampleCLR(10000, data) %>%
-  data.frame() %>%
-  mutate(sample = as.character(1:10000)) %>%
-  pivot_longer(!sample) %>%
-  
-  filter(name %in% paste0("X", 1:20)) %>%
-  ggplot() +
-  aes(x = value) +
-  
-  geom_histogram() +
-  facet_wrap(~name, scales = "free") +
-  theme_bw()
-```
-
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-
-![](README_files/figure-gfm/distributions-2.png)<!-- -->
-
-``` r
-sampleCLRApprox(samples = 10000, data) %>%
-  data.frame() %>%
-  mutate(sample = as.character(1:10000)) %>%
-  pivot_longer(!sample) %>%
-  
-  filter(name %in% paste0("X", 1:20)) %>%
-  ggplot() +
-  aes(x = value) +
-  
-  geom_histogram() +
-  facet_wrap(~name, scales = "free") +
-  theme_bw()
-```
-
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-
-![](README_files/figure-gfm/distributions-3.png)<!-- -->
-
-``` r
 #Mean can be estimated:
 #observed
 mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] -8.644966
+    ## [1] -8.645808
 
 ``` r
 #estimated
@@ -86,11 +40,10 @@ mean(getBetaMeans(data, log_transformed = T))
 sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] 0.08729911
+    ## [1] 0.08641481
 
 ``` r
 #estimated
-#mean(sqrt(getBetaVars(data, log_transformed = T)))
 sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)* length(data)))
 ```
 
@@ -99,14 +52,17 @@ sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)
 ``` r
 #comparing the distributions
 #observed
-par(mfrow=c(1,2))
 hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2, -8))
+```
 
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-1.png)<!-- -->
+
+``` r
 #estimated
 hist(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2,  -8))
 ```
 
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-1.png)<!-- -->
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
 
 ``` r
 #Overlaid:
@@ -115,7 +71,7 @@ plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transforme
 lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T)))
 ```
 
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-3.png)<!-- -->
 
 ``` r
 #real sampled data
@@ -137,6 +93,8 @@ b = sampleCLRApprox(samples = 10000, data) %>%
   
   mutate(type = "approx")
 
+#Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
+
 rbind(a, b) %>%
   filter(name %in% paste0("X", 1:10)) %>%
   ggplot() +
@@ -151,30 +109,6 @@ rbind(a, b) %>%
 
 ![](README_files/figure-gfm/comparing%20CLR%20to%20approx-1.png)<!-- -->
 
-``` r
-library(microbenchmark)
-```
-
-    ## Loading required package: microbenchmarkCore
-
-    ## Registered S3 methods overwritten by 'microbenchmark':
-    ##   method                 from              
-    ##   print.microbenchmark   microbenchmarkCore
-    ##   summary.microbenchmark microbenchmarkCore
-
-``` r
-mbm <- microbenchmark(
-               "sample" = {
-                 b <- sampleCLR(samples = 10000, data)
-                 },
-               "approx" = {
-                 b <- sampleCLRApprox(samples = 10000, data)
-                 })
-
-mbm
-```
-
-    ## Unit: milliseconds
-    ##    expr       min        lq     mean    median        uq      max neval cld
-    ##  sample 361.15395 373.04984 434.1065 451.50079 466.99507 612.5255   100   b
-    ##  approx  80.26496  84.35167  99.4112  86.41418  91.82672 209.6700   100  a
+For benchmarking click
+[Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md)
+Put on its own page as it’s slow to knit.

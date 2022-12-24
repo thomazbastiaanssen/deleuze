@@ -1,0 +1,33 @@
+---
+output:
+  md_document:
+    variant: gfm
+---
+
+
+```{r setup, message = FALSE}
+#devtools::install_github("thomazbastiaanssen/volatility")
+library(tidyverse)
+library(deleuze)
+library(patchwork)
+data = volatility::vola_genus_table$Validation_Pre_Control_2
+
+data
+
+```
+
+
+```{r benchmark}
+library(microbenchmark)
+
+mbm <- microbenchmark(
+               "sample" = {
+                 b <- sampleCLR(samples = 10000, data)
+                 },
+               "approx" = {
+                 b <- sampleCLRApprox(samples = 10000, data)
+                 })
+
+mbm
+
+```
