@@ -75,3 +75,41 @@ sampleGeomMeanApprox <- function(samples, count_sample, log_transformed = T){
   
   return(geom_mean)
 }
+
+#' samples from the approximated probability density function of a feature in count data for each feature.  
+#'
+#' @param samples An integer. How many samples should be taken
+#' @param count_sample A vector of count data.
+#' @param log_transformed A boolean, whether to return log-transformed values.
+#' 
+#' @export
+#' 
+sampleEachApprox <- function(samples, count_sample, log_transformed = T){
+  mapply(FUN = rnorm, 
+         mean = getBetaMeans(count_sample = count_sample, log_transformed = log_transformed), 
+         sd = sqrt(getBetaVars(count_sample = count_sample, log_transformed = log_transformed)), MoreArgs = list(n = samples))
+}
+
+#' samples from the approximated probability density function of a CLR-transformed count sample.  
+#'
+#' @param samples An integer. How many samples should be taken
+#' @param count_sample A vector of count data.
+#' 
+#' @export
+#' 
+sampleCLRApprox <- function(samples, count_sample){
+  
+  mu_hat = getBetaMeans(count_sample = count_sample, log_transformed = T) - 
+    mean(getBetaMeans(count_sample = count_sample, log_transformed = T))
+  
+  sd_hat = sqrt(
+    (getBetaVars(count_sample = count_sample, log_transformed = T)) +  
+    (sum(getBetaVars(count_sample = count_sample, log_transformed = T)) / (length(count_sample)* length(count_sample)))
+    )
+  
+  log_ratios = mapply(FUN = rnorm, 
+                      mean = mu_hat, 
+                      sd   = sd_hat, 
+                      MoreArgs = list(n = samples))
+  return(log_ratios)
+}
