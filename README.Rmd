@@ -37,7 +37,7 @@ lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_tra
 
 ```
 
-```{r comparing CLR to approx, out.width = '100%', out.height = '100%'}
+```{r comparing CLR to approx, out.width = '100%', fig.height = 8}
 #real sampled data
 
 a = sampleCLR(10000, data) %>%
@@ -67,13 +67,14 @@ rbind(a, b) %>%
   ggplot() +
   aes(x = value, fill = type) +
   
-  geom_histogram(alpha=0.7, position="identity") +
+  geom_density(alpha = 2/3) +
+  
   facet_wrap(~name, scales = "free", ncol = 3) +
-  theme_bw()
+  theme_bw() +
+  theme(legend.position = 'bottom')
 
 
 ```
 
 For benchmarking click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md) 
-
-Put on its own page as it's slow to knit. 
+(put on its own page as it's slow to knit)

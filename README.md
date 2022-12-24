@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645710 | 0.0865270 |
+| observed     | -8.645562 | 0.0849585 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -76,16 +76,15 @@ rbind(a, b) %>%
   ggplot() +
   aes(x = value, fill = type) +
   
-  geom_histogram(alpha=0.7, position="identity") +
+  geom_density(alpha = 2/3) +
+  
   facet_wrap(~name, scales = "free", ncol = 3) +
-  theme_bw()
+  theme_bw() +
+  theme(legend.position = 'bottom')
 ```
 
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-
-<img src="README_files/figure-gfm/comparing CLR to approx-1.png" width="100%" height="100%" />
+<img src="README_files/figure-gfm/comparing CLR to approx-1.png" width="100%" />
 
 For benchmarking click
 [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md)
-
-Put on its own page as it’s slow to knit.
+(put on its own page as it’s slow to knit)
