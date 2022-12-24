@@ -34,12 +34,13 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645562 | 0.0849585 |
+| observed     | -8.644919 | 0.0857300 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
 #Overlaid:
-plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), col = "red")
+plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), 
+     col = "red", main = "Comparing the sampled geometric mean (red)\n to the approximated distribution (black)")
 
 lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T)))
 ```
@@ -66,8 +67,6 @@ b = sampleCLRApprox(samples = 10000, data) %>%
   filter(name %in% paste0("X", 1:20)) %>%
   mutate(type = "approx")
 
-#Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
-
 rbind(a, b) %>%
   filter(name %in% paste0("X", 1:15)) %>%
 
@@ -80,7 +79,8 @@ rbind(a, b) %>%
   
   facet_wrap(~name, scales = "free", ncol = 3) +
   theme_bw() +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') + 
+  ggtitle("Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7")
 ```
 
 <img src="README_files/figure-gfm/comparing CLR to approx-1.png" width="100%" />
