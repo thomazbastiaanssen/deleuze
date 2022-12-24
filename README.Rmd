@@ -113,3 +113,18 @@ rbind(a, b) %>%
   theme_bw()
 
 ```
+
+```{r benchmark}
+library(microbenchmark)
+
+mbm <- microbenchmark(
+               "sample" = {
+                 b <- sampleCLR(samples = 10000, data)
+                 },
+               "approx" = {
+                 b <- sampleCLRApprox(samples = 10000, data)
+                 })
+
+mbm
+
+```

@@ -70,7 +70,7 @@ sampleCLRApprox(samples = 10000, data) %>%
 mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] -8.645143
+    ## [1] -8.64511
 
 ``` r
 #estimated
@@ -85,7 +85,7 @@ mean(getBetaMeans(data, log_transformed = T))
 sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] 0.08639133
+    ## [1] 0.08651449
 
 ``` r
 #estimated
@@ -152,3 +152,31 @@ rbind(a, b) %>%
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](README_files/figure-gfm/comparing%20CLR%20to%20approx-1.png)<!-- -->
+
+``` r
+library(microbenchmark)
+```
+
+    ## Loading required package: microbenchmarkCore
+
+    ## Registered S3 methods overwritten by 'microbenchmark':
+    ##   method                 from              
+    ##   print.microbenchmark   microbenchmarkCore
+    ##   summary.microbenchmark microbenchmarkCore
+
+``` r
+mbm <- microbenchmark(
+               "sample" = {
+                 b <- sampleCLR(samples = 10000, data)
+                 },
+               "approx" = {
+                 b <- sampleCLRApprox(samples = 10000, data)
+                 })
+
+mbm
+```
+
+    ## Unit: milliseconds
+    ##    expr       min        lq      mean    median        uq      max neval cld
+    ##  sample 359.75763 370.47393 414.29945 384.92809 458.88507 524.6060   100   b
+    ##  approx  80.66361  84.27142  93.66272  85.76424  89.00359 177.0132   100  a
