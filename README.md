@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645835 | 0.0856597 |
+| observed     | -8.646344 | 0.0863698 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -70,13 +70,13 @@ b = sampleCLRApprox(samples = 10000, data) %>%
 
 rbind(a, b) %>%
   
-  mutate(name = factor(name, levels = paste0("X", 1:20))) %>%
+  mutate(name = factor(name, levels = paste0("X", 1:15))) %>%
 
   ggplot() +
   aes(x = value, fill = type) +
   
   geom_histogram(alpha=0.7, position="identity") +
-  facet_wrap(~name, scales = "free", ncol = 4) +
+  facet_wrap(~name, scales = "free", ncol = 3) +
   theme_bw()
 ```
 
