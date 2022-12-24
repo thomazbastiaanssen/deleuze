@@ -27,9 +27,9 @@ hist(sampleGeomMeam(samples = 10000, count_sample = data))
 
 ``` r
 #Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7
-sampleCLR(1000, data) %>%
+sampleCLR(10000, data) %>%
   data.frame() %>%
-  mutate(sample = as.character(1:1000)) %>%
+  mutate(sample = as.character(1:10000)) %>%
   pivot_longer(!sample) %>%
   
   filter(name %in% paste0("X", 1:20)) %>%
@@ -46,12 +46,31 @@ sampleCLR(1000, data) %>%
 ![](README_files/figure-gfm/distributions-2.png)<!-- -->
 
 ``` r
+sampleCLRApprox(samples = 10000, data) %>%
+  data.frame() %>%
+  mutate(sample = as.character(1:10000)) %>%
+  pivot_longer(!sample) %>%
+  
+  filter(name %in% paste0("X", 1:20)) %>%
+  ggplot() +
+  aes(x = value) +
+  
+  geom_histogram() +
+  facet_wrap(~name, scales = "free") +
+  theme_bw()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](README_files/figure-gfm/distributions-3.png)<!-- -->
+
+``` r
 #Mean can be estimated:
 #observed
 mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] -8.647065
+    ## [1] -8.645143
 
 ``` r
 #estimated
@@ -66,7 +85,7 @@ mean(getBetaMeans(data, log_transformed = T))
 sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
 ```
 
-    ## [1] 0.08702886
+    ## [1] 0.08639133
 
 ``` r
 #estimated
@@ -99,3 +118,37 @@ lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_tra
 ```
 
 ![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-3.png)<!-- -->
+
+``` r
+#real sampled data
+a = sampleCLR(10000, data) %>%
+  data.frame() %>%
+  mutate(sample = as.character(1:10000)) %>%
+  pivot_longer(!sample) %>%
+  
+  filter(name %in% paste0("X", 1:20)) %>%
+  mutate(type = "sampled")
+
+#sampled from approximationdevtools::
+b = sampleCLRApprox(samples = 10000, data) %>%
+  data.frame() %>%
+  mutate(sample = as.character(1:10000)) %>%
+  pivot_longer(!sample) %>%
+  
+  filter(name %in% paste0("X", 1:20)) %>%
+  
+  mutate(type = "approx")
+
+rbind(a, b) %>%
+  filter(name %in% paste0("X", 1:10)) %>%
+  ggplot() +
+  aes(x = value) +
+  
+  geom_histogram() +
+  facet_grid(type~name, scales = "free") +
+  theme_bw()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+![](README_files/figure-gfm/comparing%20CLR%20to%20approx-1.png)<!-- -->
