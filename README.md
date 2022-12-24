@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.644919 | 0.0857300 |
+| observed     | -8.645202 | 0.0862248 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -70,7 +70,9 @@ b = sampleCLRApprox(samples = 10000, data) %>%
 rbind(a, b) %>%
   filter(name %in% paste0("X", 1:15)) %>%
 
-  mutate(name = factor(name, levels = paste0("X", 1:15))) %>%
+  mutate(name = paste(name, "n counts =", data[1:15])) %>%
+  mutate(name = factor(name, levels = paste0("X", 1:15, " n counts = ", data[1:15]))) %>%
+  
 
   ggplot() +
   aes(x = value, fill = type) +
@@ -80,7 +82,7 @@ rbind(a, b) %>%
   facet_wrap(~name, scales = "free", ncol = 3) +
   theme_bw() +
   theme(legend.position = 'bottom') + 
-  ggtitle("Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7")
+  ggtitle("Notice that the zero-count features such as X13\n have a much higher spread than high rollers like X7")
 ```
 
 <img src="README_files/figure-gfm/comparing CLR to approx-1.png" width="100%" />

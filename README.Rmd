@@ -61,7 +61,9 @@ b = sampleCLRApprox(samples = 10000, data) %>%
 rbind(a, b) %>%
   filter(name %in% paste0("X", 1:15)) %>%
 
-  mutate(name = factor(name, levels = paste0("X", 1:15))) %>%
+  mutate(name = paste(name, "n counts =", data[1:15])) %>%
+  mutate(name = factor(name, levels = paste0("X", 1:15, " n counts = ", data[1:15]))) %>%
+  
 
   ggplot() +
   aes(x = value, fill = type) +
@@ -71,7 +73,7 @@ rbind(a, b) %>%
   facet_wrap(~name, scales = "free", ncol = 3) +
   theme_bw() +
   theme(legend.position = 'bottom') + 
-  ggtitle("Notice that the zero-count features such as X13 have a much higher spread than high rollers like X7")
+  ggtitle("Notice that the zero-count features such as X13\n have a much higher spread than high rollers like X7")
 
 
 ```
