@@ -20,49 +20,22 @@ data
     ## [136] 3642    0
 
 ``` r
-#Mean can be estimated:
-#observed
-mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
-```
-
-    ## [1] -8.645808
-
-``` r
-#estimated
-mean(getBetaMeans(data, log_transformed = T))
-```
-
-    ## [1] -8.645706
-
-``` r
-#As can the standard deviation:
-#observed
-sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
-```
-
-    ## [1] 0.08641481
-
-``` r
-#estimated
-sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)* length(data)))
-```
-
-    ## [1] 0.0859221
-
-``` r
 #comparing the distributions
-#observed
-hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2, -8))
+#comparing mean and SD of the resampled and approximated distributions
+knitr::kable(t(data.frame("observed" = 
+                            c("mean"   = mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), 
+                              "sd"     = sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))), 
+                          "approximated" = 
+                            c("mean" = mean(getBetaMeans(data, log_transformed = T)), 
+                              "sd"   = sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /(length(data)* length(data)))))
+               )
+             )
 ```
 
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-1.png)<!-- -->
-
-``` r
-#estimated
-hist(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2,  -8))
-```
-
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-2.png)<!-- -->
+|              |      mean |        sd |
+|:-------------|----------:|----------:|
+| observed     | -8.646849 | 0.0856906 |
+| approximated | -8.645706 | 0.0859221 |
 
 ``` r
 #Overlaid:
@@ -71,7 +44,7 @@ plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transforme
 lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T)))
 ```
 
-![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-3.png)<!-- -->
+![](README_files/figure-gfm/estimation%20of%20the%20geometric%20mean-1.png)<!-- -->
 
 ``` r
 #real sampled data

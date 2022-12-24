@@ -17,26 +17,16 @@ data
 ```
 
 ```{r estimation of the geometric mean}
-
-#Mean can be estimated:
-#observed
-mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
-#estimated
-mean(getBetaMeans(data, log_transformed = T))
-
-#As can the standard deviation:
-#observed
-sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))
-#estimated
-sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /  (length(data)* length(data)))
-
-
 #comparing the distributions
-#observed
-hist(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2, -8))
-
-#estimated
-hist(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T), xlim =c(-9.2,  -8))
+#comparing mean and SD of the resampled and approximated distributions
+knitr::kable(t(data.frame("observed" = 
+                            c("mean"   = mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), 
+                              "sd"     = sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))), 
+                          "approximated" = 
+                            c("mean" = mean(getBetaMeans(data, log_transformed = T)), 
+                              "sd"   = sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /(length(data)* length(data)))))
+               )
+             )
 
 
 #Overlaid:
