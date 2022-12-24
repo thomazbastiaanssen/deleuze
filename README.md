@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.646809 | 0.0858661 |
+| observed     | -8.645835 | 0.0856597 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -82,8 +82,9 @@ rbind(a, b) %>%
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/comparing%20CLR%20to%20approx-1.png)<!-- -->
+<img src="README_files/figure-gfm/comparing CLR to approx-1.png" width="100%" height="100%" />
 
 For benchmarking click
 [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md)
+
 Put on its own page as it’s slow to knit.
