@@ -102,6 +102,32 @@ getLogBetaMean <- function(k, n){
 }
 
 
+#' Calculate by feature mean from a CLR transformed approximation
+#'
+#' @description See rbeta.
+#' @param count_sample A vector of count data.
+#' 
+#' @export
+#'
+getCLRMeans <- function(count_sample){
+getBetaMeans(count_sample = count_sample, log_transformed = T) - 
+  mean(getBetaMeans(count_sample = count_sample, log_transformed = T))
+}
+
+
+#' Calculate by feature variance from a CLR transformed approximation
+#'
+#' @description See rbeta.
+#' @param count_sample A vector of count data.
+#' 
+#' @export
+#'
+getCLRVars <- function(count_sample){
+  (getBetaVars(count_sample = count_sample, log_transformed = T)) +  
+    (sum(getBetaVars(count_sample = count_sample, log_transformed = T)) / (length(count_sample)* length(count_sample)))
+  
+}
+
 #Leave these here for now
 #' #' Calculate the covariance of two marginals in a Dirichlet. 
 #' #'
