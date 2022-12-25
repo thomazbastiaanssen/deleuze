@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.644283 | 0.0859480 |
+| observed     | -8.647416 | 0.0863472 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -122,6 +122,8 @@ pca  = data.frame(PC1 = data.a.pca$x[,1],
                   PC4 = data.a.pca$x[,4])
 
 pca$Type = rep(c("lognorm", "estimated"), each = 120 )
+pca$ID   = paste0("s",1:120)
+
 
 
 #First, the main plot. Plot the first two components of the PCA
@@ -130,9 +132,8 @@ ggplot(pca, aes(x       = PC1,
                 fill    = Type)) +  
   
   #Create the points and ellipses
-  stat_ellipse(geom = "polygon", alpha = 1/4) +
-  geom_point(size=3, col = "black") + 
-  
+  geom_path(aes(group = ID), col = "black") +
+  geom_point(size=3, col = "black", shape = 21) + 
   #Adjust appearance
   
   #Adjust labels
