@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.647416 | 0.0863472 |
+| observed     | -8.646235 | 0.0856501 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -139,7 +139,8 @@ ggplot(pca, aes(x       = PC1,
   #Adjust labels
   ggtitle("lognorm vs new method") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
-  ylab(paste("PC2: ", pc2,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme(legend.position = 'bottom') +
   theme_bw() 
 ```
 
