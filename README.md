@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645202 | 0.0862248 |
+| observed     | -8.644283 | 0.0859480 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -61,7 +61,7 @@ a = sampleCLR(10000, data) %>%
 #sampled from approximation
 b = sampleCLRApprox(samples = 10000, data) %>%
   data.frame() %>%
-  mutate(sample = as.character(1:10000)) %>%
+  mutate(sample = as.character(1:10000)) %>% 
   pivot_longer(!sample) %>%
   
   filter(name %in% paste0("X", 1:20)) %>%
@@ -90,3 +90,56 @@ rbind(a, b) %>%
 For benchmarking click
 [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md)
 (put on its own page as it’s slow to knit)
+
+``` r
+#real sampled data
+data = volatility::vola_genus_table
+
+
+a = data %>% 
+  Tjazi::clr_lite() %>%
+  t 
+
+b = data %>% 
+  getTableMeans() %>%
+  t
+
+#Apply the base R principal component analysis function on our CLR-transformed data.
+
+data.a.pca = rbind(a, b) %>% 
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(data.a.pca$sdev[1]^2/sum(data.a.pca$sdev^2),4) * 100
+pc2 <- round(data.a.pca$sdev[2]^2/sum(data.a.pca$sdev^2),4) * 100
+pc3 <- round(data.a.pca$sdev[3]^2/sum(data.a.pca$sdev^2),4) * 100
+pc4 <- round(data.a.pca$sdev[4]^2/sum(data.a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = data.a.pca$x[,1], 
+                  PC2 = data.a.pca$x[,2], 
+                  PC3 = data.a.pca$x[,3], 
+                  PC4 = data.a.pca$x[,4])
+
+pca$Type = rep(c("lognorm", "estimated"), each = 120 )
+
+
+#First, the main plot. Plot the first two components of the PCA
+ggplot(pca, aes(x       = PC1,
+                y       = PC2,
+                fill    = Type)) +  
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(size=3, col = "black") + 
+  
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("lognorm vs new method") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) + 
+  theme_bw() 
+```
+
+<img src="README_files/figure-gfm/comparing CLR to approx entire table-1.png" width="100%" />
