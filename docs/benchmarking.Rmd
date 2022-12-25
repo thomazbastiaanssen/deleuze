@@ -31,3 +31,21 @@ mbm <- microbenchmark(
 mbm
 
 ```
+
+```{r benchmark whole table}
+library(microbenchmark)
+library(Tjazi)
+
+data = volatility::vola_genus_table
+
+mbm <- microbenchmark(
+               "sample" = {
+                 b <- Tjazi::clr_c(data)
+                 },
+               "approx" = {
+                 b <- getTableMeans(data)
+                 })
+
+mbm
+
+```

@@ -43,6 +43,28 @@ mbm
 ```
 
     ## Unit: milliseconds
-    ##    expr       min       lq      mean    median        uq      max neval cld
-    ##  sample 359.36411 367.9406 410.07523 436.00359 440.79826 466.8341   100   b
-    ##  approx  80.15271  83.2360  96.59232  84.61616  88.47381 164.5329   100  a
+    ##    expr       min        lq      mean    median        uq      max neval cld
+    ##  sample 357.59313 367.69937 413.20411 436.23503 441.75005 481.6932   100   b
+    ##  approx  80.13142  82.28118  91.35211  84.48791  86.93723 169.2589   100  a
+
+``` r
+library(microbenchmark)
+library(Tjazi)
+
+data = volatility::vola_genus_table
+
+mbm <- microbenchmark(
+               "sample" = {
+                 b <- Tjazi::clr_c(data)
+                 },
+               "approx" = {
+                 b <- getTableMeans(data)
+                 })
+
+mbm
+```
+
+    ## Unit: milliseconds
+    ##    expr       min        lq      mean    median        uq       max neval cld
+    ##  sample 370.21982 375.40983 383.55706 380.03307 383.74056 528.63205   100   b
+    ##  approx  60.91575  62.44022  64.83038  63.81019  67.16897  79.26466   100  a

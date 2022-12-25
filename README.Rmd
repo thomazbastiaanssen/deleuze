@@ -89,7 +89,7 @@ data = volatility::vola_genus_table
 
 
 a = data %>% 
-  Tjazi::clr_lite() %>%
+  Tjazi::clr_c() %>%
   t 
 
 b = data %>% 
@@ -135,6 +135,8 @@ ggplot(pca, aes(x       = PC1,
   theme_bw() +
   theme(legend.position = 'bottom') 
   
+plot(x = c(unlist(Tjazi::clr_c(data))),
+     y = c(getTableMeans(data)))
 
 ```
 

@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645155 | 0.0855616 |
+| observed     | -8.645481 | 0.0854143 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -97,7 +97,7 @@ data = volatility::vola_genus_table
 
 
 a = data %>% 
-  Tjazi::clr_lite() %>%
+  Tjazi::clr_c() %>%
   t 
 
 b = data %>% 
@@ -145,3 +145,10 @@ ggplot(pca, aes(x       = PC1,
 ```
 
 <img src="README_files/figure-gfm/comparing CLR to approx entire table-1.png" width="100%" />
+
+``` r
+plot(x = c(unlist(Tjazi::clr_c(data))),
+     y = c(getTableMeans(data)))
+```
+
+<img src="README_files/figure-gfm/comparing CLR to approx entire table-2.png" width="100%" />
