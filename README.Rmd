@@ -132,8 +132,9 @@ ggplot(pca, aes(x       = PC1,
   ggtitle("lognorm vs new method") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
-  theme(legend.position = 'bottom') +
-  theme_bw() 
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
 
 ```
 
