@@ -43,9 +43,9 @@ mbm
 ```
 
     ## Unit: milliseconds
-    ##    expr       min        lq      mean    median        uq      max neval cld
-    ##  sample 357.59313 367.69937 413.20411 436.23503 441.75005 481.6932   100   b
-    ##  approx  80.13142  82.28118  91.35211  84.48791  86.93723 169.2589   100  a
+    ##    expr      min       lq     mean   median       uq      max neval cld
+    ##  sample 757.8101 786.7227 832.8274 851.6246 870.4794 965.9022   100   b
+    ##  approx 169.9546 176.5457 197.2054 179.3692 188.3612 321.7788   100  a
 
 ``` r
 library(microbenchmark)
@@ -65,6 +65,6 @@ mbm
 ```
 
     ## Unit: milliseconds
-    ##    expr       min        lq      mean    median        uq       max neval cld
-    ##  sample 370.21982 375.40983 383.55706 380.03307 383.74056 528.63205   100   b
-    ##  approx  60.91575  62.44022  64.83038  63.81019  67.16897  79.26466   100  a
+    ##    expr      min       lq     mean   median       uq       max neval cld
+    ##  sample 789.8281 824.2436 844.4953 836.7131 855.1128 1053.7719   100   b
+    ##  approx 129.7679 134.4234 138.7461 137.7347 141.2531  174.7399   100  a

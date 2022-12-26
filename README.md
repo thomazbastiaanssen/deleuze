@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645481 | 0.0854143 |
+| observed     | -8.646175 | 0.0859372 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -152,3 +152,74 @@ plot(x = c(unlist(Tjazi::clr_c(data))),
 ```
 
 <img src="README_files/figure-gfm/comparing CLR to approx entire table-2.png" width="100%" />
+
+``` r
+set.seed(12345)
+
+library(tidyverse)
+library(deleuze)
+
+#Create some dummy data with known ground truth
+vec = round(runif(n = 100, min = 1, max = 100))
+
+
+x = exp(c(
+  seq(1,4.95,by = 0.05), 
+  seq(5,1.05,by = -0.05)
+  ))
+
+y = c(x[41:160],x[1:40])
+  
+
+z = rep(1,160)
+
+xpart = sapply(X = vec[ 1: 25], FUN = function(f){(f*x)}, simplify = T) 
+ypart = sapply(X = vec[26: 50], FUN = function(f){(f*y)}, simplify = T) 
+zpart = sapply(X = vec[51:100], FUN = function(f){(f*z)}, simplify = T)
+
+
+dummy = do.call(cbind, list(xpart,ypart,zpart)) 
+
+  
+rownames(dummy) = paste("sample",  1:160, sep = "_")
+colnames(dummy) = paste("microbe", 1:100, sep = "_") 
+
+
+res_dummy = apply(dummy, 1,FUN = function(x){
+  table(factor(sample(colnames(dummy), prob = x, replace = T,size = 10000 ),levels = colnames(dummy)))
+  
+})
+
+par(1,2)
+```
+
+    ## [[1]]
+    ## NULL
+    ## 
+    ## [[2]]
+    ## NULL
+
+``` r
+plot(c(unlist(dummy[1:10,] %>% 
+                t() %>% 
+                Tjazi::clr_c() )),
+     
+     c(
+       getTableMeans(res_dummy[,1:10]/
+                       (rowMeans(getTableVars(res_dummy[,1:10]))))
+          )
+)
+```
+
+![](README_files/figure-gfm/reduce%20overdispersion-1.png)<!-- -->
+
+``` r
+plot(c(unlist(dummy[1:10,] %>% 
+                t() %>% 
+                Tjazi::clr_c() )),
+     c(unlist(res_dummy[,1:10] %>% 
+                
+                Tjazi::clr_c() )))
+```
+
+![](README_files/figure-gfm/reduce%20overdispersion-2.png)<!-- -->
