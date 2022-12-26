@@ -4,14 +4,14 @@
 \alias{getTableVars}
 \title{Estimate the approximated vars from a CLR-transformed count sample using.}
 \usage{
-getTableVars(count_table, log_transformed = T, rows_as_features = F)
+getTableVars(count_table, CLR_transformed = T, rows_as_features = F)
 }
 \arguments{
 \item{count_table}{A table of count data with rows as features and columns as samples.}
 
-\item{log_transformed}{A boolean, whether to return log-transformed values.}
-
 \item{rows_as_features}{A boolean. Toggles whether rows or columns are samples.}
+
+\item{log_transformed}{A boolean, whether to return log-transformed values.}
 }
 \description{
 See rbeta.

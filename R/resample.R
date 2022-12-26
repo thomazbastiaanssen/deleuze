@@ -4,6 +4,7 @@
 #' @param draws An integer. How many samples should be taken
 #' @param k An integer. How many counts were observerd
 #' @param n An integer. How many obserations were made
+#' @importFrom stats rbeta rnorm
 #' 
 #' @export
 #'

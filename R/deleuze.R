@@ -7,9 +7,20 @@
 #' 
 #' @export
 #'
-getTableMeans <- function(count_table, log_transformed = T, rows_as_features = F){
+getTableMeans <- function(count_table, CLR_transformed = T, rows_as_features = F){
   margin = 2 - rows_as_features
-  table_means = apply(X = count_table, MARGIN = margin, FUN = getCLRMeans)
+
+  if(CLR_transformed){
+    table_means = apply(X = count_table, 
+                        MARGIN = margin, 
+                        FUN = getCLRMeans)
+    }
+  if(!CLR_transformed){
+    table_means = apply(X = count_table, 
+                        MARGIN = margin, 
+                        FUN = getBetaMeans,
+                        log_transformed = F)
+  }
   
   if(rows_as_features){table_means = t(table_means)}
   
@@ -25,9 +36,20 @@ getTableMeans <- function(count_table, log_transformed = T, rows_as_features = F
 #' 
 #' @export
 #'
-getTableVars <- function(count_table, log_transformed = T, rows_as_features = F){
+getTableVars <- function(count_table, CLR_transformed = T, rows_as_features = F){
   margin = 2 - rows_as_features
-  table_vars = apply(X = count_table, MARGIN = margin, FUN = getCLRVars)
+  
+  if(CLR_transformed){
+    table_vars = apply(X = count_table, 
+                       MARGIN = margin, 
+                       FUN = getCLRVars)
+  }
+  if(!CLR_transformed){
+    table_vars = apply(X = count_table, 
+                       MARGIN = margin, 
+                       FUN = getBetaVars, 
+                       log_transformed = F)
+  }
   
   if(rows_as_features){table_vars = t(table_vars)}
   
