@@ -9,9 +9,9 @@ getTableVars(count_table, CLR_transformed = T, rows_as_features = F)
 \arguments{
 \item{count_table}{A table of count data with rows as features and columns as samples.}
 
-\item{rows_as_features}{A boolean. Toggles whether rows or columns are samples.}
+\item{CLR_transformed}{A boolean, whether to return centered log-ratio (CLR) values.}
 
-\item{log_transformed}{A boolean, whether to return log-transformed values.}
+\item{rows_as_features}{A boolean. Toggles whether rows or columns are samples.}
 }
 \description{
 See rbeta.

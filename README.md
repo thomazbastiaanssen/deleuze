@@ -34,7 +34,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.646175 | 0.0859372 |
+| observed     | -8.645030 | 0.0861364 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -153,6 +153,9 @@ plot(x = c(unlist(Tjazi::clr_c(data))),
 
 <img src="README_files/figure-gfm/comparing CLR to approx entire table-2.png" width="100%" />
 
+Dividing by the variance of the CLR transformed data before transforming
+reduces dispersion.
+
 ``` r
 set.seed(12345)
 
@@ -190,16 +193,8 @@ res_dummy = apply(dummy, 1,FUN = function(x){
   
 })
 
-par(1,2)
-```
+par(mfrow = c(1,2))
 
-    ## [[1]]
-    ## NULL
-    ## 
-    ## [[2]]
-    ## NULL
-
-``` r
 plot(c(unlist(dummy[1:10,] %>% 
                 t() %>% 
                 Tjazi::clr_c() )),
@@ -209,11 +204,8 @@ plot(c(unlist(dummy[1:10,] %>%
                        (rowMeans(getTableVars(res_dummy[,1:10]))))
           )
 )
-```
 
-![](README_files/figure-gfm/reduce%20overdispersion-1.png)<!-- -->
 
-``` r
 plot(c(unlist(dummy[1:10,] %>% 
                 t() %>% 
                 Tjazi::clr_c() )),
@@ -222,4 +214,4 @@ plot(c(unlist(dummy[1:10,] %>%
                 Tjazi::clr_c() )))
 ```
 
-![](README_files/figure-gfm/reduce%20overdispersion-2.png)<!-- -->
+![](README_files/figure-gfm/reduce%20overdispersion-1.png)<!-- -->

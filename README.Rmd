@@ -142,8 +142,8 @@ plot(x = c(unlist(Tjazi::clr_c(data))),
 
 
 
+Dividing by the variance of the CLR transformed data before transforming reduces dispersion. 
 ```{r reduce overdispersion}
-
 set.seed(12345)
 
 library(tidyverse)
@@ -180,7 +180,7 @@ res_dummy = apply(dummy, 1,FUN = function(x){
   
 })
 
-par(1,2)
+par(mfrow = c(1,2))
 
 plot(c(unlist(dummy[1:10,] %>% 
                 t() %>% 
