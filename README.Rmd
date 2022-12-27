@@ -10,6 +10,7 @@ output:
 library(tidyverse)
 library(deleuze)
 library(patchwork)
+library(Tjazi)
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
 data
@@ -143,7 +144,7 @@ plot(x = c(unlist(Tjazi::clr_c(data))),
 
 
 Dividing by the variance of the CLR transformed data before transforming reduces dispersion. 
-```{r reduce overdispersion}
+```{r reduce overdispersion, out.width = '100%', fig.height = 8}
 set.seed(12345)
 
 library(tidyverse)
@@ -201,3 +202,90 @@ plot(c(unlist(dummy[1:10,] %>%
                 Tjazi::clr_c() )))
   
 ```
+
+
+
+```{r fib comparison, out.width = '100%', fig.height = 6}
+
+x <- 0
+y <- 1
+fib <- c()
+while (x < 2000 & y < 2000){
+  x <- x + y
+  y <- x + y
+  fib = c(fib, x, y)
+}
+length(fib)
+
+
+res_fib = sapply(X = rep(seq(1000,10000, by = 100), each = 10),FUN = function(x){
+  table(factor(sample(paste0("size_",fib), prob = fib, replace = T,size = x ),levels = paste0("size_",fib)))
+  
+})
+
+colnames(res_fib) = paste0(rep(seq(1000,10000, by = 100), each = 10))
+View(res_fib)
+
+res_old <- res_fib %>% 
+  clr_c() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate(name = str_remove(name, pattern = "\\..*")) %>%
+  add_column("type" = "old")
+
+res_new <- (res_fib/rowMeans(getTableVars(res_fib))) %>%
+  getTableMeans() %>%
+  data.frame() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate(name = str_remove(name, pattern = "\\..*")) %>%
+  mutate(name = str_remove(name, pattern = "X")) %>%
+  add_column("type" = "new")
+
+
+rbind(res_old, res_new) %>%
+  mutate(name = as.numeric(name)) %>%
+  mutate(feature = factor(feature,  levels = paste0("size_",fib))) %>%
+  filter(feature %in% paste0("size_",fib)[1:8]) %>%
+  ggplot() +
+  aes(x = name, y = value, fill = type) +
+  
+  geom_point(shape = 21) +
+  facet_wrap(~feature, scales = "free") +
+  theme_bw()
+  
+
+
+res_old <- res_fib %>% 
+  clr_c() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate("type" = "old")
+
+res_new <- (res_fib/rowMeans(getTableVars(res_fib))) %>%
+  getTableMeans() %>%
+  data.frame() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate(name = str_remove(name, pattern = "X")) %>%
+  add_column("type" = "new")
+
+
+rbind(res_old, res_new) %>%
+
+  filter(feature %in% paste0("size_",fib)[1:12]) %>%
+  pivot_wider(names_from = "type") %>%
+  mutate(feature = factor(feature,  levels = paste0("size_",fib))) %>%
+  mutate(name = str_remove(name, pattern = "\\..*")) %>%
+  mutate(name = as.numeric(name)) %>%
+  
+  ggplot() +
+  aes(x = old, y = new, fill = name) +
+  
+  geom_point(shape = 21, alpha = 3/4) +
+  scale_fill_gradient(low = "#4575b4", high = "#d73027") +
+  facet_wrap(~feature, scales = "free", ncol = 4) +
+  theme_bw()
+```
+
+}

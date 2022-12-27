@@ -3,6 +3,7 @@
 library(tidyverse)
 library(deleuze)
 library(patchwork)
+library(Tjazi)
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
 data
@@ -34,7 +35,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645030 | 0.0861364 |
+| observed     | -8.645503 | 0.0871252 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -214,4 +215,102 @@ plot(c(unlist(dummy[1:10,] %>%
                 Tjazi::clr_c() )))
 ```
 
-![](README_files/figure-gfm/reduce%20overdispersion-1.png)<!-- -->
+<img src="README_files/figure-gfm/reduce overdispersion-1.png" width="100%" />
+
+``` r
+x <- 0
+y <- 1
+fib <- c()
+while (x < 2000 & y < 2000){
+  x <- x + y
+  y <- x + y
+  fib = c(fib, x, y)
+}
+length(fib)
+```
+
+    ## [1] 18
+
+``` r
+res_fib = sapply(X = rep(seq(1000,10000, by = 100), each = 10),FUN = function(x){
+  table(factor(sample(paste0("size_",fib), prob = fib, replace = T,size = x ),levels = paste0("size_",fib)))
+  
+})
+
+colnames(res_fib) = paste0(rep(seq(1000,10000, by = 100), each = 10))
+View(res_fib)
+
+res_old <- res_fib %>% 
+  clr_c() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate(name = str_remove(name, pattern = "\\..*")) %>%
+  add_column("type" = "old")
+```
+
+    ## Warning: The `.data` argument of `add_column()` must have unique names as of tibble 3.0.0.
+    ## Use `.name_repair = "minimal"`.
+    ## This warning is displayed once every 8 hours.
+    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
+
+``` r
+res_new <- (res_fib/rowMeans(getTableVars(res_fib))) %>%
+  getTableMeans() %>%
+  data.frame() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate(name = str_remove(name, pattern = "\\..*")) %>%
+  mutate(name = str_remove(name, pattern = "X")) %>%
+  add_column("type" = "new")
+
+
+rbind(res_old, res_new) %>%
+  mutate(name = as.numeric(name)) %>%
+  mutate(feature = factor(feature,  levels = paste0("size_",fib))) %>%
+  filter(feature %in% paste0("size_",fib)[1:8]) %>%
+  ggplot() +
+  aes(x = name, y = value, fill = type) +
+  
+  geom_point(shape = 21) +
+  facet_wrap(~feature, scales = "free") +
+  theme_bw()
+```
+
+<img src="README_files/figure-gfm/fib comparison-1.png" width="100%" />
+
+``` r
+res_old <- res_fib %>% 
+  clr_c() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate("type" = "old")
+
+res_new <- (res_fib/rowMeans(getTableVars(res_fib))) %>%
+  getTableMeans() %>%
+  data.frame() %>%
+  rownames_to_column("feature") %>%
+  pivot_longer(!feature) %>%
+  mutate(name = str_remove(name, pattern = "X")) %>%
+  add_column("type" = "new")
+
+
+rbind(res_old, res_new) %>%
+
+  filter(feature %in% paste0("size_",fib)[1:12]) %>%
+  pivot_wider(names_from = "type") %>%
+  mutate(feature = factor(feature,  levels = paste0("size_",fib))) %>%
+  mutate(name = str_remove(name, pattern = "\\..*")) %>%
+  mutate(name = as.numeric(name)) %>%
+  
+  ggplot() +
+  aes(x = old, y = new, fill = name) +
+  
+  geom_point(shape = 21, alpha = 3/4) +
+  scale_fill_gradient(low = "#4575b4", high = "#d73027") +
+  facet_wrap(~feature, scales = "free", ncol = 4) +
+  theme_bw()
+```
+
+<img src="README_files/figure-gfm/fib comparison-2.png" width="100%" />
+
+}
