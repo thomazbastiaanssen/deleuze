@@ -4,6 +4,8 @@ library(tidyverse)
 library(deleuze)
 library(patchwork)
 library(Tjazi)
+library(vegan) #For PERMANOVA eventually?
+
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
 data
@@ -35,7 +37,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645503 | 0.0871252 |
+| observed     | -8.646037 | 0.0855284 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -218,6 +220,10 @@ plot(c(unlist(dummy[1:10,] %>%
 <img src="README_files/figure-gfm/reduce overdispersion-1.png" width="100%" />
 
 ``` r
+set.seed(12345)
+
+
+
 x <- 0
 y <- 1
 fib <- c()
@@ -226,91 +232,228 @@ while (x < 2000 & y < 2000){
   y <- x + y
   fib = c(fib, x, y)
 }
-length(fib)
-```
 
-    ## [1] 18
 
-``` r
-res_fib = sapply(X = rep(seq(1000,10000, by = 100), each = 10),FUN = function(x){
+res_fib = sapply(X = rep(seq(1000,10000, by = 1000), each = 100),FUN = function(x){
   table(factor(sample(paste0("size_",fib), prob = fib, replace = T,size = x ),levels = paste0("size_",fib)))
   
 })
 
-colnames(res_fib) = paste0(rep(seq(1000,10000, by = 100), each = 10))
-View(res_fib)
+colnames(res_fib) = paste0(rep(seq(1000,10000, by = 1000), each = 100))
+#View(res_fib)
 
-res_old <- res_fib %>% 
-  clr_c() %>%
-  rownames_to_column("feature") %>%
-  pivot_longer(!feature) %>%
-  mutate(name = str_remove(name, pattern = "\\..*")) %>%
-  add_column("type" = "old")
-```
-
-    ## Warning: The `.data` argument of `add_column()` must have unique names as of tibble 3.0.0.
-    ## Use `.name_repair = "minimal"`.
-    ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
-
-``` r
-res_new <- (res_fib/rowMeans(getTableVars(res_fib))) %>%
-  getTableMeans() %>%
+data.a.pca = res_fib %>% 
+  cbind("real" = fib) %>%
   data.frame() %>%
-  rownames_to_column("feature") %>%
-  pivot_longer(!feature) %>%
-  mutate(name = str_remove(name, pattern = "\\..*")) %>%
-  mutate(name = str_remove(name, pattern = "X")) %>%
-  add_column("type" = "new")
+  clr_c() %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(data.a.pca$sdev[1]^2/sum(data.a.pca$sdev^2),4) * 100
+pc2 <- round(data.a.pca$sdev[2]^2/sum(data.a.pca$sdev^2),4) * 100
+pc3 <- round(data.a.pca$sdev[3]^2/sum(data.a.pca$sdev^2),4) * 100
+pc4 <- round(data.a.pca$sdev[4]^2/sum(data.a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = data.a.pca$x[,1], 
+                  PC2 = data.a.pca$x[,2], 
+                  PC3 = data.a.pca$x[,3], 
+                  PC4 = data.a.pca$x[,4])
+
+pca$samples = str_remove(row.names(pca), pattern = "X") %>%
+  str_remove("\\..*") %>% factor(levels = c(seq(1000,10000, by = 1000), "real"))
 
 
-rbind(res_old, res_new) %>%
-  mutate(name = as.numeric(name)) %>%
-  mutate(feature = factor(feature,  levels = paste0("size_",fib))) %>%
-  filter(feature %in% paste0("size_",fib)[1:8]) %>%
-  ggplot() +
-  aes(x = name, y = value, fill = type) +
+
+#First, the main plot. Plot the first two components of the PCA
+old = ggplot(pca, aes(x       = PC1,
+                y       = PC2,
+                fill    = samples)) +  
   
-  geom_point(shape = 21) +
-  facet_wrap(~feature, scales = "free") +
-  theme_bw()
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("old method") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+data.a.pca = (res_fib %>% cbind("real" = fib)) %>%
+  data.frame() %>%
+  getTableMeans() %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(data.a.pca$sdev[1]^2/sum(data.a.pca$sdev^2),4) * 100
+pc2 <- round(data.a.pca$sdev[2]^2/sum(data.a.pca$sdev^2),4) * 100
+pc3 <- round(data.a.pca$sdev[3]^2/sum(data.a.pca$sdev^2),4) * 100
+pc4 <- round(data.a.pca$sdev[4]^2/sum(data.a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = data.a.pca$x[,1], 
+                  PC2 = data.a.pca$x[,2], 
+                  PC3 = data.a.pca$x[,3], 
+                  PC4 = data.a.pca$x[,4])
+
+pca$samples = str_remove(row.names(pca), pattern = "X") %>%
+  str_remove("\\..*") %>% factor(levels = c(seq(1000,10000, by = 1000), "real"))
+
+
+
+#First, the main plot. Plot the first two components of the PCA
+new = ggplot(pca, aes(x       = PC1,
+                      y       = PC2,
+                      fill    = samples)) +  
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("new method") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+data.a.pca = (res_fib %>% cbind("real" = fib)/(rowMeans(getTableVars(res_fib %>% cbind("real" = fib))))) %>%
+  data.frame() %>%
+  getTableMeans() %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(data.a.pca$sdev[1]^2/sum(data.a.pca$sdev^2),4) * 100
+pc2 <- round(data.a.pca$sdev[2]^2/sum(data.a.pca$sdev^2),4) * 100
+pc3 <- round(data.a.pca$sdev[3]^2/sum(data.a.pca$sdev^2),4) * 100
+pc4 <- round(data.a.pca$sdev[4]^2/sum(data.a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = data.a.pca$x[,1], 
+                  PC2 = data.a.pca$x[,2], 
+                  PC3 = data.a.pca$x[,3], 
+                  PC4 = data.a.pca$x[,4])
+
+pca$samples = str_remove(row.names(pca), pattern = "X") %>%
+  str_remove("\\..*") %>% factor(levels = c(seq(1000,10000, by = 1000), "real"))
+
+
+
+#First, the main plot. Plot the first two components of the PCA
+new_shrunk = ggplot(pca, 
+                    aes(x       = PC1,
+                        y       = PC2,
+                        fill    = samples)) +  
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("new shrunk method") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+old + new + new_shrunk + plot_layout(guides = 'collect') &  theme(legend.position = 'bottom') 
 ```
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
 
 <img src="README_files/figure-gfm/fib comparison-1.png" width="100%" />
 
 ``` r
-res_old <- res_fib %>% 
-  clr_c() %>%
-  rownames_to_column("feature") %>%
-  pivot_longer(!feature) %>%
-  mutate("type" = "old")
+df_shr <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
+cbind("real" = fib) %>%
+       data.frame() %>%
+  
+       getTableMeans() %>%
+  t() %>%
+dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame()
 
-res_new <- (res_fib/rowMeans(getTableVars(res_fib))) %>%
-  getTableMeans() %>%
+df_new <- (res_fib %>% cbind("real" = fib)) %>%
   data.frame() %>%
-  rownames_to_column("feature") %>%
-  pivot_longer(!feature) %>%
-  mutate(name = str_remove(name, pattern = "X")) %>%
-  add_column("type" = "new")
+  getTableMeans() %>%
+  t() %>%
+  dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame() 
+
+df_c <- (res_fib %>% cbind("real" = fib)) %>%
+  data.frame() %>%
+  Tjazi::clr_c() %>%
+  t() %>%
+  dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame() 
+
+df_unif <- (res_fib %>% cbind("real" = fib)) %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  t() %>%
+  dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame() 
+
+df_logunif <- (res_fib %>% cbind("real" = fib)) %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  t() %>%
+  dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame() 
 
 
-rbind(res_old, res_new) %>%
+plot_df = data.frame(constant = df_c[,"real"], 
+                     new      = df_new[,"real"],
+                     #shrunk   = df_shr[,"real"], 
+                     unif      = df_unif[,"real"], 
+                     logunif   = df_logunif[,"real"], 
+                     
+                     sample   = c(rep(seq(1000,10000, by = 1000), each = 100),"NA"))
 
-  filter(feature %in% paste0("size_",fib)[1:12]) %>%
-  pivot_wider(names_from = "type") %>%
-  mutate(feature = factor(feature,  levels = paste0("size_",fib))) %>%
-  mutate(name = str_remove(name, pattern = "\\..*")) %>%
-  mutate(name = as.numeric(name)) %>%
+plot_df %>% 
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, sample)) %>%
+  filter(sample != "NA") %>%
+  mutate(sample = factor(sample, levels = seq(1000,10000, by = 1000))) %>%
+  #mutate(sample = as.numeric(sample)) %>%
   
   ggplot() +
-  aes(x = old, y = new, fill = name) +
-  
-  geom_point(shape = 21, alpha = 3/4) +
-  scale_fill_gradient(low = "#4575b4", high = "#d73027") +
-  facet_wrap(~feature, scales = "free", ncol = 4) +
-  theme_bw()
+  aes(x = sample, y = value, fill = name) +
+  geom_boxplot() + 
+  geom_point(shape = 21, position = position_dodge(0.75)) +
+  theme_bw() +
+  xlab("Number of counts taken") +
+  ylab("Aitchison distance from ground truth")
 ```
 
 <img src="README_files/figure-gfm/fib comparison-2.png" width="100%" />
-
-}
