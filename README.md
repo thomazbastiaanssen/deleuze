@@ -37,7 +37,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.646037 | 0.0855284 |
+| observed     | -8.645020 | 0.0862882 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -415,13 +415,13 @@ df_c <- (res_fib %>% cbind("real" = fib)) %>%
   as.matrix %>%
   data.frame() 
 
-df_unif <- (res_fib %>% cbind("real" = fib)) %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
-  t() %>%
-  dist(., diag = T, upper = T, method = "euclidean")  %>%
-  as.matrix %>%
-  data.frame() 
+# df_unif <- (res_fib %>% cbind("real" = fib)) %>%
+#   data.frame() %>%
+#   Tjazi::clr_unif() %>%
+#   t() %>%
+#   dist(., diag = T, upper = T, method = "euclidean")  %>%
+#   as.matrix %>%
+#   data.frame() 
 
 df_logunif <- (res_fib %>% cbind("real" = fib)) %>%
   data.frame() %>%
@@ -435,7 +435,7 @@ df_logunif <- (res_fib %>% cbind("real" = fib)) %>%
 plot_df = data.frame(constant = df_c[,"real"], 
                      new      = df_new[,"real"],
                      #shrunk   = df_shr[,"real"], 
-                     unif      = df_unif[,"real"], 
+                     #unif      = df_unif[,"real"], 
                      logunif   = df_logunif[,"real"], 
                      
                      sample   = c(rep(seq(1000,10000, by = 1000), each = 100),"NA"))
