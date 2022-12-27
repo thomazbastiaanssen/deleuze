@@ -207,7 +207,7 @@ plot(c(unlist(dummy[1:10,] %>%
 
 
 
-```{r fib comparison, out.width = '100%', fig.height = 6, cache=TRUE}
+```{r fib comparison, out.width = '100%', fig.height = 6}
 set.seed(12345)
 
 
