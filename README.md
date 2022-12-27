@@ -4,7 +4,7 @@ library(tidyverse)
 library(deleuze)
 library(patchwork)
 library(Tjazi)
-library(vegan) #For PERMANOVA eventually?
+library(vegan)
 
 data = volatility::vola_genus_table$Validation_Pre_Control_2
 
@@ -37,7 +37,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.643650 | 0.0855051 |
+| observed     | -8.645057 | 0.0866959 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -93,68 +93,6 @@ rbind(a, b) %>%
 For benchmarking click
 [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md)
 (put on its own page as it’s slow to knit)
-
-``` r
-#real sampled data
-data = volatility::vola_genus_table
-
-
-a = data %>% 
-  Tjazi::clr_c() %>%
-  t 
-
-b = data %>% 
-  getTableMeans() %>%
-  t
-
-#Apply the base R principal component analysis function on our CLR-transformed data.
-
-data.a.pca = rbind(a, b) %>% 
-  prcomp()
-
-#Extract the amount of variance the first four components explain for plotting. 
-pc1 <- round(data.a.pca$sdev[1]^2/sum(data.a.pca$sdev^2),4) * 100
-pc2 <- round(data.a.pca$sdev[2]^2/sum(data.a.pca$sdev^2),4) * 100
-pc3 <- round(data.a.pca$sdev[3]^2/sum(data.a.pca$sdev^2),4) * 100
-pc4 <- round(data.a.pca$sdev[4]^2/sum(data.a.pca$sdev^2),4) * 100
-
-#Extract the scores for every sample for the first four components for plotting. 
-pca  = data.frame(PC1 = data.a.pca$x[,1], 
-                  PC2 = data.a.pca$x[,2], 
-                  PC3 = data.a.pca$x[,3], 
-                  PC4 = data.a.pca$x[,4])
-
-pca$Type = rep(c("lognorm", "estimated"), each = 120 )
-pca$ID   = paste0("s",1:120)
-
-
-
-#First, the main plot. Plot the first two components of the PCA
-ggplot(pca, aes(x       = PC1,
-                y       = PC2,
-                fill    = Type)) +  
-  
-  #Create the points and ellipses
-  geom_path(aes(group = ID), col = "black") +
-  geom_point(size=3, col = "black", shape = 21) + 
-  #Adjust appearance
-  
-  #Adjust labels
-  ggtitle("lognorm vs new method") + 
-  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
-  ylab(paste("PC2: ", pc2,  "%", sep="")) +
-  theme_bw() +
-  theme(legend.position = 'bottom') 
-```
-
-<img src="README_files/figure-gfm/comparing CLR to approx entire table-1.png" width="100%" />
-
-``` r
-plot(x = c(unlist(Tjazi::clr_c(data))),
-     y = c(getTableMeans(data)))
-```
-
-<img src="README_files/figure-gfm/comparing CLR to approx entire table-2.png" width="100%" />
 
 Dividing by the variance of the CLR transformed data before transforming
 reduces dispersion.
@@ -453,7 +391,162 @@ plot_df %>%
   geom_point(shape = 21, position = position_dodge(0.75)) +
   theme_bw() +
   xlab("Number of counts taken") +
-  ylab("Aitchison distance from ground truth")
+  ylab("Aitchison distance from ground truth") +
+  theme(legend.position = 'bottom') 
 ```
 
 <img src="README_files/figure-gfm/fib comparison-2.png" width="100%" />
+
+``` r
+df_shr <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
+cbind("real" = fib) %>%
+       data.frame() %>%
+  
+       getTableMeans() %>%
+  t() %>%
+dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame()
+
+df_new <- (res_fib %>% cbind("real" = fib)) %>%
+  data.frame() %>%
+  getTableMeans() %>%
+  t() %>%
+  dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame() 
+
+df_c <- (res_fib %>% cbind("real" = fib)) %>%
+  data.frame() %>%
+  Tjazi::clr_c() %>%
+  t() %>%
+  dist(., diag = T, upper = T, method = "euclidean")  %>%
+  as.matrix %>%
+  data.frame() 
+
+# df_unif <- (res_fib %>% cbind("real" = fib)) %>%
+#   data.frame() %>%
+#   Tjazi::clr_unif() %>%
+#   t() %>%
+#   dist(., diag = T, upper = T, method = "euclidean")  %>%
+#   as.matrix %>%
+#   data.frame() 
+```
+
+``` r
+dist_logunif <- res_fib %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")  
+
+dist_const <- res_fib %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")  
+
+dist_unif <- res_fib %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")  
+
+dist_shrunk <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
+  data.frame() %>%
+  getTableMeans() %>%
+  t() %>%
+  dist(x = .,method = "euclidean")
+
+dist_new <- res_fib %>% 
+  data.frame() %>%
+  getTableMeans() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")
+
+
+groups = rep(seq(1000,10000, by = 1000), each = 100)
+
+vegan::adonis2(dist_const   ~ groups, method = "euclidean")
+```
+
+    ## Permutation test for adonis under reduced model
+    ## Terms added sequentially (first to last)
+    ## Permutation: free
+    ## Number of permutations: 999
+    ## 
+    ## vegan::adonis2(formula = dist_const ~ groups, method = "euclidean")
+    ##           Df SumOfSqs      R2      F Pr(>F)    
+    ## groups     1   452.82 0.19247 237.86  0.001 ***
+    ## Residual 998  1899.89 0.80753                  
+    ## Total    999  2352.71 1.00000                  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+vegan::adonis2(dist_unif    ~ groups, method = "euclidean")
+```
+
+    ## Permutation test for adonis under reduced model
+    ## Terms added sequentially (first to last)
+    ## Permutation: free
+    ## Number of permutations: 999
+    ## 
+    ## vegan::adonis2(formula = dist_unif ~ groups, method = "euclidean")
+    ##           Df SumOfSqs      R2      F Pr(>F)    
+    ## groups     1   390.28 0.16014 190.29  0.001 ***
+    ## Residual 998  2046.84 0.83986                  
+    ## Total    999  2437.12 1.00000                  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+vegan::adonis2(dist_logunif ~ groups, method = "euclidean")
+```
+
+    ## Permutation test for adonis under reduced model
+    ## Terms added sequentially (first to last)
+    ## Permutation: free
+    ## Number of permutations: 999
+    ## 
+    ## vegan::adonis2(formula = dist_logunif ~ groups, method = "euclidean")
+    ##           Df SumOfSqs      R2      F Pr(>F)    
+    ## groups     1   235.03 0.07716 83.448  0.001 ***
+    ## Residual 998  2810.81 0.92284                  
+    ## Total    999  3045.83 1.00000                  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+vegan::adonis2(dist_new     ~ groups, method = "euclidean")
+```
+
+    ## Permutation test for adonis under reduced model
+    ## Terms added sequentially (first to last)
+    ## Permutation: free
+    ## Number of permutations: 999
+    ## 
+    ## vegan::adonis2(formula = dist_new ~ groups, method = "euclidean")
+    ##           Df SumOfSqs      R2      F Pr(>F)    
+    ## groups     1   317.23 0.12563 143.39  0.001 ***
+    ## Residual 998  2207.90 0.87437                  
+    ## Total    999  2525.13 1.00000                  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean")
+```
+
+    ## Permutation test for adonis under reduced model
+    ## Terms added sequentially (first to last)
+    ## Permutation: free
+    ## Number of permutations: 999
+    ## 
+    ## vegan::adonis2(formula = dist_shrunk ~ groups, method = "euclidean")
+    ##           Df SumOfSqs      R2      F Pr(>F)    
+    ## groups     1    376.8 0.11624 131.27  0.001 ***
+    ## Residual 998   2864.4 0.88376                  
+    ## Total    999   3241.2 1.00000                  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
