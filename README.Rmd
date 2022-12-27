@@ -446,11 +446,11 @@ dist_new <- res_fib %>%
 
 groups = rep(seq(1000,10000, by = 1000), each = 100)
 
-vegan::adonis2(dist_const   ~ groups, method = "euclidean")
-vegan::adonis2(dist_unif    ~ groups, method = "euclidean")
-vegan::adonis2(dist_logunif ~ groups, method = "euclidean")
-vegan::adonis2(dist_new     ~ groups, method = "euclidean")
-vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean")
+vegan::adonis2(dist_const   ~ groups, method = "euclidean", permutations = 10000)
+vegan::adonis2(dist_unif    ~ groups, method = "euclidean", permutations = 10000)
+vegan::adonis2(dist_logunif ~ groups, method = "euclidean", permutations = 10000)
+vegan::adonis2(dist_new     ~ groups, method = "euclidean", permutations = 10000)
+vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 10000)
 
 ```
 

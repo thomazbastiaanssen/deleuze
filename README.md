@@ -37,7 +37,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645057 | 0.0866959 |
+| observed     | -8.645835 | 0.0855425 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -467,86 +467,86 @@ dist_new <- res_fib %>%
 
 groups = rep(seq(1000,10000, by = 1000), each = 100)
 
-vegan::adonis2(dist_const   ~ groups, method = "euclidean")
+vegan::adonis2(dist_const   ~ groups, method = "euclidean", permutations = 10000)
 ```
 
     ## Permutation test for adonis under reduced model
     ## Terms added sequentially (first to last)
     ## Permutation: free
-    ## Number of permutations: 999
+    ## Number of permutations: 10000
     ## 
-    ## vegan::adonis2(formula = dist_const ~ groups, method = "euclidean")
-    ##           Df SumOfSqs      R2      F Pr(>F)    
-    ## groups     1   452.82 0.19247 237.86  0.001 ***
-    ## Residual 998  1899.89 0.80753                  
-    ## Total    999  2352.71 1.00000                  
+    ## vegan::adonis2(formula = dist_const ~ groups, permutations = 10000, method = "euclidean")
+    ##           Df SumOfSqs      R2      F    Pr(>F)    
+    ## groups     1   452.82 0.19247 237.86 9.999e-05 ***
+    ## Residual 998  1899.89 0.80753                     
+    ## Total    999  2352.71 1.00000                     
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-vegan::adonis2(dist_unif    ~ groups, method = "euclidean")
+vegan::adonis2(dist_unif    ~ groups, method = "euclidean", permutations = 10000)
 ```
 
     ## Permutation test for adonis under reduced model
     ## Terms added sequentially (first to last)
     ## Permutation: free
-    ## Number of permutations: 999
+    ## Number of permutations: 10000
     ## 
-    ## vegan::adonis2(formula = dist_unif ~ groups, method = "euclidean")
-    ##           Df SumOfSqs      R2      F Pr(>F)    
-    ## groups     1   390.28 0.16014 190.29  0.001 ***
-    ## Residual 998  2046.84 0.83986                  
-    ## Total    999  2437.12 1.00000                  
+    ## vegan::adonis2(formula = dist_unif ~ groups, permutations = 10000, method = "euclidean")
+    ##           Df SumOfSqs      R2      F    Pr(>F)    
+    ## groups     1   390.28 0.16014 190.29 9.999e-05 ***
+    ## Residual 998  2046.84 0.83986                     
+    ## Total    999  2437.12 1.00000                     
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-vegan::adonis2(dist_logunif ~ groups, method = "euclidean")
+vegan::adonis2(dist_logunif ~ groups, method = "euclidean", permutations = 10000)
 ```
 
     ## Permutation test for adonis under reduced model
     ## Terms added sequentially (first to last)
     ## Permutation: free
-    ## Number of permutations: 999
+    ## Number of permutations: 10000
     ## 
-    ## vegan::adonis2(formula = dist_logunif ~ groups, method = "euclidean")
-    ##           Df SumOfSqs      R2      F Pr(>F)    
-    ## groups     1   235.03 0.07716 83.448  0.001 ***
-    ## Residual 998  2810.81 0.92284                  
-    ## Total    999  3045.83 1.00000                  
+    ## vegan::adonis2(formula = dist_logunif ~ groups, permutations = 10000, method = "euclidean")
+    ##           Df SumOfSqs      R2      F    Pr(>F)    
+    ## groups     1   235.03 0.07716 83.448 9.999e-05 ***
+    ## Residual 998  2810.81 0.92284                     
+    ## Total    999  3045.83 1.00000                     
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-vegan::adonis2(dist_new     ~ groups, method = "euclidean")
+vegan::adonis2(dist_new     ~ groups, method = "euclidean", permutations = 10000)
 ```
 
     ## Permutation test for adonis under reduced model
     ## Terms added sequentially (first to last)
     ## Permutation: free
-    ## Number of permutations: 999
+    ## Number of permutations: 10000
     ## 
-    ## vegan::adonis2(formula = dist_new ~ groups, method = "euclidean")
-    ##           Df SumOfSqs      R2      F Pr(>F)    
-    ## groups     1   317.23 0.12563 143.39  0.001 ***
-    ## Residual 998  2207.90 0.87437                  
-    ## Total    999  2525.13 1.00000                  
+    ## vegan::adonis2(formula = dist_new ~ groups, permutations = 10000, method = "euclidean")
+    ##           Df SumOfSqs      R2      F    Pr(>F)    
+    ## groups     1   317.23 0.12563 143.39 9.999e-05 ***
+    ## Residual 998  2207.90 0.87437                     
+    ## Total    999  2525.13 1.00000                     
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean")
+vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 10000)
 ```
 
     ## Permutation test for adonis under reduced model
     ## Terms added sequentially (first to last)
     ## Permutation: free
-    ## Number of permutations: 999
+    ## Number of permutations: 10000
     ## 
-    ## vegan::adonis2(formula = dist_shrunk ~ groups, method = "euclidean")
-    ##           Df SumOfSqs      R2      F Pr(>F)    
-    ## groups     1    376.8 0.11624 131.27  0.001 ***
-    ## Residual 998   2864.4 0.88376                  
-    ## Total    999   3241.2 1.00000                  
+    ## vegan::adonis2(formula = dist_shrunk ~ groups, permutations = 10000, method = "euclidean")
+    ##           Df SumOfSqs      R2      F    Pr(>F)    
+    ## groups     1    376.8 0.11624 131.27 9.999e-05 ***
+    ## Residual 998   2864.4 0.88376                     
+    ## Total    999   3241.2 1.00000                     
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
