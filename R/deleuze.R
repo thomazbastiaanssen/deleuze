@@ -83,13 +83,13 @@ sCLR <- function(count_table, cols_as_features = F){
           MARGIN = 2 - cols_as_features, 
           FUN = getBetaMeans,
           log_transformed = F, 
-          simplify = T)/
-      apply(X = getTableVars(count_table, CLR_transformed = T, 
-                             cols_as_features = cols_as_features),
-            MARGIN = 1 + cols_as_features,
-            FUN = mean, 
-            simplify = T), 
-    cols_as_features = F)
+          simplify = T), 
+    cols_as_features = F)/
+    (apply(X = getTableVars(count_table, CLR_transformed = T, 
+                           cols_as_features = cols_as_features),
+          MARGIN = 1 + cols_as_features,
+          FUN = mean, 
+          simplify = T))
   
 
   if(cols_as_features)(res_clr = t(res_clr))

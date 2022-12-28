@@ -44,7 +44,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645728 | 0.0852562 |
+| observed     | -8.644120 | 0.0848185 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
