@@ -2,7 +2,7 @@
 % Please edit documentation in R/deleuze.R
 \name{getTableVars}
 \alias{getTableVars}
-\title{Estimate the approximated vars from a CLR-transformed count sample using.}
+\title{Estimate the approximated vars from a CLR-transformed count sample.}
 \usage{
 getTableVars(count_table, CLR_transformed = T, rows_as_features = F)
 }

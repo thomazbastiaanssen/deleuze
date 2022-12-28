@@ -2,7 +2,7 @@
 % Please edit documentation in R/deleuze.R
 \name{getTableMeans}
 \alias{getTableMeans}
-\title{Estimate the approximated means from a CLR-transformed count sample using.}
+\title{Estimate the approximated means from a CLR-transformed count sample.}
 \usage{
 getTableMeans(count_table, CLR_transformed = T, rows_as_features = F)
 }

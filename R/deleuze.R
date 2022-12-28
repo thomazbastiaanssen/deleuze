@@ -1,4 +1,4 @@
-#' Estimate the approximated means from a CLR-transformed count sample using.  
+#' Estimate the approximated means from a CLR-transformed count sample.  
 #'
 #' @description See rbeta.
 #' @param count_table A table of count data with rows as features and columns as samples. 
@@ -27,7 +27,7 @@ getTableMeans <- function(count_table, CLR_transformed = T, rows_as_features = F
   return(table_means)
 }
 
-#' Estimate the approximated vars from a CLR-transformed count sample using.  
+#' Estimate the approximated vars from a CLR-transformed count sample.  
 #'
 #' @description See rbeta.
 #' @param count_table A table of count data with rows as features and columns as samples. 
@@ -54,4 +54,19 @@ getTableVars <- function(count_table, CLR_transformed = T, rows_as_features = F)
   if(rows_as_features){table_vars = t(table_vars)}
   
   return(table_vars)
+}
+
+
+#' Give shrunk means from a CLR-transformed count sample.  
+#'
+#' @description See rbeta.
+#' @param count_table A table of count data with rows as features and columns as samples. 
+#' 
+#' @export
+#'
+sCLR <- function(count_table){
+  getTableMeans(
+    getTableMeans(count_table, CLR_transformed = F)/
+      rowMeans(getTableVars(count_table, CLR_transformed = F)),
+    CLR_transformed = T)
 }
