@@ -1,0 +1,87 @@
+---
+output:
+  md_document:
+    variant: gfm
+---
+
+
+```{r setup, message = FALSE}
+#devtools::install_github("thomazbastiaanssen/volatility")
+library(tidyverse)
+library(deleuze)
+library(patchwork)
+library(Tjazi)
+library(vegan)
+
+
+```
+
+```{r permanovas}
+set.seed(12345)
+library(tidyverse)
+library(deleuze)
+library(patchwork)
+library(Tjazi)
+library(vegan)
+
+x <- 0
+y <- 1
+fib <- c()
+while (x < 2000 & y < 2000){
+  x <- x + y
+  y <- x + y
+  fib = c(fib, x, y)
+}
+
+
+res_fib = sapply(X = rep(seq(1000,10000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("size_",fib), prob = fib, replace = T,size = x ),levels = paste0("size_",fib)))
+  
+})
+
+colnames(res_fib) = paste0(rep(seq(1000,10000, by = 1000), each = 100))
+
+
+
+dist_logunif <- res_fib %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")  
+
+dist_const <- res_fib %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")  
+
+dist_unif <- res_fib %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")  
+
+dist_shrunk <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
+  data.frame() %>%
+  getTableMeans() %>%
+  t() %>%
+  dist(x = .,method = "euclidean")
+
+dist_new <- res_fib %>% 
+  data.frame() %>%
+  getTableMeans() %>%
+  t() %>%
+  dist(x = ., method = "euclidean")
+
+
+groups = rep(seq(1000,10000, by = 1000), each = 100)
+
+vegan::adonis2(dist_const   ~ groups, method = "euclidean", permutations = 1000)
+vegan::adonis2(dist_unif    ~ groups, method = "euclidean", permutations = 1000)
+vegan::adonis2(dist_logunif ~ groups, method = "euclidean", permutations = 1000)
+vegan::adonis2(dist_new     ~ groups, method = "euclidean", permutations = 1000)
+vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 1000)
+
+```
+
+

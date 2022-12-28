@@ -1,3 +1,10 @@
+For benchmarking click
+[Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md)
+For PERMANOVAs click
+[Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/permanova.md)
+
+(put on their own page as it’s slow to knit)
+
 ``` r
 #devtools::install_github("thomazbastiaanssen/volatility")
 library(tidyverse)
@@ -37,7 +44,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645835 | 0.0855425 |
+| observed     | -8.645781 | 0.0869779 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -89,10 +96,6 @@ rbind(a, b) %>%
 ```
 
 <img src="README_files/figure-gfm/comparing CLR to approx-1.png" width="100%" />
-
-For benchmarking click
-[Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md)
-(put on its own page as it’s slow to knit)
 
 Dividing by the variance of the CLR transformed data before transforming
 reduces dispersion.
@@ -327,8 +330,11 @@ old + new + new_shrunk + plot_layout(guides = 'collect') &  theme(legend.positio
 <img src="README_files/figure-gfm/fib comparison-1.png" width="100%" />
 
 ``` r
-df_shr <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
-cbind("real" = fib) %>%
+df_shr <- (getTableMeans(res_fib %>%
+                           cbind("real" = fib),
+                         CLR_transformed = F)/
+             (rowMeans(getTableVars(res_fib %>%
+                                      cbind("real" = fib) )))) %>%
        data.frame() %>%
   
        getTableMeans() %>%
@@ -372,7 +378,7 @@ df_logunif <- (res_fib %>% cbind("real" = fib)) %>%
 
 plot_df = data.frame(constant = df_c[,"real"], 
                      new      = df_new[,"real"],
-                     #shrunk   = df_shr[,"real"], 
+                     shrunk   = df_shr[,"real"], 
                      #unif      = df_unif[,"real"], 
                      logunif   = df_logunif[,"real"], 
                      
@@ -398,7 +404,7 @@ plot_df %>%
 <img src="README_files/figure-gfm/fib comparison-2.png" width="100%" />
 
 ``` r
-df_shr <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
+df_shr <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
 cbind("real" = fib) %>%
        data.frame() %>%
   
@@ -434,27 +440,52 @@ df_c <- (res_fib %>% cbind("real" = fib)) %>%
 ```
 
 ``` r
-dist_logunif <- res_fib %>%
-  data.frame() %>%
-  Tjazi::clr_logunif() %>%
-  t() %>%
-  dist(x = ., method = "euclidean")  
+set.seed(12345)
+library(tidyverse)
+library(deleuze)
+library(patchwork)
+library(Tjazi)
+library(vegan)
+
+x <- 0
+y <- 1
+fib <- c()
+while (x < 2000 & y < 2000){
+  x <- x + y
+  y <- x + y
+  fib = c(fib, x, y)
+}
+
+
+res_fib = sapply(X = rep(seq(1000,10000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("size_",fib), prob = fib, replace = T,size = x ),levels = paste0("size_",fib)))
+  
+})
+
+colnames(res_fib) = paste0(rep(seq(1000,10000, by = 1000), each = 100))
+
+# 
+# dist_logunif <- res_fib %>%
+#   data.frame() %>%
+#   Tjazi::clr_logunif() %>%
+#   t() %>%
+#   dist(x = ., method = "euclidean")  
 
 dist_const <- res_fib %>%  
   data.frame() %>%
   Tjazi::clr_c() %>%
   t() %>%
   dist(x = ., method = "euclidean")  
+# 
+# dist_unif <- res_fib %>%
+#   data.frame() %>%
+#   Tjazi::clr_unif() %>%
+#   t() %>%
+#   dist(x = ., method = "euclidean")  
 
-dist_unif <- res_fib %>%
+dist_shrunk <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
   data.frame() %>%
-  Tjazi::clr_unif() %>%
-  t() %>%
-  dist(x = ., method = "euclidean")  
-
-dist_shrunk <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
-  data.frame() %>%
-  getTableMeans() %>%
+  #getTableMeans() %>%
   t() %>%
   dist(x = .,method = "euclidean")
 
@@ -465,88 +496,70 @@ dist_new <- res_fib %>%
   dist(x = ., method = "euclidean")
 
 
-groups = rep(seq(1000,10000, by = 1000), each = 100)
+lm_shrunk <- data.frame(col=colnames(as.matrix(dist_shrunk))[col(as.matrix(dist_shrunk))], 
+                        row=rownames(as.matrix(dist_shrunk))[row(as.matrix(dist_shrunk))], 
+                        dist=c(as.matrix(dist_shrunk))) %>%
+  mutate(X1 = str_remove(col, "X") %>% str_remove("\\..*") %>% as.numeric(), 
+         X2 = str_remove(row, "X") %>% str_remove("\\..*") %>% as.numeric())
 
-vegan::adonis2(dist_const   ~ groups, method = "euclidean", permutations = 10000)
+
+lm_new = data.frame(col=colnames(as.matrix(dist_new))[col(as.matrix(dist_new))], 
+                      row=rownames(as.matrix(dist_new))[row(as.matrix(dist_new))], 
+                      dist=c(as.matrix(dist_new))) %>%
+  mutate(X1 = str_remove(col, "X") %>% str_remove("\\..*") %>% as.numeric(), 
+         X2 = str_remove(row, "X") %>% str_remove("\\..*") %>% as.numeric())
+
+lm_const = data.frame(col=colnames(as.matrix(dist_const))[col(as.matrix(dist_const))], 
+                      row=rownames(as.matrix(dist_const))[row(as.matrix(dist_const))], 
+                      dist=c(as.matrix(dist_const))) %>%
+  mutate(X1 = str_remove(col, "X") %>% str_remove("\\..*") %>% as.numeric(), 
+         X2 = str_remove(row, "X") %>% str_remove("\\..*") %>% as.numeric())
+
+
+
+lm_const %>%
+  group_by(X1, X2) %>%
+  summarise(dist = mean(dist)) %>%
+  
+  ggplot() +
+  aes(x = (X1), y = (X2), label = round(dist, 3)) +
+  geom_tile(aes(fill = dist)) +
+  geom_label()
 ```
 
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 10000
-    ## 
-    ## vegan::adonis2(formula = dist_const ~ groups, permutations = 10000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F    Pr(>F)    
-    ## groups     1   452.82 0.19247 237.86 9.999e-05 ***
-    ## Residual 998  1899.89 0.80753                     
-    ## Total    999  2352.71 1.00000                     
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## `summarise()` has grouped output by 'X1'. You can override using the `.groups`
+    ## argument.
+
+![](README_files/figure-gfm/depth%20analysis-1.png)<!-- -->
 
 ``` r
-vegan::adonis2(dist_unif    ~ groups, method = "euclidean", permutations = 10000)
+lm_shrunk %>%
+  group_by(X1, X2) %>%
+  summarise(dist = mean(dist)) %>%
+  
+  ggplot() +
+  aes(x = (X1), y = (X2), label = round(dist, 3)) +
+  geom_tile(aes(fill = dist)) +
+  geom_label()
 ```
 
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 10000
-    ## 
-    ## vegan::adonis2(formula = dist_unif ~ groups, permutations = 10000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F    Pr(>F)    
-    ## groups     1   390.28 0.16014 190.29 9.999e-05 ***
-    ## Residual 998  2046.84 0.83986                     
-    ## Total    999  2437.12 1.00000                     
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## `summarise()` has grouped output by 'X1'. You can override using the `.groups`
+    ## argument.
+
+![](README_files/figure-gfm/depth%20analysis-2.png)<!-- -->
 
 ``` r
-vegan::adonis2(dist_logunif ~ groups, method = "euclidean", permutations = 10000)
+lm_new %>%
+  group_by(X1, X2) %>%
+  summarise(dist = mean(dist)) %>%
+  
+  ggplot() +
+  aes(x = (X1), y = (X2), label = round(dist, 3)) +
+  geom_tile(aes(fill = dist)) +
+  geom_label()
 ```
 
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 10000
-    ## 
-    ## vegan::adonis2(formula = dist_logunif ~ groups, permutations = 10000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F    Pr(>F)    
-    ## groups     1   235.03 0.07716 83.448 9.999e-05 ***
-    ## Residual 998  2810.81 0.92284                     
-    ## Total    999  3045.83 1.00000                     
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## `summarise()` has grouped output by 'X1'. You can override using the `.groups`
+    ## argument.
 
-``` r
-vegan::adonis2(dist_new     ~ groups, method = "euclidean", permutations = 10000)
-```
-
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 10000
-    ## 
-    ## vegan::adonis2(formula = dist_new ~ groups, permutations = 10000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F    Pr(>F)    
-    ## groups     1   317.23 0.12563 143.39 9.999e-05 ***
-    ## Residual 998  2207.90 0.87437                     
-    ## Total    999  2525.13 1.00000                     
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-``` r
-vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 10000)
-```
-
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 10000
-    ## 
-    ## vegan::adonis2(formula = dist_shrunk ~ groups, permutations = 10000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F    Pr(>F)    
-    ## groups     1    376.8 0.11624 131.27 9.999e-05 ***
-    ## Residual 998   2864.4 0.88376                     
-    ## Total    999   3241.2 1.00000                     
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+![](README_files/figure-gfm/depth%20analysis-3.png)<!-- -->

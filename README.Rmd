@@ -3,7 +3,10 @@ output:
   md_document:
     variant: gfm
 ---
+For benchmarking click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md) 
+For PERMANOVAs click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/permanova.md)
 
+(put on their own page as it's slow to knit)
 
 ```{r setup, message = FALSE}
 #devtools::install_github("thomazbastiaanssen/volatility")
@@ -80,11 +83,6 @@ rbind(a, b) %>%
 
 
 ```
-
-For benchmarking click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md) 
-(put on its own page as it's slow to knit)
-
-
 
 
 
@@ -304,8 +302,11 @@ new_shrunk = ggplot(pca,
 
 old + new + new_shrunk + plot_layout(guides = 'collect') &  theme(legend.position = 'bottom') 
 
-df_shr <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
-cbind("real" = fib) %>%
+df_shr <- (getTableMeans(res_fib %>%
+                           cbind("real" = fib),
+                         CLR_transformed = F)/
+             (rowMeans(getTableVars(res_fib %>%
+                                      cbind("real" = fib) )))) %>%
        data.frame() %>%
   
        getTableMeans() %>%
@@ -349,7 +350,7 @@ df_logunif <- (res_fib %>% cbind("real" = fib)) %>%
 
 plot_df = data.frame(constant = df_c[,"real"], 
                      new      = df_new[,"real"],
-                     #shrunk   = df_shr[,"real"], 
+                     shrunk   = df_shr[,"real"], 
                      #unif      = df_unif[,"real"], 
                      logunif   = df_logunif[,"real"], 
                      
@@ -374,7 +375,7 @@ plot_df %>%
 
 
 
-df_shr <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
+df_shr <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
 cbind("real" = fib) %>%
        data.frame() %>%
   
@@ -411,48 +412,6 @@ df_c <- (res_fib %>% cbind("real" = fib)) %>%
 
 ```
 
-```{r permanovas}
-
-dist_logunif <- res_fib %>%
-  data.frame() %>%
-  Tjazi::clr_logunif() %>%
-  t() %>%
-  dist(x = ., method = "euclidean")  
-
-dist_const <- res_fib %>%  
-  data.frame() %>%
-  Tjazi::clr_c() %>%
-  t() %>%
-  dist(x = ., method = "euclidean")  
-
-dist_unif <- res_fib %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
-  t() %>%
-  dist(x = ., method = "euclidean")  
-
-dist_shrunk <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
-  data.frame() %>%
-  getTableMeans() %>%
-  t() %>%
-  dist(x = .,method = "euclidean")
-
-dist_new <- res_fib %>% 
-  data.frame() %>%
-  getTableMeans() %>%
-  t() %>%
-  dist(x = ., method = "euclidean")
-
-
-groups = rep(seq(1000,10000, by = 1000), each = 100)
-
-vegan::adonis2(dist_const   ~ groups, method = "euclidean", permutations = 10000)
-vegan::adonis2(dist_unif    ~ groups, method = "euclidean", permutations = 10000)
-vegan::adonis2(dist_logunif ~ groups, method = "euclidean", permutations = 10000)
-vegan::adonis2(dist_new     ~ groups, method = "euclidean", permutations = 10000)
-vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 10000)
-
-```
 
 ```{r depth analysis}
 set.seed(12345)
@@ -498,9 +457,9 @@ dist_const <- res_fib %>%
 #   t() %>%
 #   dist(x = ., method = "euclidean")  
 
-dist_shrunk <- (res_fib/(rowMeans(getTableVars(res_fib)))) %>%
+dist_shrunk <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
   data.frame() %>%
-  getTableMeans() %>%
+  #getTableMeans() %>%
   t() %>%
   dist(x = .,method = "euclidean")
 
@@ -558,4 +517,5 @@ lm_new %>%
   aes(x = (X1), y = (X2), label = round(dist, 3)) +
   geom_tile(aes(fill = dist)) +
   geom_label()
+
 ```
