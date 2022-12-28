@@ -258,6 +258,7 @@ new = ggplot(pca, aes(x       = PC1,
 
 
 data.a.pca =  sCLR(res_fib %>% cbind("real" = fib)) %>%
+  data.frame() %>%
   t() %>%
   prcomp()
 
@@ -300,7 +301,7 @@ new_shrunk = ggplot(pca,
 
 old + new + new_shrunk + plot_layout(guides = 'collect') &  theme(legend.position = 'bottom') 
 
-df_shr <- sCLR(res_fib %>% cbind("real" = fib))
+df_shr <- sCLR(res_fib %>% cbind("real" = fib)) %>%
   t() %>%
 dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
@@ -366,7 +367,7 @@ plot_df %>%
 
 
 
-df_shr <-  sCLR(res_fib %>% cbind("real" = fib))
+df_shr <-  sCLR(res_fib %>% cbind("real" = fib)) %>%
   t() %>%
 dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%

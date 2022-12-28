@@ -67,6 +67,6 @@ getTableVars <- function(count_table, CLR_transformed = T, rows_as_features = F)
 sCLR <- function(count_table){
   getTableMeans(
     getTableMeans(count_table, CLR_transformed = F)/
-      rowMeans(getTableVars(count_table, CLR_transformed = F)),
+      rowMeans(getTableVars(count_table, CLR_transformed = T)),
     CLR_transformed = T)
 }

@@ -61,9 +61,9 @@ dist_unif <- res_fib %>%
   t() %>%
   dist(x = ., method = "euclidean")  
 
-dist_shrunk <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
+dist_shrunk <- res_fib %>%
   data.frame() %>%
-  getTableMeans() %>%
+  sCLR() %>%
   t() %>%
   dist(x = .,method = "euclidean")
 

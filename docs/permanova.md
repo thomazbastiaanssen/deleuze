@@ -52,9 +52,9 @@ dist_unif <- res_fib %>%
   t() %>%
   dist(x = ., method = "euclidean")  
 
-dist_shrunk <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
+dist_shrunk <- res_fib %>%
   data.frame() %>%
-  getTableMeans() %>%
+  sCLR() %>%
   t() %>%
   dist(x = .,method = "euclidean")
 
@@ -145,8 +145,8 @@ vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 1000)
     ## 
     ## vegan::adonis2(formula = dist_shrunk ~ groups, permutations = 1000, method = "euclidean")
     ##           Df SumOfSqs      R2      F   Pr(>F)    
-    ## groups     1   0.0795 0.00354 3.5466 0.000999 ***
-    ## Residual 998  22.3576 0.99646                    
-    ## Total    999  22.4370 1.00000                    
+    ## groups     1   450.06 0.23379 304.52 0.000999 ***
+    ## Residual 998  1474.99 0.76621                    
+    ## Total    999  1925.06 1.00000                    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1

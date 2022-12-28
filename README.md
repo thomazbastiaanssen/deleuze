@@ -44,7 +44,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.645781 | 0.0869779 |
+| observed     | -8.644830 | 0.0848285 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -269,9 +269,8 @@ new = ggplot(pca, aes(x       = PC1,
 
 
 
-data.a.pca = (res_fib %>% cbind("real" = fib)/(rowMeans(getTableVars(res_fib %>% cbind("real" = fib))))) %>%
+data.a.pca =  sCLR(res_fib %>% cbind("real" = fib)) %>%
   data.frame() %>%
-  getTableMeans() %>%
   t() %>%
   prcomp()
 
@@ -330,14 +329,7 @@ old + new + new_shrunk + plot_layout(guides = 'collect') &  theme(legend.positio
 <img src="README_files/figure-gfm/fib comparison-1.png" width="100%" />
 
 ``` r
-df_shr <- (getTableMeans(res_fib %>%
-                           cbind("real" = fib),
-                         CLR_transformed = F)/
-             (rowMeans(getTableVars(res_fib %>%
-                                      cbind("real" = fib) )))) %>%
-       data.frame() %>%
-  
-       getTableMeans() %>%
+df_shr <- sCLR(res_fib %>% cbind("real" = fib)) %>%
   t() %>%
 dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
@@ -404,11 +396,7 @@ plot_df %>%
 <img src="README_files/figure-gfm/fib comparison-2.png" width="100%" />
 
 ``` r
-df_shr <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
-cbind("real" = fib) %>%
-       data.frame() %>%
-  
-       getTableMeans() %>%
+df_shr <-  sCLR(res_fib %>% cbind("real" = fib)) %>%
   t() %>%
 dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
@@ -483,9 +471,7 @@ dist_const <- res_fib %>%
 #   t() %>%
 #   dist(x = ., method = "euclidean")  
 
-dist_shrunk <- (getTableMeans(res_fib, CLR_transformed = F)/(rowMeans(getTableVars(res_fib)))) %>%
-  data.frame() %>%
-  #getTableMeans() %>%
+dist_shrunk <-  sCLR(res_fib) %>%
   t() %>%
   dist(x = .,method = "euclidean")
 
