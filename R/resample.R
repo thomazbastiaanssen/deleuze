@@ -114,3 +114,25 @@ sampleCLRApprox <- function(samples, count_sample){
                       MoreArgs = list(n = samples))
   return(log_ratios)
 }
+
+
+
+#' samples from the approximated probability density function of a CLR-transformed count sample.  
+#'
+#' @param samples An integer. How many samples should be taken
+#' @param count_table A vector of count data.
+#' 
+#' @export
+#' 
+sampleTableCLR <- function(samples, count_table){
+  CLR_out <- matrix(0, nrow = nrow(count_table), ncol = ncol(count_table))
+  
+  for(i in 1:samples){
+    CLR_out = CLR_out + apply(X = count_table,
+                              MARGIN = 2, 
+                              FUN = function(x){sampleCLRApprox(count_sample = x,samples = 1)}
+                                )
+  }
+  return(CLR_out/samples)
+  
+}
