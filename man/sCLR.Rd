@@ -2,7 +2,7 @@
 % Please edit documentation in R/deleuze.R
 \name{sCLR}
 \alias{sCLR}
-\title{Give shrunk means from a CLR-transformed count sample.}
+\title{Shrink and CLR-transform a relative count table.}
 \usage{
 sCLR(count_table, cols_as_features = F)
 }
@@ -12,5 +12,5 @@ sCLR(count_table, cols_as_features = F)
 \item{cols_as_features}{A boolean. Toggles whether rows or columns are samples.}
 }
 \description{
-See rbeta.
+Compute shrunk proportions using the 'qsh' method described by Ionas Erb \href{https://doi.org/10.48550/arXiv.2205.09215}{here}.
 }

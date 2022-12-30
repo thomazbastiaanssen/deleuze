@@ -67,34 +67,57 @@ clr <- function(x, cols_as_features = F){
   apply(X = x, MARGIN = margin, FUN = function(y){log(y)-mean(log(y))})
 }
 
+#' Compute shrunk proportions using the 'qsh' method described by Ionas Erb \href{https://doi.org/10.48550/arXiv.2205.09215}{here}.
+#' 
+#' @description Shrink relative count data using the arithmetic mean. 
+#' @param x A table of compositional data.
+#' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
+#' @return A relative count table shrunk towards the arithmetic mean. 
+#' 
+estQshr <- function(x, cols_as_features = F){
+  margin = 2 - cols_as_features
+  
+  apply(X = x, MARGIN = margin, FUN = function(n){
+    #Total counts
+    N <- sum(n)
+    
+    #Relative counts 
+    q <- n/N		        
+    
+    #Number of components
+    D <- length(n)     
+    
+    #Define maximum entropy (equidistribution) prior
+    Tau <- rep(1/D,D)  
+    
+    #Define the shrinkage parameter lambda
+    l <- (1-sum(q^2)) / ((N-1)*sum((Tau-q)^2))
+    
+    #Bound lamda at 0 and 1. 
+    if(l<0){l=0}
+    if(l>1){l=1}
+    
+    #Shrink the empirical estimator of the relative counts data by mixing it with the naive equidistant prior.  
+    return(l/D+(1-l)*n/N) 
+  })
+}
 
-
-#' Give shrunk means from a CLR-transformed count sample.  
+#' Shrink and CLR-transform a relative count table.  
 #'
-#' @description See rbeta.
+#' @description Compute shrunk proportions using the 'qsh' method described by Ionas Erb \href{https://doi.org/10.48550/arXiv.2205.09215}{here}.
 #' @param count_table A table of count data with rows as features and columns as samples. 
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
 #' @export
 #'
 sCLR <- function(count_table, cols_as_features = F){
  
-  means = apply(X = count_table, 
-                  MARGIN = 2 - cols_as_features, 
-                  FUN = getBetaMeans,
-                  log_transformed = F, 
-                  simplify = T)
-  
-  vars = apply(X = getTableVars(count_table, 
-                                    CLR_transformed = T, 
-                                    cols_as_features = cols_as_features),
-                   MARGIN = 1 + cols_as_features,
-                   FUN = mean, 
-                   simplify = T)
-  
-res_clr = clr(means,cols_as_features = F) * (exp(mean(log(vars)))/vars)
-  
-
-  if(cols_as_features)(res_clr = t(res_clr))
-  
-  return(res_clr)
+  #Shrink the count table
+  res <- estQshr(count_table, cols_as_features = cols_as_features) 
+ 
+  #CLR transform the shrunk relative count estimates. Leave boolean at FALSE. 
+  res = clr(res, cols_as_features = F)
+ 
+  if(cols_as_features){res = t(res)}
+ 
+  return(res)
 }
