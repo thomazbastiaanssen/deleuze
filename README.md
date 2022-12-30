@@ -44,7 +44,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.644909 | 0.0853598 |
+| observed     | -8.644942 | 0.0863034 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -268,7 +268,7 @@ new = ggplot(pca, aes(x       = PC1,
   theme(legend.position = 'bottom') 
 
 
-
+#Use the shrinkage method described here: https://doi.org/10.48550/arXiv.2205.09215
 data.a.pca =  sCLR(res_fib %>% cbind("real" = fib)) %>%
   data.frame() %>%
   t() %>%
@@ -292,7 +292,7 @@ pca$samples = str_remove(row.names(pca), pattern = "X") %>%
 
 
 #First, the main plot. Plot the first two components of the PCA
-new_shrunk = ggplot(pca, 
+shrunk = ggplot(pca, 
                     aes(x       = PC1,
                         y       = PC2,
                         fill    = samples)) +  
@@ -304,14 +304,14 @@ new_shrunk = ggplot(pca,
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("new shrunk method") + 
+  ggtitle("shrunk method") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
   theme(legend.position = 'bottom') 
 
 
-old + new + new_shrunk + plot_layout(guides = 'collect') &  theme(legend.position = 'bottom') 
+old + new + shrunk + plot_layout(guides = 'collect') &  theme(legend.position = 'bottom') 
 ```
 
     ## Warning: Using size for a discrete variable is not advised.

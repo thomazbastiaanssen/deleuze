@@ -145,8 +145,8 @@ vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 1000)
     ## 
     ## vegan::adonis2(formula = dist_shrunk ~ groups, permutations = 1000, method = "euclidean")
     ##           Df SumOfSqs      R2      F   Pr(>F)    
-    ## groups     1   0.0795 0.00354 3.5466 0.000999 ***
-    ## Residual 998  22.3576 0.99646                    
-    ## Total    999  22.4370 1.00000                    
+    ## groups     1    167.1 0.04009 41.684 0.000999 ***
+    ## Residual 998   3999.7 0.95991                    
+    ## Total    999   4166.8 1.00000                    
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
