@@ -44,7 +44,7 @@ knitr::kable(t(data.frame("observed" =
 
 |              |      mean |        sd |
 |:-------------|----------:|----------:|
-| observed     | -8.644942 | 0.0863034 |
+| observed     | -8.645908 | 0.0868254 |
 | approximated | -8.645706 | 0.0859221 |
 
 ``` r
@@ -184,9 +184,9 @@ colnames(res_fib) = paste0(rep(seq(1000,10000, by = 1000), each = 100))
 #View(res_fib)
 
 data.a.pca = res_fib %>% 
-  cbind("real" = fib) %>%
   data.frame() %>%
   clr_c() %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
   prcomp()
 
@@ -226,9 +226,10 @@ old = ggplot(pca, aes(x       = PC1,
   theme(legend.position = 'bottom') 
 
 
-data.a.pca = (res_fib %>% cbind("real" = fib)) %>%
+data.a.pca = (res_fib) %>%
   data.frame() %>%
   getTableMeans() %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
   prcomp()
 
@@ -269,7 +270,8 @@ new = ggplot(pca, aes(x       = PC1,
 
 
 #Use the shrinkage method described here: https://doi.org/10.48550/arXiv.2205.09215
-data.a.pca =  sCLR(res_fib %>% cbind("real" = fib)) %>%
+data.a.pca =  sCLR(res_fib) %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   data.frame() %>%
   t() %>%
   prcomp()
@@ -329,23 +331,26 @@ old + new + shrunk + plot_layout(guides = 'collect') &  theme(legend.position = 
 <img src="README_files/figure-gfm/fib comparison-1.png" width="100%" />
 
 ``` r
-df_shr <- sCLR(res_fib %>% cbind("real" = fib)) %>%
+df_shr <- sCLR(res_fib) %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
 dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
   data.frame()
 
-df_new <- (res_fib %>% cbind("real" = fib)) %>%
+df_new <- (res_fib) %>%
   data.frame() %>%
   getTableMeans() %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
   dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
   data.frame() 
 
-df_c <- (res_fib %>% cbind("real" = fib)) %>%
+df_c <- (res_fib) %>%
   data.frame() %>%
   Tjazi::clr_c() %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
   dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
@@ -359,9 +364,10 @@ df_c <- (res_fib %>% cbind("real" = fib)) %>%
 #   as.matrix %>%
 #   data.frame() 
 
-df_logunif <- (res_fib %>% cbind("real" = fib)) %>%
+df_logunif <- (res_fib) %>%
   data.frame() %>%
   Tjazi::clr_logunif() %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
   dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
@@ -396,23 +402,26 @@ plot_df %>%
 <img src="README_files/figure-gfm/fib comparison-2.png" width="100%" />
 
 ``` r
-df_shr <-  sCLR(res_fib %>% cbind("real" = fib)) %>%
+df_shr <-  sCLR(res_fib) %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
 dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
   data.frame()
 
-df_new <- (res_fib %>% cbind("real" = fib)) %>%
+df_new <- (res_fib) %>%
   data.frame() %>%
   getTableMeans() %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
   dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
   data.frame() 
 
-df_c <- (res_fib %>% cbind("real" = fib)) %>%
+df_c <- (res_fib) %>%
   data.frame() %>%
   Tjazi::clr_c() %>%
+  cbind("real" = deleuze:::clr(data.frame(fib))[,1]) %>%
   t() %>%
   dist(., diag = T, upper = T, method = "euclidean")  %>%
   as.matrix %>%
