@@ -1,5 +1,5 @@
 ``` r
-#devtools::install_github("thomazbastiaanssen/volatility")
+set.seed(12345)
 library(tidyverse)
 library(deleuze)
 library(patchwork)
@@ -8,13 +8,6 @@ library(vegan)
 ```
 
 ``` r
-set.seed(12345)
-library(tidyverse)
-library(deleuze)
-library(patchwork)
-library(Tjazi)
-library(vegan)
-
 x <- 0
 y <- 1
 fib <- c()
@@ -67,86 +60,27 @@ dist_new <- res_fib %>%
 
 groups = rep(seq(1000,10000, by = 1000), each = 100)
 
-vegan::adonis2(dist_const   ~ groups, method = "euclidean", permutations = 1000)
+v1 <- vegan::adonis2(dist_const   ~ groups, method = "euclidean", permutations = 1000)
+v2 <- vegan::adonis2(dist_unif    ~ groups, method = "euclidean", permutations = 1000)
+v3 <- vegan::adonis2(dist_logunif ~ groups, method = "euclidean", permutations = 1000)
+v4 <- vegan::adonis2(dist_new     ~ groups, method = "euclidean", permutations = 1000)
+v5 <- vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 1000)
+
+adonis_df <- data.frame(R2 =     c(v1$R2[1], v2$R2[1], v3$R2[1], v4$R2[1], v5$R2[1]), 
+                        method = factor(c("constant replacement", "uniform replacement", "log-uniform replacement", "parameterization", "arithmetric shrinkage"), 
+                                        levels = rev(c("constant replacement", "uniform replacement", "log-uniform replacement", "parameterization", "arithmetric shrinkage"))))
+
+ggplot(adonis_df) +
+  aes(x = R2, y = method) + 
+  geom_segment(size = sqrt(2), x = 0, aes(xend = R2, yend = method), col = "black") +
+  geom_segment(size = 1, x = 0, aes(xend = R2, yend = method), col = "red")+
+  geom_point(size = 5, shape = 21, fill = "red") +
+  
+  theme_bw() +
+  scale_x_continuous(limits = c(0,0.25)) +
+  ylab("") + 
+  xlab(Variance~explained~by~sampling~depth~(R^2)) +
+  ggtitle("The effect of sampling depth is dependent on zero imputation strategy")
 ```
 
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 1000
-    ## 
-    ## vegan::adonis2(formula = dist_const ~ groups, permutations = 1000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F   Pr(>F)    
-    ## groups     1   452.82 0.19247 237.86 0.000999 ***
-    ## Residual 998  1899.89 0.80753                    
-    ## Total    999  2352.71 1.00000                    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-``` r
-vegan::adonis2(dist_unif    ~ groups, method = "euclidean", permutations = 1000)
-```
-
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 1000
-    ## 
-    ## vegan::adonis2(formula = dist_unif ~ groups, permutations = 1000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F   Pr(>F)    
-    ## groups     1   390.15 0.16012 190.26 0.000999 ***
-    ## Residual 998  2046.47 0.83988                    
-    ## Total    999  2436.61 1.00000                    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-``` r
-vegan::adonis2(dist_logunif ~ groups, method = "euclidean", permutations = 1000)
-```
-
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 1000
-    ## 
-    ## vegan::adonis2(formula = dist_logunif ~ groups, permutations = 1000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F   Pr(>F)    
-    ## groups     1   234.18 0.07689 83.134 0.000999 ***
-    ## Residual 998  2811.29 0.92311                    
-    ## Total    999  3045.47 1.00000                    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-``` r
-vegan::adonis2(dist_new     ~ groups, method = "euclidean", permutations = 1000)
-```
-
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 1000
-    ## 
-    ## vegan::adonis2(formula = dist_new ~ groups, permutations = 1000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F   Pr(>F)    
-    ## groups     1   317.23 0.12563 143.39 0.000999 ***
-    ## Residual 998  2207.90 0.87437                    
-    ## Total    999  2525.13 1.00000                    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-``` r
-vegan::adonis2(dist_shrunk  ~ groups, method = "euclidean", permutations = 1000)
-```
-
-    ## Permutation test for adonis under reduced model
-    ## Terms added sequentially (first to last)
-    ## Permutation: free
-    ## Number of permutations: 1000
-    ## 
-    ## vegan::adonis2(formula = dist_shrunk ~ groups, permutations = 1000, method = "euclidean")
-    ##           Df SumOfSqs      R2      F   Pr(>F)    
-    ## groups     1    167.1 0.04009 41.684 0.000999 ***
-    ## Residual 998   3999.7 0.95991                    
-    ## Total    999   4166.8 1.00000                    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+![](permanova_files/figure-gfm/permanovas-1.png)<!-- -->
