@@ -205,17 +205,33 @@ clr_new_b3 <- res_b3 %>%
          source = "b3", 
          method = "parameterization") 
 
-do.call(rbind, list(clr_const_b1,  clr_const_b2,  clr_const_b3, 
-                    clr_shrunk_b1, clr_shrunk_b2, clr_shrunk_b3, 
-                    clr_new_b1,    clr_new_b2,    clr_new_b3)) %>%
-  mutate(real_abundance = factor(real_abundance, levels = c(1, 5, 15, 40, 80, 100, 250, 350, 450))) %>%
-  #filter(ID == "feature_50") %>%
+do.call(rbind, list(
+  clr_const_b1,  clr_const_b2,  clr_const_b3, 
+  clr_shrunk_b1, clr_shrunk_b2, clr_shrunk_b3, 
+  clr_new_b1,    clr_new_b2,    clr_new_b3
+                    )) %>% 
+  mutate(source = str_replace(source, pattern = "b1", replacement = "10% Rare Features"), 
+         source = str_replace(source, pattern = "b2", replacement = "30% Rare Features"), 
+         source = str_replace(source, pattern = "b3", replacement = "50% Rare Features")) %>%
+  mutate(real_abundance = as.character(real_abundance)) %>%
+  mutate(real_abundance = str_replace(real_abundance, pattern = "250|350|450", replacement = "High" )) %>%
+  mutate(abundance_clust = as.character(real_abundance %in% c("1", "5", "15"))) %>%
+  
+  mutate(real_abundance = factor(real_abundance, levels = c("1", "5", "15", "40", "80", "100", "High"))) %>%
+  #filter(as.numeric(real_abundance) < 20) %>%
   ggplot() +
-  aes(x = name, y = value, colour = real_abundance) +
+  aes(x = depth, y = value, colour = real_abundance) +
   geom_point(alpha = 1/100) + 
+  geom_smooth(se = F) +
+  scale_colour_manual(values = c("1" = "#e41a1c", "5" = "#377eb8", "15" = "#4daf4a", "40" = "#984ea3", "80" = "#ff7f00", "100" = "#ffff33", "High" = "#a65628"), "Sampling abundance") +
+  guides(colour = guide_legend(override.aes = list(alpha = 1) ) ) +
   facet_grid(method~source, switch = "y") +
-  theme_bw()
+  
+  theme_bw() +
+  theme(legend.position = 'bottom') 
 ```
+
+    ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
 
 ![](permanova_files/figure-gfm/individual%20feature%20precision-1.png)<!-- -->
 
@@ -401,7 +417,11 @@ ggplot() +
   theme_bw() +
   theme(legend.position = 'bottom') + 
   scale_x_continuous(limits = c(0,.1)) +
-  scale_fill_manual(values = c("10%" = "#feb24c", "30%" = "#fc4e2a", "50%" = "#800026"), "Rare features") +
+  scale_fill_manual(values = c("10%" = "#feb24c", "30%" = "#fc4e2a", "50%" = "#800026"), "Rare features",
+                      guide = guide_legend(reverse = TRUE)) +
+  scale_colour_manual(values = c("10%" = "#feb24c", "30%" = "#fc4e2a", "50%" = "#800026"), "Rare features",
+                      guide = guide_legend(reverse = TRUE))+
+
   ylab("") + 
   xlab(Variance~explained~by~sampling~depth~(R^2)) +
   ggtitle("The effect of sampling depth is dependent on zero imputation strategy")
