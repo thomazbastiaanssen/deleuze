@@ -16,7 +16,7 @@ library(vegan)
 
 ```
 
-```{r permanovas}
+```{r prepare precision assessment, fig.width = 5, fig.height = 5}
 
 set.seed(12345)
 b1 <- c(rep(1, 10), rep(5, 20), rep(15, 20), rep(40, 20), rep(80, 20), rep(100, 5), rep(250, 5) )
@@ -45,8 +45,190 @@ res_b3 = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x
   
 })
 
+```
+
+```{r individual feature precision, fig.width = 8, fig.height = 8}
+# clr_logunif_b1 <- res_b1 %>%
+#   data.frame() %>%
+#   Tjazi::clr_logunif() %>% 
+#   data.frame() %>%
+#   mutate(real_abundance = b1) %>%
+#   rownames_to_column("ID") %>%
+#   pivot_longer(!c(ID, real_abundance))  %>% 
+#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+#          source = "b1", 
+#          method = "log-uniform replacement") 
+  
+
+clr_const_b1 <- res_b1 %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() %>%
+  mutate(real_abundance = b1) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b1", 
+         method = "constant replacement") 
+  
+
+# clr_unif_b1 <- res_b1 %>%
+#   data.frame() %>%
+#   Tjazi::clr_unif() %>% 
+#   data.frame() %>%
+#   mutate(real_abundance = b1) %>%
+#   rownames_to_column("ID") %>%
+#   pivot_longer(!c(ID, real_abundance))  %>% 
+#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+#          source = "b1", 
+#          method = "uniform replacement") 
+
+clr_shrunk_b1 <- res_b1 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() %>%
+  mutate(real_abundance = b1) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b1", 
+         method = "arithmetic shrinkage") 
+
+clr_new_b1 <- res_b1 %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() %>%
+  mutate(real_abundance = b1) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b1", 
+         method = "parameterization") 
+
+# clr_logunif_b2 <- res_b2 %>%
+#   data.frame() %>%
+#   Tjazi::clr_logunif() %>% 
+#   data.frame() %>%
+#   mutate(real_abundance = b2) %>%
+#   rownames_to_column("ID") %>%
+#   pivot_longer(!c(ID, real_abundance))  %>% 
+#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+#          source = "b2", 
+#          method = "log-uniform replacement") 
+
+clr_const_b2 <- res_b2 %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() %>%
+  mutate(real_abundance = b2) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b2", 
+         method = "constant replacement") 
+
+# clr_unif_b2 <- res_b2 %>%
+#   data.frame() %>%
+#   Tjazi::clr_unif() %>% 
+#   data.frame() %>%
+#   mutate(real_abundance = b2) %>%
+#   rownames_to_column("ID") %>%
+#   pivot_longer(!c(ID, real_abundance))  %>% 
+#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+#          source = "b2", 
+#          method = "uniform replacement") 
+
+clr_shrunk_b2 <- res_b2 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() %>%
+  mutate(real_abundance = b2) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b2", 
+         method = "arithmetic shrinkage") 
+
+clr_new_b2 <- res_b2 %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() %>%
+  mutate(real_abundance = b2) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b2", 
+         method = "parameterization") 
+
+# clr_logunif_b3 <- res_b3 %>%
+#   data.frame() %>%
+#   Tjazi::clr_logunif()  %>% 
+#   data.frame() %>%
+#   mutate(real_abundance = b3) %>%
+#   rownames_to_column("ID") %>%
+#   pivot_longer(!c(ID, real_abundance))  %>% 
+#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+#          source = "b3", 
+#          method = "log-uniform replacement") 
 
 
+clr_const_b3 <- res_b3 %>%  
+  data.frame() %>%
+  Tjazi::clr_c()  %>% 
+  data.frame() %>%
+  mutate(real_abundance = b3) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b3", 
+         method = "constant replacement") 
+
+# clr_unif_b3 <- res_b3 %>%
+#   data.frame() %>%
+#   Tjazi::clr_unif() %>% 
+#   data.frame() %>%
+#   mutate(real_abundance = b3) %>%
+#   rownames_to_column("ID") %>%
+#   pivot_longer(!c(ID, real_abundance))  %>% 
+#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+#          source = "b3", 
+#          method = "uniform replacement") 
+
+clr_shrunk_b3 <- res_b3 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() %>%
+  mutate(real_abundance = b3) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b3", 
+         method = "arithmetic shrinkage") 
+
+clr_new_b3 <- res_b3 %>% 
+  data.frame() %>%
+  getTableMeans()  %>% 
+  data.frame() %>%
+  mutate(real_abundance = b3) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>% 
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
+         source = "b3", 
+         method = "parameterization") 
+
+do.call(rbind, list(clr_const_b1,  clr_const_b2,  clr_const_b3, 
+                    clr_shrunk_b1, clr_shrunk_b2, clr_shrunk_b3, 
+                    clr_new_b1,    clr_new_b2,    clr_new_b3)) %>%
+  mutate(real_abundance = factor(real_abundance, levels = c(1, 5, 15, 40, 80, 100, 250, 350, 450))) %>%
+  #filter(ID == "feature_50") %>%
+  ggplot() +
+  aes(x = name, y = value, colour = real_abundance) +
+  geom_point(alpha = 1/100) + 
+  facet_grid(method~source, switch = "y") +
+  theme_bw()
+```
+
+```{r permanovas, fig.width = 5, fig.height = 5}
 dist_logunif_b1 <- res_b1 %>%
   data.frame() %>%
   Tjazi::clr_logunif() %>%
@@ -163,7 +345,7 @@ adonis_b1 <- data.frame(R2 =     c(b1_v1$R2[1],
                                                        "log-uniform replacement", 
                                                        "parameterization", 
                                                        "arithmetric shrinkage"))), 
-                        distribution = "b1")
+                        distribution = "10%")
 
 
 b2_v1 <- vegan::adonis2(dist_const_b2   ~ groups, method = "euclidean", permutations = 1000)
@@ -187,7 +369,7 @@ adonis_b2 <- data.frame(R2 =     c(b2_v1$R2[1],
                                                        "log-uniform replacement", 
                                                        "parameterization", 
                                                        "arithmetric shrinkage"))), 
-                        distribution = "b2")
+                        distribution = "30%")
 
 
 b3_v1 <- vegan::adonis2(dist_const_b3   ~ groups, method = "euclidean", permutations = 1000)
@@ -211,11 +393,11 @@ adonis_b3 <- data.frame(R2 =     c(b3_v1$R2[1],
                                                        "log-uniform replacement", 
                                                        "parameterization", 
                                                        "arithmetric shrinkage"))), 
-                        distribution = "b3")
+                        distribution = "50%")
 
 
 do.call(rbind, list(adonis_b1, adonis_b2, adonis_b3)) %>%
-  mutate(distribution = factor(distribution, levels = rev(c("b1", "b2", "b3")))) %>%
+  mutate(distribution = factor(distribution, levels = rev(c("10%", "30%", "50%")))) %>%
 
 ggplot() +
   
@@ -226,7 +408,9 @@ ggplot() +
   #facet_wrap(~distribution) +
   
   theme_bw() +
+  theme(legend.position = 'bottom') + 
   scale_x_continuous(limits = c(0,.1)) +
+  scale_fill_manual(values = c("10%" = "#feb24c", "30%" = "#fc4e2a", "50%" = "#800026"), "Rare features") +
   ylab("") + 
   xlab(Variance~explained~by~sampling~depth~(R^2)) +
   ggtitle("The effect of sampling depth is dependent on zero imputation strategy")
