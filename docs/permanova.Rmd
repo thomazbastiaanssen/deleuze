@@ -16,7 +16,7 @@ library(vegan)
 
 ```
 
-```{r prepare precision assessment, fig.width = 5, fig.height = 5}
+```{r prepare precision assessment, fig.width = 5, fig.height = 5, cache=TRUE}
 
 set.seed(12345)
 b1 <- c(rep(1, 10), rep(5, 20), rep(15, 20), rep(40, 20), rep(80, 20), rep(100, 5), rep(250, 5) )
@@ -47,7 +47,7 @@ res_b3 = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x
 
 ```
 
-```{r individual feature precision, fig.width = 8, fig.height = 15}
+```{r prep individual feature precision, fig.width = 8, fig.height = 15, cache=TRUE}
 clr_logunif_b1 <- res_b1 %>%
   data.frame() %>%
   Tjazi::clr_logunif() %>%
@@ -216,6 +216,10 @@ clr_new_b3 <- res_b3 %>%
          source = "b3", 
          method = "parameterization") 
 
+```
+
+```{r plot individual feature precision, fig.width = 8, fig.height = 15}
+
 do.call(rbind, list(
   clr_const_b1,   clr_const_b2,   clr_const_b3, 
   clr_shrunk_b1,  clr_shrunk_b2,  clr_shrunk_b3, 
@@ -251,6 +255,7 @@ do.call(rbind, list(
   theme(legend.position = 'bottom') 
 
 ```
+
 ```{r variance by feature, fig.width = 8, fig.height = 15}
 do.call(rbind, list(
   clr_const_b1,   clr_const_b2,   clr_const_b3, 
@@ -284,7 +289,7 @@ do.call(rbind, list(
 
 ```
 
-```{r permanovas, fig.width = 8, fig.height = 5}
+```{r prep permanovas, fig.width = 8, fig.height = 5, cache=TRUE}
 dist_logunif_b1 <- res_b1 %>%
   data.frame() %>%
   Tjazi::clr_logunif() %>%
@@ -450,6 +455,10 @@ adonis_b3 <- data.frame(R2 =     c(b3_v1$R2[1],
                                                        "parameterization", 
                                                        "arithmetric shrinkage"))), 
                         distribution = "50%")
+
+```
+
+```{r plot permanovas, fig.width = 8, fig.height = 5}
 
 
 do.call(rbind, list(adonis_b1, adonis_b2, adonis_b3)) %>%

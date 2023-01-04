@@ -204,7 +204,9 @@ clr_new_b3 <- res_b3 %>%
   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
          source = "b3", 
          method = "parameterization") 
+```
 
+``` r
 do.call(rbind, list(
   clr_const_b1,   clr_const_b2,   clr_const_b3, 
   clr_shrunk_b1,  clr_shrunk_b2,  clr_shrunk_b3, 
@@ -242,7 +244,7 @@ do.call(rbind, list(
 
     ## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
 
-![](permanova_files/figure-gfm/individual%20feature%20precision-1.png)<!-- -->
+![](permanova_files/figure-gfm/plot%20individual%20feature%20precision-1.png)<!-- -->
 
 ``` r
 do.call(rbind, list(
@@ -448,8 +450,9 @@ adonis_b3 <- data.frame(R2 =     c(b3_v1$R2[1],
                                                        "parameterization", 
                                                        "arithmetric shrinkage"))), 
                         distribution = "50%")
+```
 
-
+``` r
 do.call(rbind, list(adonis_b1, adonis_b2, adonis_b3)) %>%
   mutate(distribution = factor(distribution, levels = rev(c("10%", "30%", "50%")))) %>%
 
@@ -474,4 +477,4 @@ ggplot() +
   ggtitle("The effect of sampling depth is dependent on zero imputation strategy")
 ```
 
-![](permanova_files/figure-gfm/permanovas-1.png)<!-- -->
+![](permanova_files/figure-gfm/plot%20permanovas-1.png)<!-- -->
