@@ -47,18 +47,18 @@ res_b3 = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x
 
 ```
 
-```{r individual feature precision, fig.width = 8, fig.height = 10}
-# clr_logunif_b1 <- res_b1 %>%
-#   data.frame() %>%
-#   Tjazi::clr_logunif() %>% 
-#   data.frame() %>%
-#   mutate(real_abundance = b1) %>%
-#   rownames_to_column("ID") %>%
-#   pivot_longer(!c(ID, real_abundance))  %>% 
-#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
-#          source = "b1", 
-#          method = "log-uniform replacement") 
-  
+```{r individual feature precision, fig.width = 8, fig.height = 15}
+clr_logunif_b1 <- res_b1 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() %>%
+  mutate(real_abundance = b1) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>%
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100),
+         source = "b1",
+         method = "log-uniform replacement")
+
 
 clr_const_b1 <- res_b1 %>%  
   data.frame() %>%
@@ -72,16 +72,16 @@ clr_const_b1 <- res_b1 %>%
          method = "constant replacement") 
   
 
-# clr_unif_b1 <- res_b1 %>%
-#   data.frame() %>%
-#   Tjazi::clr_unif() %>% 
-#   data.frame() %>%
-#   mutate(real_abundance = b1) %>%
-#   rownames_to_column("ID") %>%
-#   pivot_longer(!c(ID, real_abundance))  %>% 
-#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
-#          source = "b1", 
-#          method = "uniform replacement") 
+clr_unif_b1 <- res_b1 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame() %>%
+  mutate(real_abundance = b1) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>%
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100),
+         source = "b1",
+         method = "uniform replacement")
 
 clr_shrunk_b1 <- res_b1 %>%
   data.frame() %>%
@@ -105,16 +105,16 @@ clr_new_b1 <- res_b1 %>%
          source = "b1", 
          method = "parameterization") 
 
-# clr_logunif_b2 <- res_b2 %>%
-#   data.frame() %>%
-#   Tjazi::clr_logunif() %>% 
-#   data.frame() %>%
-#   mutate(real_abundance = b2) %>%
-#   rownames_to_column("ID") %>%
-#   pivot_longer(!c(ID, real_abundance))  %>% 
-#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
-#          source = "b2", 
-#          method = "log-uniform replacement") 
+clr_logunif_b2 <- res_b2 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() %>%
+  mutate(real_abundance = b2) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>%
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100),
+         source = "b2",
+         method = "log-uniform replacement")
 
 clr_const_b2 <- res_b2 %>%  
   data.frame() %>%
@@ -127,16 +127,16 @@ clr_const_b2 <- res_b2 %>%
          source = "b2", 
          method = "constant replacement") 
 
-# clr_unif_b2 <- res_b2 %>%
-#   data.frame() %>%
-#   Tjazi::clr_unif() %>% 
-#   data.frame() %>%
-#   mutate(real_abundance = b2) %>%
-#   rownames_to_column("ID") %>%
-#   pivot_longer(!c(ID, real_abundance))  %>% 
-#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
-#          source = "b2", 
-#          method = "uniform replacement") 
+clr_unif_b2 <- res_b2 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame() %>%
+  mutate(real_abundance = b2) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>%
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100),
+         source = "b2",
+         method = "uniform replacement")
 
 clr_shrunk_b2 <- res_b2 %>%
   data.frame() %>%
@@ -160,16 +160,16 @@ clr_new_b2 <- res_b2 %>%
          source = "b2", 
          method = "parameterization") 
 
-# clr_logunif_b3 <- res_b3 %>%
-#   data.frame() %>%
-#   Tjazi::clr_logunif()  %>% 
-#   data.frame() %>%
-#   mutate(real_abundance = b3) %>%
-#   rownames_to_column("ID") %>%
-#   pivot_longer(!c(ID, real_abundance))  %>% 
-#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
-#          source = "b3", 
-#          method = "log-uniform replacement") 
+clr_logunif_b3 <- res_b3 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif()  %>%
+  data.frame() %>%
+  mutate(real_abundance = b3) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>%
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100),
+         source = "b3",
+         method = "log-uniform replacement")
 
 
 clr_const_b3 <- res_b3 %>%  
@@ -183,16 +183,16 @@ clr_const_b3 <- res_b3 %>%
          source = "b3", 
          method = "constant replacement") 
 
-# clr_unif_b3 <- res_b3 %>%
-#   data.frame() %>%
-#   Tjazi::clr_unif() %>% 
-#   data.frame() %>%
-#   mutate(real_abundance = b3) %>%
-#   rownames_to_column("ID") %>%
-#   pivot_longer(!c(ID, real_abundance))  %>% 
-#   mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100), 
-#          source = "b3", 
-#          method = "uniform replacement") 
+clr_unif_b3 <- res_b3 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame() %>%
+  mutate(real_abundance = b3) %>%
+  rownames_to_column("ID") %>%
+  pivot_longer(!c(ID, real_abundance))  %>%
+  mutate(depth = rep(rep(seq(from = 1000, to = 20000, by = 1000), each = 100), 100),
+         source = "b3",
+         method = "uniform replacement")
 
 clr_shrunk_b3 <- res_b3 %>%
   data.frame() %>%
@@ -217,24 +217,65 @@ clr_new_b3 <- res_b3 %>%
          method = "parameterization") 
 
 do.call(rbind, list(
-  clr_const_b1,  clr_const_b2,  clr_const_b3, 
-  clr_shrunk_b1, clr_shrunk_b2, clr_shrunk_b3, 
-  clr_new_b1,    clr_new_b2,    clr_new_b3
+  clr_const_b1,   clr_const_b2,   clr_const_b3, 
+  clr_shrunk_b1,  clr_shrunk_b2,  clr_shrunk_b3, 
+  clr_new_b1,     clr_new_b2,     clr_new_b3, 
+  clr_unif_b1,    clr_unif_b2,    clr_unif_b3, 
+  clr_logunif_b3, clr_logunif_b2, clr_logunif_b3
                     )) %>% 
   mutate(source = str_replace(source, pattern = "b1", replacement = "10% Rare Features"), 
          source = str_replace(source, pattern = "b2", replacement = "30% Rare Features"), 
          source = str_replace(source, pattern = "b3", replacement = "50% Rare Features")) %>%
   mutate(real_abundance = as.character(real_abundance)) %>%
   mutate(real_abundance = str_replace(real_abundance, pattern = "250|350|450", replacement = "High" )) %>%
-  mutate(abundance_clust = as.character(real_abundance %in% c("1", "5", "15"))) %>%
-  
+
   mutate(real_abundance = factor(real_abundance, levels = c("1", "5", "15", "40", "80", "100", "High"))) %>%
   #filter(as.numeric(real_abundance) < 20) %>%
   ggplot() +
   aes(x = depth, y = value, colour = real_abundance) +
   geom_point(alpha = 1/100) + 
   geom_smooth(se = F) +
+  scale_colour_manual(values = c(
+    "1" = "#e41a1c", 
+    "5" = "#377eb8", 
+    "15" = "#4daf4a", 
+    "40" = "#984ea3", 
+    "80" = "#ff7f00", 
+    "100" = "#ffff33", 
+    "High" = "#a65628"), 
+    "Sampling abundance") +
+  guides(colour = guide_legend(override.aes = list(alpha = 1) ) ) +
+  facet_grid(method~source, switch = "y") +
+  
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+```
+```{r variance by feature, fig.width = 8, fig.height = 15}
+do.call(rbind, list(
+  clr_const_b1,   clr_const_b2,   clr_const_b3, 
+  clr_shrunk_b1,  clr_shrunk_b2,  clr_shrunk_b3, 
+  clr_new_b1,     clr_new_b2,     clr_new_b3, 
+  clr_unif_b1,    clr_unif_b2,    clr_unif_b3, 
+  clr_logunif_b3, clr_logunif_b2, clr_logunif_b3
+                    )) %>% 
+  mutate(source = str_replace(source, pattern = "b1", replacement = "10% Rare Features"), 
+         source = str_replace(source, pattern = "b2", replacement = "30% Rare Features"), 
+         source = str_replace(source, pattern = "b3", replacement = "50% Rare Features")) %>%
+  mutate(real_abundance = as.character(real_abundance)) %>%
+  mutate(real_abundance = str_replace(real_abundance, pattern = "250|350|450", replacement = "High" )) %>%
+
+  group_by(source, depth, method, real_abundance) %>%
+  summarise(Variance = var(value)) %>%
+  ungroup() %>%
+  mutate(real_abundance = factor(real_abundance, levels = c("1", "5", "15", "40", "80", "100", "High"))) %>%
+  #filter(as.numeric(real_abundance) < 20) %>%
+  ggplot() +
+  aes(x = depth, y = Variance, colour = real_abundance, fill = real_abundance) +
+  geom_smooth(method = "loess", se = F) +
+  geom_point(shape = 21, colour = "black") + 
   scale_colour_manual(values = c("1" = "#e41a1c", "5" = "#377eb8", "15" = "#4daf4a", "40" = "#984ea3", "80" = "#ff7f00", "100" = "#ffff33", "High" = "#a65628"), "Sampling abundance") +
+    scale_fill_manual(values = c("1" = "#e41a1c", "5" = "#377eb8", "15" = "#4daf4a", "40" = "#984ea3", "80" = "#ff7f00", "100" = "#ffff33", "High" = "#a65628"), "Sampling abundance") +
   guides(colour = guide_legend(override.aes = list(alpha = 1) ) ) +
   facet_grid(method~source, switch = "y") +
   
@@ -243,7 +284,7 @@ do.call(rbind, list(
 
 ```
 
-```{r permanovas, fig.width = 5, fig.height = 5}
+```{r permanovas, fig.width = 8, fig.height = 5}
 dist_logunif_b1 <- res_b1 %>%
   data.frame() %>%
   Tjazi::clr_logunif() %>%
