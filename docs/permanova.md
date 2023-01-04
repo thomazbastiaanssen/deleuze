@@ -483,7 +483,7 @@ const_b1 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("constant replacement") + 
+  ggtitle("Constant replacement", subtitle = "10% Rare features") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -522,7 +522,7 @@ new_b1 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("parametrization") + 
+  ggtitle("Parametrization", subtitle = "10% Rare features") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -563,7 +563,7 @@ shrunk_b1 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("arithmetric shrinkage") + 
+  ggtitle("Arithmetric shrinkage", subtitle = "10% Rare features") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -603,7 +603,7 @@ unif_b1 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("uniform replacement") + 
+  ggtitle("Uniform replacement", subtitle = "10% Rare features") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -642,7 +642,7 @@ logunif_b1 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("log-uniform replacement") + 
+  ggtitle("Log-uniform replacement", subtitle = "10% Rare features") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -681,7 +681,8 @@ const_b2 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("constant replacement") + 
+  #ggtitle("constant replacement") + 
+  ggtitle("", subtitle = "30% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -720,7 +721,8 @@ new_b2 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("parametrization") + 
+  #ggtitle("constant replacement") + 
+  ggtitle("", subtitle = "30% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -761,7 +763,8 @@ shrunk_b2 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("arithmetric shrinkage") + 
+    #ggtitle("constant replacement") + 
+  ggtitle("", subtitle = "30% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -800,8 +803,9 @@ unif_b2 = ggplot(pca) +
              aes(size = samples == "real")) + 
   #Adjust appearance
   
-  #Adjust labels
-  ggtitle("uniform replacement") + 
+  #Adjust labels  
+  #ggtitle("constant replacement") + 
+  ggtitle("", subtitle = "30% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -840,7 +844,8 @@ logunif_b2 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("log-uniform replacement") + 
+    #ggtitle("constant replacement") + 
+  ggtitle("", subtitle = "30% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -879,7 +884,8 @@ const_b3 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("constant replacement") + 
+    #ggtitle("constant replacement") + 
+  ggtitle("", subtitle = "50% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -918,7 +924,8 @@ new_b3 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("parametrization") + 
+  #ggtitle("parametrization") + 
+  ggtitle("", subtitle = "50% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -959,7 +966,8 @@ shrunk_b3 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("arithmetric shrinkage") + 
+  #ggtitle("parametrization") + 
+  ggtitle("", subtitle = "50% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -999,7 +1007,8 @@ unif_b3 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("uniform replacement") + 
+  #ggtitle("parametrization") + 
+  ggtitle("", subtitle = "50% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -1038,7 +1047,8 @@ logunif_b3 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("log-uniform replacement") + 
+  #ggtitle("parametrization") + 
+  ggtitle("", subtitle = "50% Rare features") +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +
@@ -1046,11 +1056,11 @@ logunif_b3 = ggplot(pca) +
 ```
 
 ``` r
-  (const_b1   | const_b2   | const_b3)/
-  (unif_b1    | unif_b2    | unif_b3)/
-  (logunif_b1 | logunif_b2 | logunif_b3)/
-  (new_b1     | new_b2     | new_b3)/
-  (shrunk_b1  | shrunk_b2  | shrunk_b3) +
+  ((const_b1   | const_b2   | const_b3)   )/
+  ((unif_b1    | unif_b2    | unif_b3)    )/
+  ((logunif_b1 | logunif_b2 | logunif_b3) )/
+  ((new_b1     | new_b2     | new_b3)     )/
+  ((shrunk_b1  | shrunk_b2  | shrunk_b3)  ) +
   patchwork::plot_layout(guides = 'collect')  & theme(legend.position = 'bottom')
 ```
 
