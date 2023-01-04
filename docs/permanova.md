@@ -37,10 +37,84 @@ res_b3 = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x
 ```
 
 ``` r
-clr_logunif_b1 <- res_b1 %>%
+clr_logunif_b1_base <- res_b1 %>%
   data.frame() %>%
   Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_const_b1_base <- res_b1 %>%  
   data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+  
+clr_unif_b1_base <- res_b1 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_shrunk_b1_base <- res_b1 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_new_b1_base <- res_b1 %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_logunif_b2_base <- res_b2 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_const_b2_base <- res_b2 %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_unif_b2_base <- res_b2 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame() 
+
+clr_shrunk_b2_base <- res_b2 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame()
+
+clr_new_b2_base <- res_b2 %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_logunif_b3_base <- res_b3 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif()  %>%
+  data.frame() 
+
+clr_const_b3_base <- res_b3 %>%  
+  data.frame() %>%
+  Tjazi::clr_c()  %>% 
+  data.frame() 
+
+clr_unif_b3_base <- res_b3 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame() 
+
+clr_shrunk_b3_base <- res_b3 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_new_b3_base <- res_b3 %>% 
+  data.frame() %>%
+  getTableMeans()  %>% 
+  data.frame()
+```
+
+``` r
+clr_logunif_b1 <- clr_logunif_b1_base %>%
   mutate(real_abundance = b1) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>%
@@ -49,10 +123,7 @@ clr_logunif_b1 <- res_b1 %>%
          method = "log-uniform replacement")
 
 
-clr_const_b1 <- res_b1 %>%  
-  data.frame() %>%
-  Tjazi::clr_c() %>% 
-  data.frame() %>%
+clr_const_b1 <- clr_const_b1_base %>%
   mutate(real_abundance = b1) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -61,10 +132,7 @@ clr_const_b1 <- res_b1 %>%
          method = "constant replacement") 
   
 
-clr_unif_b1 <- res_b1 %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
-  data.frame() %>%
+clr_unif_b1 <- clr_unif_b1_base %>%
   mutate(real_abundance = b1) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>%
@@ -72,10 +140,7 @@ clr_unif_b1 <- res_b1 %>%
          source = "b1",
          method = "uniform replacement")
 
-clr_shrunk_b1 <- res_b1 %>%
-  data.frame() %>%
-  sCLR() %>% 
-  data.frame() %>%
+clr_shrunk_b1 <- clr_shrunk_b1_base %>%
   mutate(real_abundance = b1) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -83,10 +148,7 @@ clr_shrunk_b1 <- res_b1 %>%
          source = "b1", 
          method = "arithmetic shrinkage") 
 
-clr_new_b1 <- res_b1 %>% 
-  data.frame() %>%
-  getTableMeans() %>% 
-  data.frame() %>%
+clr_new_b1 <- clr_new_b1_base %>%
   mutate(real_abundance = b1) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -94,10 +156,7 @@ clr_new_b1 <- res_b1 %>%
          source = "b1", 
          method = "parameterization") 
 
-clr_logunif_b2 <- res_b2 %>%
-  data.frame() %>%
-  Tjazi::clr_logunif() %>%
-  data.frame() %>%
+clr_logunif_b2 <- clr_logunif_b2_base %>%
   mutate(real_abundance = b2) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>%
@@ -105,10 +164,7 @@ clr_logunif_b2 <- res_b2 %>%
          source = "b2",
          method = "log-uniform replacement")
 
-clr_const_b2 <- res_b2 %>%  
-  data.frame() %>%
-  Tjazi::clr_c() %>% 
-  data.frame() %>%
+clr_const_b2 <-clr_const_b2_base %>%
   mutate(real_abundance = b2) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -116,10 +172,7 @@ clr_const_b2 <- res_b2 %>%
          source = "b2", 
          method = "constant replacement") 
 
-clr_unif_b2 <- res_b2 %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
-  data.frame() %>%
+clr_unif_b2 <- clr_unif_b2_base %>%
   mutate(real_abundance = b2) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>%
@@ -127,10 +180,7 @@ clr_unif_b2 <- res_b2 %>%
          source = "b2",
          method = "uniform replacement")
 
-clr_shrunk_b2 <- res_b2 %>%
-  data.frame() %>%
-  sCLR() %>% 
-  data.frame() %>%
+clr_shrunk_b2 <- clr_shrunk_b2_base %>%
   mutate(real_abundance = b2) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -138,10 +188,7 @@ clr_shrunk_b2 <- res_b2 %>%
          source = "b2", 
          method = "arithmetic shrinkage") 
 
-clr_new_b2 <- res_b2 %>% 
-  data.frame() %>%
-  getTableMeans() %>% 
-  data.frame() %>%
+clr_new_b2 <- clr_new_b2_base %>%
   mutate(real_abundance = b2) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -149,10 +196,7 @@ clr_new_b2 <- res_b2 %>%
          source = "b2", 
          method = "parameterization") 
 
-clr_logunif_b3 <- res_b3 %>%
-  data.frame() %>%
-  Tjazi::clr_logunif()  %>%
-  data.frame() %>%
+clr_logunif_b3 <- clr_logunif_b3_base %>%
   mutate(real_abundance = b3) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>%
@@ -161,10 +205,7 @@ clr_logunif_b3 <- res_b3 %>%
          method = "log-uniform replacement")
 
 
-clr_const_b3 <- res_b3 %>%  
-  data.frame() %>%
-  Tjazi::clr_c()  %>% 
-  data.frame() %>%
+clr_const_b3 <- clr_const_b3_base %>%
   mutate(real_abundance = b3) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -172,10 +213,7 @@ clr_const_b3 <- res_b3 %>%
          source = "b3", 
          method = "constant replacement") 
 
-clr_unif_b3 <- res_b3 %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
-  data.frame() %>%
+clr_unif_b3 <- clr_unif_b3_base %>%
   mutate(real_abundance = b3) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>%
@@ -183,10 +221,7 @@ clr_unif_b3 <- res_b3 %>%
          source = "b3",
          method = "uniform replacement")
 
-clr_shrunk_b3 <- res_b3 %>%
-  data.frame() %>%
-  sCLR() %>% 
-  data.frame() %>%
+clr_shrunk_b3 <- clr_shrunk_b3_base %>%
   mutate(real_abundance = b3) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -194,10 +229,7 @@ clr_shrunk_b3 <- res_b3 %>%
          source = "b3", 
          method = "arithmetic shrinkage") 
 
-clr_new_b3 <- res_b3 %>% 
-  data.frame() %>%
-  getTableMeans()  %>% 
-  data.frame() %>%
+clr_new_b3 <- clr_new_b3_base %>%
   mutate(real_abundance = b3) %>%
   rownames_to_column("ID") %>%
   pivot_longer(!c(ID, real_abundance))  %>% 
@@ -285,98 +317,65 @@ do.call(rbind, list(
 ![](permanova_files/figure-gfm/variance%20by%20feature-1.png)<!-- -->
 
 ``` r
-dist_logunif_b1 <- res_b1 %>%
-  data.frame() %>%
-  Tjazi::clr_logunif() %>%
+dist_logunif_b1 <- clr_logunif_b1_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-dist_const_b1 <- res_b1 %>%  
-  data.frame() %>%
-  Tjazi::clr_c() %>%
+dist_const_b1 <- clr_const_b1_base %>%
   t() %>%
   dist(x = ., method = "euclidean")  
 
-dist_unif_b1 <- res_b1 %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
+dist_unif_b1 <- clr_unif_b1_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-dist_shrunk_b1 <- res_b1 %>%
-  data.frame() %>%
-  sCLR() %>%
+dist_shrunk_b1 <- clr_shrunk_b1_base %>%
   t() %>%
   dist(x = .,method = "euclidean")
 
-dist_new_b1 <- res_b1 %>% 
-  data.frame() %>%
-  getTableMeans() %>%
+dist_new_b1 <- clr_new_b1_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-
-dist_logunif_b2 <- res_b2 %>%
-  data.frame() %>%
-  Tjazi::clr_logunif() %>%
+dist_logunif_b2 <- clr_logunif_b2_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-dist_const_b2 <- res_b2 %>%  
-  data.frame() %>%
-  Tjazi::clr_c() %>%
+dist_const_b2 <- clr_const_b2_base %>%
   t() %>%
   dist(x = ., method = "euclidean")  
 
-dist_unif_b2 <- res_b2 %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
+dist_unif_b2 <- clr_unif_b2_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-dist_shrunk_b2 <- res_b2 %>%
-  data.frame() %>%
-  sCLR() %>%
+dist_shrunk_b2 <- clr_shrunk_b2_base %>%
   t() %>%
   dist(x = .,method = "euclidean")
 
-dist_new_b2 <- res_b2 %>% 
-  data.frame() %>%
-  getTableMeans() %>%
+dist_new_b2 <- clr_new_b2_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-
-dist_logunif_b3 <- res_b3 %>%
-  data.frame() %>%
-  Tjazi::clr_logunif() %>%
+dist_logunif_b3 <- clr_logunif_b3_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-dist_const_b3 <- res_b3 %>%  
-  data.frame() %>%
-  Tjazi::clr_c() %>%
+dist_const_b3 <- clr_const_b3_base %>%
   t() %>%
   dist(x = ., method = "euclidean")  
 
-dist_unif_b3 <- res_b3 %>%
-  data.frame() %>%
-  Tjazi::clr_unif() %>%
+dist_unif_b3 <- clr_unif_b3_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
 
-dist_shrunk_b3 <- res_b3 %>%
-  data.frame() %>%
-  sCLR() %>%
+dist_shrunk_b3 <- clr_shrunk_b3_base %>%
   t() %>%
   dist(x = .,method = "euclidean")
 
-dist_new_b3 <- res_b3 %>% 
-  data.frame() %>%
-  getTableMeans() %>%
+dist_new_b3 <- clr_new_b3_base %>%
   t() %>%
   dist(x = ., method = "euclidean")
-
 
 groups = rep(seq(1000,20000, by = 1000), each = 100)
 
@@ -451,6 +450,671 @@ adonis_b3 <- data.frame(R2 =     c(b3_v1$R2[1],
                                                        "arithmetric shrinkage"))), 
                         distribution = "50%")
 ```
+
+``` r
+const_b1.pca = clr_const_b1_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b1))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b1.pca$sdev[1]^2/sum(const_b1.pca$sdev^2),4) * 100
+pc2 <- round(const_b1.pca$sdev[2]^2/sum(const_b1.pca$sdev^2),4) * 100
+pc3 <- round(const_b1.pca$sdev[3]^2/sum(const_b1.pca$sdev^2),4) * 100
+pc4 <- round(const_b1.pca$sdev[4]^2/sum(const_b1.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b1.pca$x[,1], 
+                  PC2 = const_b1.pca$x[,2], 
+                  PC3 = const_b1.pca$x[,3], 
+                  PC4 = const_b1.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+const_b1 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("constant replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+new_b1.pca = clr_new_b1_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b1))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b1.pca$sdev[1]^2/sum(new_b1.pca$sdev^2),4) * 100
+pc2 <- round(new_b1.pca$sdev[2]^2/sum(new_b1.pca$sdev^2),4) * 100
+pc3 <- round(new_b1.pca$sdev[3]^2/sum(new_b1.pca$sdev^2),4) * 100
+pc4 <- round(new_b1.pca$sdev[4]^2/sum(new_b1.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b1.pca$x[,1], 
+                  PC2 = new_b1.pca$x[,2], 
+                  PC3 = new_b1.pca$x[,3], 
+                  PC4 = new_b1.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+new_b1 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("parametrization") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  
+  
+shrunk_b1.pca = clr_shrunk_b1_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b1))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b1.pca$sdev[1]^2/sum(shrunk_b1.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b1.pca$sdev[2]^2/sum(shrunk_b1.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b1.pca$sdev[3]^2/sum(shrunk_b1.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b1.pca$sdev[4]^2/sum(shrunk_b1.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b1.pca$x[,1], 
+                  PC2 = shrunk_b1.pca$x[,2], 
+                  PC3 = shrunk_b1.pca$x[,3], 
+                  PC4 = shrunk_b1.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+shrunk_b1 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("arithmetric shrinkage") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  
+unif_b1.pca = clr_unif_b1_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b1))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b1.pca$sdev[1]^2/sum(unif_b1.pca$sdev^2),4) * 100
+pc2 <- round(unif_b1.pca$sdev[2]^2/sum(unif_b1.pca$sdev^2),4) * 100
+pc3 <- round(unif_b1.pca$sdev[3]^2/sum(unif_b1.pca$sdev^2),4) * 100
+pc4 <- round(unif_b1.pca$sdev[4]^2/sum(unif_b1.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b1.pca$x[,1], 
+                  PC2 = unif_b1.pca$x[,2], 
+                  PC3 = unif_b1.pca$x[,3], 
+                  PC4 = unif_b1.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+unif_b1 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("uniform replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  logunif_b1.pca = clr_logunif_b1_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b1))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b1.pca$sdev[1]^2/sum(logunif_b1.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b1.pca$sdev[2]^2/sum(logunif_b1.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b1.pca$sdev[3]^2/sum(logunif_b1.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b1.pca$sdev[4]^2/sum(logunif_b1.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b1.pca$x[,1], 
+                  PC2 = logunif_b1.pca$x[,2], 
+                  PC3 = logunif_b1.pca$x[,3], 
+                  PC4 = logunif_b1.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+logunif_b1 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("log-uniform replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+    
+  
+const_b2.pca = clr_const_b2_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b2))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b2.pca$sdev[1]^2/sum(const_b2.pca$sdev^2),4) * 100
+pc2 <- round(const_b2.pca$sdev[2]^2/sum(const_b2.pca$sdev^2),4) * 100
+pc3 <- round(const_b2.pca$sdev[3]^2/sum(const_b2.pca$sdev^2),4) * 100
+pc4 <- round(const_b2.pca$sdev[4]^2/sum(const_b2.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b2.pca$x[,1], 
+                  PC2 = const_b2.pca$x[,2], 
+                  PC3 = const_b2.pca$x[,3], 
+                  PC4 = const_b2.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+const_b2 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("constant replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+new_b2.pca = clr_new_b2_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b2))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b2.pca$sdev[1]^2/sum(new_b2.pca$sdev^2),4) * 100
+pc2 <- round(new_b2.pca$sdev[2]^2/sum(new_b2.pca$sdev^2),4) * 100
+pc3 <- round(new_b2.pca$sdev[3]^2/sum(new_b2.pca$sdev^2),4) * 100
+pc4 <- round(new_b2.pca$sdev[4]^2/sum(new_b2.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b2.pca$x[,1], 
+                  PC2 = new_b2.pca$x[,2], 
+                  PC3 = new_b2.pca$x[,3], 
+                  PC4 = new_b2.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+new_b2 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("parametrization") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  
+  
+shrunk_b2.pca = clr_shrunk_b2_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b2))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b2.pca$sdev[1]^2/sum(shrunk_b2.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b2.pca$sdev[2]^2/sum(shrunk_b2.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b2.pca$sdev[3]^2/sum(shrunk_b2.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b2.pca$sdev[4]^2/sum(shrunk_b2.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b2.pca$x[,1], 
+                  PC2 = shrunk_b2.pca$x[,2], 
+                  PC3 = shrunk_b2.pca$x[,3], 
+                  PC4 = shrunk_b2.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+shrunk_b2 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("arithmetric shrinkage") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  
+unif_b2.pca = clr_unif_b2_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b2))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b2.pca$sdev[1]^2/sum(unif_b2.pca$sdev^2),4) * 100
+pc2 <- round(unif_b2.pca$sdev[2]^2/sum(unif_b2.pca$sdev^2),4) * 100
+pc3 <- round(unif_b2.pca$sdev[3]^2/sum(unif_b2.pca$sdev^2),4) * 100
+pc4 <- round(unif_b2.pca$sdev[4]^2/sum(unif_b2.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b2.pca$x[,1], 
+                  PC2 = unif_b2.pca$x[,2], 
+                  PC3 = unif_b2.pca$x[,3], 
+                  PC4 = unif_b2.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+unif_b2 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("uniform replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  logunif_b2.pca = clr_logunif_b2_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b2))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b2.pca$sdev[1]^2/sum(logunif_b2.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b2.pca$sdev[2]^2/sum(logunif_b2.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b2.pca$sdev[3]^2/sum(logunif_b2.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b2.pca$sdev[4]^2/sum(logunif_b2.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b2.pca$x[,1], 
+                  PC2 = logunif_b2.pca$x[,2], 
+                  PC3 = logunif_b2.pca$x[,3], 
+                  PC4 = logunif_b2.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+logunif_b2 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("log-uniform replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+  
+const_b3.pca = clr_const_b3_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b3))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b3.pca$sdev[1]^2/sum(const_b3.pca$sdev^2),4) * 100
+pc2 <- round(const_b3.pca$sdev[2]^2/sum(const_b3.pca$sdev^2),4) * 100
+pc3 <- round(const_b3.pca$sdev[3]^2/sum(const_b3.pca$sdev^2),4) * 100
+pc4 <- round(const_b3.pca$sdev[4]^2/sum(const_b3.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b3.pca$x[,1], 
+                  PC2 = const_b3.pca$x[,2], 
+                  PC3 = const_b3.pca$x[,3], 
+                  PC4 = const_b3.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+const_b3 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("constant replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+new_b3.pca = clr_new_b3_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b3))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b3.pca$sdev[1]^2/sum(new_b3.pca$sdev^2),4) * 100
+pc2 <- round(new_b3.pca$sdev[2]^2/sum(new_b3.pca$sdev^2),4) * 100
+pc3 <- round(new_b3.pca$sdev[3]^2/sum(new_b3.pca$sdev^2),4) * 100
+pc4 <- round(new_b3.pca$sdev[4]^2/sum(new_b3.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b3.pca$x[,1], 
+                  PC2 = new_b3.pca$x[,2], 
+                  PC3 = new_b3.pca$x[,3], 
+                  PC4 = new_b3.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+new_b3 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("parametrization") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  
+  
+shrunk_b3.pca = clr_shrunk_b3_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b3))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b3.pca$sdev[1]^2/sum(shrunk_b3.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b3.pca$sdev[2]^2/sum(shrunk_b3.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b3.pca$sdev[3]^2/sum(shrunk_b3.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b3.pca$sdev[4]^2/sum(shrunk_b3.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b3.pca$x[,1], 
+                  PC2 = shrunk_b3.pca$x[,2], 
+                  PC3 = shrunk_b3.pca$x[,3], 
+                  PC4 = shrunk_b3.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+shrunk_b3 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("arithmetric shrinkage") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  
+unif_b3.pca = clr_unif_b3_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b3))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b3.pca$sdev[1]^2/sum(unif_b3.pca$sdev^2),4) * 100
+pc2 <- round(unif_b3.pca$sdev[2]^2/sum(unif_b3.pca$sdev^2),4) * 100
+pc3 <- round(unif_b3.pca$sdev[3]^2/sum(unif_b3.pca$sdev^2),4) * 100
+pc4 <- round(unif_b3.pca$sdev[4]^2/sum(unif_b3.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b3.pca$x[,1], 
+                  PC2 = unif_b3.pca$x[,2], 
+                  PC3 = unif_b3.pca$x[,3], 
+                  PC4 = unif_b3.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+unif_b3 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("uniform replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+  
+  
+  logunif_b3.pca = clr_logunif_b3_base %>%
+  cbind("real" = deleuze:::clr(data.frame(b3))[,1]) %>%
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b3.pca$sdev[1]^2/sum(logunif_b3.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b3.pca$sdev[2]^2/sum(logunif_b3.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b3.pca$sdev[3]^2/sum(logunif_b3.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b3.pca$sdev[4]^2/sum(logunif_b3.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b3.pca$x[,1], 
+                  PC2 = logunif_b3.pca$x[,2], 
+                  PC3 = logunif_b3.pca$x[,3], 
+                  PC4 = logunif_b3.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+
+logunif_b3 = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("log-uniform replacement") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+```
+
+``` r
+  (const_b1   | const_b2   | const_b3)/
+  (unif_b1    | unif_b2    | unif_b3)/
+  (logunif_b1 | logunif_b2 | logunif_b3)/
+  (new_b1     | new_b2     | new_b3)/
+  (shrunk_b1  | shrunk_b2  | shrunk_b3) +
+  patchwork::plot_layout(guides = 'collect')  & theme(legend.position = 'bottom')
+```
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+
+![](permanova_files/figure-gfm/plot%20PCAs-1.png)<!-- -->
 
 ``` r
 do.call(rbind, list(adonis_b1, adonis_b2, adonis_b3)) %>%
