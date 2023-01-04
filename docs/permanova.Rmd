@@ -221,7 +221,7 @@ do.call(rbind, list(
   clr_shrunk_b1,  clr_shrunk_b2,  clr_shrunk_b3, 
   clr_new_b1,     clr_new_b2,     clr_new_b3, 
   clr_unif_b1,    clr_unif_b2,    clr_unif_b3, 
-  clr_logunif_b3, clr_logunif_b2, clr_logunif_b3
+  clr_logunif_b1, clr_logunif_b2, clr_logunif_b3
                     )) %>% 
   mutate(source = str_replace(source, pattern = "b1", replacement = "10% Rare Features"), 
          source = str_replace(source, pattern = "b2", replacement = "30% Rare Features"), 
@@ -257,7 +257,7 @@ do.call(rbind, list(
   clr_shrunk_b1,  clr_shrunk_b2,  clr_shrunk_b3, 
   clr_new_b1,     clr_new_b2,     clr_new_b3, 
   clr_unif_b1,    clr_unif_b2,    clr_unif_b3, 
-  clr_logunif_b3, clr_logunif_b2, clr_logunif_b3
+  clr_logunif_b1, clr_logunif_b2, clr_logunif_b3
                     )) %>% 
   mutate(source = str_replace(source, pattern = "b1", replacement = "10% Rare Features"), 
          source = str_replace(source, pattern = "b2", replacement = "30% Rare Features"), 
