@@ -4,29 +4,7 @@ output:
     variant: gfm
 ---
 
-```{r for knitr, include=FALSE}
-hooks = knitr::knit_hooks$get()
-hook_foldable = function(type) {
-  force(type)
-  function(x, options) {
-    res = hooks[[type]](x, options)
-    
-    if (isFALSE(options[[paste0("fold.", type)]])) return(res)
-    
-    paste0(
-      "<details><summary>", type, "</summary>\n\n",
-      res,
-      "\n\n</details>"
-    )
-  }
-}
-knitr::knit_hooks$set(
-  output = hook_foldable("output"),
-  plot = hook_foldable("plot")
-)
-```
-
-```{r setup, message = FALSE, fold.output=FALSE, fold.plot=FALSE}
+```{r setup, message = FALSE}
 set.seed(12345)
 library(tidyverse)
 library(deleuze)
@@ -239,7 +217,7 @@ clr_new_b3 <- res_b3 %>%
 
 ```
 
-```{r plot individual feature precision, fig.width = 8, fig.height = 15, fold.output=FALSE, fold.plot=FALSE}
+```{r plot individual feature precision, fig.width = 8, fig.height = 15}
 
 do.call(rbind, list(
   clr_const_b1,   clr_const_b2,   clr_const_b3, 
@@ -277,7 +255,7 @@ do.call(rbind, list(
 
 ```
 
-```{r variance by feature, fig.width = 8, fig.height = 15, fold.output=FALSE, fold.plot=FALSE}
+```{r variance by feature, fig.width = 8, fig.height = 15}
 do.call(rbind, list(
   clr_const_b1,   clr_const_b2,   clr_const_b3, 
   clr_shrunk_b1,  clr_shrunk_b2,  clr_shrunk_b3, 
@@ -479,7 +457,7 @@ adonis_b3 <- data.frame(R2 =     c(b3_v1$R2[1],
 
 ```
 
-```{r plot permanovas, fig.width = 8, fig.height = 5, fold.output=FALSE, fold.plot=FALSE}
+```{r plot permanovas, fig.width = 8, fig.height = 5}
 
 
 do.call(rbind, list(adonis_b1, adonis_b2, adonis_b3)) %>%
