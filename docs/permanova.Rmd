@@ -707,7 +707,7 @@ pc3 <- round(new_b2.pca$sdev[3]^2/sum(new_b2.pca$sdev^2),4) * 100
 pc4 <- round(new_b2.pca$sdev[4]^2/sum(new_b2.pca$sdev^2),4) * 100
 
 #Extract the scores for every sample for the first four components for plotting. 
-pca  = data.frame(PC1 = new_b2.pca$x[,1], 
+pca  = data.frame(PC1 = new_b2.pca$x[,1] * -1, 
                   PC2 = new_b2.pca$x[,2], 
                   PC3 = new_b2.pca$x[,3], 
                   PC4 = new_b2.pca$x[,4])
@@ -790,7 +790,7 @@ pc3 <- round(unif_b2.pca$sdev[3]^2/sum(unif_b2.pca$sdev^2),4) * 100
 pc4 <- round(unif_b2.pca$sdev[4]^2/sum(unif_b2.pca$sdev^2),4) * 100
 
 #Extract the scores for every sample for the first four components for plotting. 
-pca  = data.frame(PC1 = unif_b2.pca$x[,1], 
+pca  = data.frame(PC1 = unif_b2.pca$x[,1] * -1, 
                   PC2 = unif_b2.pca$x[,2], 
                   PC3 = unif_b2.pca$x[,3], 
                   PC4 = unif_b2.pca$x[,4])
@@ -870,7 +870,7 @@ pc3 <- round(const_b3.pca$sdev[3]^2/sum(const_b3.pca$sdev^2),4) * 100
 pc4 <- round(const_b3.pca$sdev[4]^2/sum(const_b3.pca$sdev^2),4) * 100
 
 #Extract the scores for every sample for the first four components for plotting. 
-pca  = data.frame(PC1 = const_b3.pca$x[,1], 
+pca  = data.frame(PC1 = const_b3.pca$x[,1] * -1, 
                   PC2 = const_b3.pca$x[,2], 
                   PC3 = const_b3.pca$x[,3], 
                   PC4 = const_b3.pca$x[,4])
