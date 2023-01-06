@@ -394,12 +394,12 @@ adonis_b1 <- data.frame(R2 =     c(b1_v1$R2[1],
                                           "uniform replacement", 
                                           "log-uniform replacement", 
                                           "parameterization", 
-                                          "arithmetric shrinkage"), 
+                                          "arithmetic shrinkage"), 
                                         levels = rev(c("constant replacement", 
                                                        "uniform replacement", 
                                                        "log-uniform replacement", 
                                                        "parameterization", 
-                                                       "arithmetric shrinkage"))), 
+                                                       "arithmetic shrinkage"))), 
                         distribution = "10%")
 
 
@@ -418,12 +418,12 @@ adonis_b2 <- data.frame(R2 =     c(b2_v1$R2[1],
                                           "uniform replacement", 
                                           "log-uniform replacement", 
                                           "parameterization", 
-                                          "arithmetric shrinkage"), 
+                                          "arithmetic shrinkage"), 
                                         levels = rev(c("constant replacement", 
                                                        "uniform replacement", 
                                                        "log-uniform replacement", 
                                                        "parameterization", 
-                                                       "arithmetric shrinkage"))), 
+                                                       "arithmetic shrinkage"))), 
                         distribution = "30%")
 
 
@@ -442,12 +442,12 @@ adonis_b3 <- data.frame(R2 =     c(b3_v1$R2[1],
                                           "uniform replacement", 
                                           "log-uniform replacement", 
                                           "parameterization", 
-                                          "arithmetric shrinkage"), 
+                                          "arithmetic shrinkage"), 
                                         levels = rev(c("constant replacement", 
                                                        "uniform replacement", 
                                                        "log-uniform replacement", 
                                                        "parameterization", 
-                                                       "arithmetric shrinkage"))), 
+                                                       "arithmetic shrinkage"))), 
                         distribution = "50%")
 ```
 
@@ -563,7 +563,7 @@ shrunk_b1 = ggplot(pca) +
   #Adjust appearance
   
   #Adjust labels
-  ggtitle("Arithmetric shrinkage", subtitle = "10% Rare features") + 
+  ggtitle("Arithmetic shrinkage", subtitle = "10% Rare features") + 
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) +
   theme_bw() +

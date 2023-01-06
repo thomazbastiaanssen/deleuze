@@ -1,0 +1,2450 @@
+``` r
+set.seed(12345)
+library(tidyverse)
+library(deleuze)
+library(patchwork)
+library(Tjazi)
+library(vegan)
+```
+
+``` r
+set.seed(12345)
+b1  <-      c(rep(1, 10), rep(5, 20), rep(15, 20), rep(40, 20), rep(80, 20), rep(100, 5), rep(250, 5) )
+b1a <- b1 * c(rep(1, 10), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 60) ) 
+b1b <- b1 * c(rep(1, 30), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 40) ) 
+b1c <- b1 * c(rep(1, 50), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 20) )
+
+b2  <-      c(rep(1, 30), rep(5, 15), rep(15, 15), rep(40, 15), rep(80, 15), rep(100, 5), rep(350, 5) )
+b2a <- b2 * c(rep(1, 30), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 40) ) 
+b2b <- b2 * c(rep(1, 45), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 25) ) 
+b2c <- b2 * c(rep(1, 60), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 10) ) 
+
+b3  <-      c(rep(1, 50), rep(5, 10), rep(15, 10), rep(40, 10), rep(80, 10), rep(100, 5), rep(450, 5) )
+b3a <- b3 * c(rep(1, 50), rep(exp(1), 10), rep(1/exp(1), 10), rep(1, 30) ) 
+b3b <- b3 * c(rep(1, 60), rep(exp(1), 10), rep(1/exp(1), 10), rep(1, 20) ) 
+b3c <- b3 * c(rep(1, 70), rep(exp(1), 10), rep(1/exp(1), 10), rep(1, 10) ) 
+
+
+res_b1 = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b1a = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1a, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+res_b1b = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1b, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+res_b1c = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1c, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+
+res_b2 = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b2, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b2a = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b2a, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+res_b2b = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b2b, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+res_b2c = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b2c, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b3 = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b3, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+
+res_b3a = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b3a, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b3b = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b3b, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b3c = sapply(X = rep(seq(1000,20000, by = 1000), each = 100),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b3c, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+```
+
+``` r
+clr_logunif_b1_base <- res_b1 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b1a_base <- res_b1a %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b1b_base <- res_b1b %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b1c_base <- res_b1c %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_const_b1_base <- res_b1 %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b1a_base <- res_b1a %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b1b_base <- res_b1b %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b1c_base <- res_b1c %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+  
+clr_unif_b1_base <- res_b1 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b1a_base <- res_b1a %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b1b_base <- res_b1b %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b1c_base <- res_b1c %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+
+clr_shrunk_b1_base <- res_b1 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b1a_base <- res_b1a %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b1b_base <- res_b1b %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b1c_base <- res_b1c %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_new_b1_base <- res_b1 %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b1a_base <- res_b1a %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b1b_base <- res_b1b %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b1c_base <- res_b1c %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_logunif_b2_base <- res_b2 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b2a_base <- res_b2a %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b2b_base <- res_b2b %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b2c_base <- res_b2c %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_const_b2_base <- res_b2 %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b2a_base <- res_b2a %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b2b_base <- res_b2b %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b2c_base <- res_b2c %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+  
+clr_unif_b2_base <- res_b2 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b2a_base <- res_b2a %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b2b_base <- res_b2b %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b2c_base <- res_b2c %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+
+clr_shrunk_b2_base <- res_b2 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b2a_base <- res_b2a %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b2b_base <- res_b2b %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b2c_base <- res_b2c %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_new_b2_base <- res_b2 %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b2a_base <- res_b2a %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b2b_base <- res_b2b %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b2c_base <- res_b2c %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_logunif_b3_base <- res_b3 %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b3a_base <- res_b3a %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b3b_base <- res_b3b %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_logunif_b3c_base <- res_b3c %>%
+  data.frame() %>%
+  Tjazi::clr_logunif() %>%
+  data.frame() 
+
+clr_const_b3_base <- res_b3 %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b3a_base <- res_b3a %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b3b_base <- res_b3b %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+
+clr_const_b3c_base <- res_b3c %>%  
+  data.frame() %>%
+  Tjazi::clr_c() %>% 
+  data.frame() 
+  
+clr_unif_b3_base <- res_b3 %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b3a_base <- res_b3a %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b3b_base <- res_b3b %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+clr_unif_b3c_base <- res_b3c %>%
+  data.frame() %>%
+  Tjazi::clr_unif() %>%
+  data.frame()
+
+
+clr_shrunk_b3_base <- res_b3 %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b3a_base <- res_b3a %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b3b_base <- res_b3b %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_shrunk_b3c_base <- res_b3c %>%
+  data.frame() %>%
+  sCLR() %>% 
+  data.frame() 
+
+clr_new_b3_base <- res_b3 %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b3a_base <- res_b3a %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b3b_base <- res_b3b %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+
+clr_new_b3c_base <- res_b3c %>% 
+  data.frame() %>%
+  getTableMeans() %>% 
+  data.frame() 
+```
+
+``` r
+const_b1a.pca = cbind(clr_const_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                      clr_const_b1a_base %>% cbind("real" = deleuze:::clr(data.frame(b1a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b1a.pca$sdev[1]^2/sum(const_b1a.pca$sdev^2),4) * 100
+pc2 <- round(const_b1a.pca$sdev[2]^2/sum(const_b1a.pca$sdev^2),4) * 100
+pc3 <- round(const_b1a.pca$sdev[3]^2/sum(const_b1a.pca$sdev^2),4) * 100
+pc4 <- round(const_b1a.pca$sdev[4]^2/sum(const_b1a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b1a.pca$x[,1], 
+                  PC2 = const_b1a.pca$x[,2], 
+                  PC3 = const_b1a.pca$x[,3], 
+                  PC4 = const_b1a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b1a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("Constant replacement", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+const_b1b.pca = cbind(clr_const_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                      clr_const_b1b_base %>% cbind("real" = deleuze:::clr(data.frame(b1b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b1b.pca$sdev[1]^2/sum(const_b1b.pca$sdev^2),4) * 100
+pc2 <- round(const_b1b.pca$sdev[2]^2/sum(const_b1b.pca$sdev^2),4) * 100
+pc3 <- round(const_b1b.pca$sdev[3]^2/sum(const_b1b.pca$sdev^2),4) * 100
+pc4 <- round(const_b1b.pca$sdev[4]^2/sum(const_b1b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b1b.pca$x[,1], 
+                  PC2 = const_b1b.pca$x[,2], 
+                  PC3 = const_b1b.pca$x[,3], 
+                  PC4 = const_b1b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b1b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+const_b1c.pca = cbind(clr_const_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                      clr_const_b1c_base %>% cbind("real" = deleuze:::clr(data.frame(b1c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b1c.pca$sdev[1]^2/sum(const_b1c.pca$sdev^2),4) * 100
+pc2 <- round(const_b1c.pca$sdev[2]^2/sum(const_b1c.pca$sdev^2),4) * 100
+pc3 <- round(const_b1c.pca$sdev[3]^2/sum(const_b1c.pca$sdev^2),4) * 100
+pc4 <- round(const_b1c.pca$sdev[4]^2/sum(const_b1c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b1c.pca$x[,1], 
+                  PC2 = const_b1c.pca$x[,2], 
+                  PC3 = const_b1c.pca$x[,3], 
+                  PC4 = const_b1c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b1c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+unif_b1a.pca = cbind(clr_unif_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                      clr_unif_b1a_base %>% cbind("real" = deleuze:::clr(data.frame(b1a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b1a.pca$sdev[1]^2/sum(unif_b1a.pca$sdev^2),4) * 100
+pc2 <- round(unif_b1a.pca$sdev[2]^2/sum(unif_b1a.pca$sdev^2),4) * 100
+pc3 <- round(unif_b1a.pca$sdev[3]^2/sum(unif_b1a.pca$sdev^2),4) * 100
+pc4 <- round(unif_b1a.pca$sdev[4]^2/sum(unif_b1a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b1a.pca$x[,1], 
+                  PC2 = unif_b1a.pca$x[,2], 
+                  PC3 = unif_b1a.pca$x[,3], 
+                  PC4 = unif_b1a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b1a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("Uniform replacement", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+unif_b1b.pca = cbind(clr_unif_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                      clr_unif_b1b_base %>% cbind("real" = deleuze:::clr(data.frame(b1b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b1b.pca$sdev[1]^2/sum(unif_b1b.pca$sdev^2),4) * 100
+pc2 <- round(unif_b1b.pca$sdev[2]^2/sum(unif_b1b.pca$sdev^2),4) * 100
+pc3 <- round(unif_b1b.pca$sdev[3]^2/sum(unif_b1b.pca$sdev^2),4) * 100
+pc4 <- round(unif_b1b.pca$sdev[4]^2/sum(unif_b1b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b1b.pca$x[,1], 
+                  PC2 = unif_b1b.pca$x[,2], 
+                  PC3 = unif_b1b.pca$x[,3], 
+                  PC4 = unif_b1b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b1b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+unif_b1c.pca = cbind(clr_unif_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                      clr_unif_b1c_base %>% cbind("real" = deleuze:::clr(data.frame(b1c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b1c.pca$sdev[1]^2/sum(unif_b1c.pca$sdev^2),4) * 100
+pc2 <- round(unif_b1c.pca$sdev[2]^2/sum(unif_b1c.pca$sdev^2),4) * 100
+pc3 <- round(unif_b1c.pca$sdev[3]^2/sum(unif_b1c.pca$sdev^2),4) * 100
+pc4 <- round(unif_b1c.pca$sdev[4]^2/sum(unif_b1c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b1c.pca$x[,1], 
+                  PC2 = unif_b1c.pca$x[,2], 
+                  PC3 = unif_b1c.pca$x[,3], 
+                  PC4 = unif_b1c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b1c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+logunif_b1a.pca = cbind(clr_logunif_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                     clr_logunif_b1a_base %>% cbind("real" = deleuze:::clr(data.frame(b1a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b1a.pca$sdev[1]^2/sum(logunif_b1a.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b1a.pca$sdev[2]^2/sum(logunif_b1a.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b1a.pca$sdev[3]^2/sum(logunif_b1a.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b1a.pca$sdev[4]^2/sum(logunif_b1a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b1a.pca$x[,1], 
+                  PC2 = logunif_b1a.pca$x[,2], 
+                  PC3 = logunif_b1a.pca$x[,3], 
+                  PC4 = logunif_b1a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b1a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("Log-uniform replacement", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+logunif_b1b.pca = cbind(clr_logunif_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                     clr_logunif_b1b_base %>% cbind("real" = deleuze:::clr(data.frame(b1b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b1b.pca$sdev[1]^2/sum(logunif_b1b.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b1b.pca$sdev[2]^2/sum(logunif_b1b.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b1b.pca$sdev[3]^2/sum(logunif_b1b.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b1b.pca$sdev[4]^2/sum(logunif_b1b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b1b.pca$x[,1], 
+                  PC2 = logunif_b1b.pca$x[,2] * -1, 
+                  PC3 = logunif_b1b.pca$x[,3], 
+                  PC4 = logunif_b1b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b1b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+logunif_b1c.pca = cbind(clr_logunif_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                     clr_logunif_b1c_base %>% cbind("real" = deleuze:::clr(data.frame(b1c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b1c.pca$sdev[1]^2/sum(logunif_b1c.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b1c.pca$sdev[2]^2/sum(logunif_b1c.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b1c.pca$sdev[3]^2/sum(logunif_b1c.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b1c.pca$sdev[4]^2/sum(logunif_b1c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b1c.pca$x[,1], 
+                  PC2 = logunif_b1c.pca$x[,2], 
+                  PC3 = logunif_b1c.pca$x[,3], 
+                  PC4 = logunif_b1c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b1c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+new_b1a.pca = cbind(clr_new_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                        clr_new_b1a_base %>% cbind("real" = deleuze:::clr(data.frame(b1a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b1a.pca$sdev[1]^2/sum(new_b1a.pca$sdev^2),4) * 100
+pc2 <- round(new_b1a.pca$sdev[2]^2/sum(new_b1a.pca$sdev^2),4) * 100
+pc3 <- round(new_b1a.pca$sdev[3]^2/sum(new_b1a.pca$sdev^2),4) * 100
+pc4 <- round(new_b1a.pca$sdev[4]^2/sum(new_b1a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b1a.pca$x[,1], 
+                  PC2 = new_b1a.pca$x[,2] * -1, 
+                  PC3 = new_b1a.pca$x[,3], 
+                  PC4 = new_b1a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b1a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("Parameterization", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+new_b1b.pca = cbind(clr_new_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                        clr_new_b1b_base %>% cbind("real" = deleuze:::clr(data.frame(b1b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b1b.pca$sdev[1]^2/sum(new_b1b.pca$sdev^2),4) * 100
+pc2 <- round(new_b1b.pca$sdev[2]^2/sum(new_b1b.pca$sdev^2),4) * 100
+pc3 <- round(new_b1b.pca$sdev[3]^2/sum(new_b1b.pca$sdev^2),4) * 100
+pc4 <- round(new_b1b.pca$sdev[4]^2/sum(new_b1b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b1b.pca$x[,1], 
+                  PC2 = new_b1b.pca$x[,2], 
+                  PC3 = new_b1b.pca$x[,3], 
+                  PC4 = new_b1b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b1b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+new_b1c.pca = cbind(clr_new_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                        clr_new_b1c_base %>% cbind("real" = deleuze:::clr(data.frame(b1c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b1c.pca$sdev[1]^2/sum(new_b1c.pca$sdev^2),4) * 100
+pc2 <- round(new_b1c.pca$sdev[2]^2/sum(new_b1c.pca$sdev^2),4) * 100
+pc3 <- round(new_b1c.pca$sdev[3]^2/sum(new_b1c.pca$sdev^2),4) * 100
+pc4 <- round(new_b1c.pca$sdev[4]^2/sum(new_b1c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b1c.pca$x[,1], 
+                  PC2 = new_b1c.pca$x[,2], 
+                  PC3 = new_b1c.pca$x[,3], 
+                  PC4 = new_b1c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b1c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+
+shrunk_b1a.pca = cbind(clr_shrunk_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                    clr_shrunk_b1a_base %>% cbind("real" = deleuze:::clr(data.frame(b1a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b1a.pca$sdev[1]^2/sum(shrunk_b1a.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b1a.pca$sdev[2]^2/sum(shrunk_b1a.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b1a.pca$sdev[3]^2/sum(shrunk_b1a.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b1a.pca$sdev[4]^2/sum(shrunk_b1a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b1a.pca$x[,1], 
+                  PC2 = shrunk_b1a.pca$x[,2], 
+                  PC3 = shrunk_b1a.pca$x[,3], 
+                  PC4 = shrunk_b1a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b1a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("Arithmetic shrinkage", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+shrunk_b1b.pca = cbind(clr_shrunk_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                    clr_shrunk_b1b_base %>% cbind("real" = deleuze:::clr(data.frame(b1b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b1b.pca$sdev[1]^2/sum(shrunk_b1b.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b1b.pca$sdev[2]^2/sum(shrunk_b1b.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b1b.pca$sdev[3]^2/sum(shrunk_b1b.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b1b.pca$sdev[4]^2/sum(shrunk_b1b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b1b.pca$x[,1], 
+                  PC2 = shrunk_b1b.pca$x[,2], 
+                  PC3 = shrunk_b1b.pca$x[,3], 
+                  PC4 = shrunk_b1b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b1b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+shrunk_b1c.pca = cbind(clr_shrunk_b1_base  %>% cbind("real" = deleuze:::clr(data.frame(b1 ))[,1]), 
+                    clr_shrunk_b1c_base %>% cbind("real" = deleuze:::clr(data.frame(b1c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b1c.pca$sdev[1]^2/sum(shrunk_b1c.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b1c.pca$sdev[2]^2/sum(shrunk_b1c.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b1c.pca$sdev[3]^2/sum(shrunk_b1c.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b1c.pca$sdev[4]^2/sum(shrunk_b1c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b1c.pca$x[,1], 
+                  PC2 = shrunk_b1c.pca$x[,2], 
+                  PC3 = shrunk_b1c.pca$x[,3], 
+                  PC4 = shrunk_b1c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b1c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "10% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+const_b2a.pca = cbind(clr_const_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                      clr_const_b2a_base %>% cbind("real" = deleuze:::clr(data.frame(b2a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b2a.pca$sdev[1]^2/sum(const_b2a.pca$sdev^2),4) * 100
+pc2 <- round(const_b2a.pca$sdev[2]^2/sum(const_b2a.pca$sdev^2),4) * 100
+pc3 <- round(const_b2a.pca$sdev[3]^2/sum(const_b2a.pca$sdev^2),4) * 100
+pc4 <- round(const_b2a.pca$sdev[4]^2/sum(const_b2a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b2a.pca$x[,1], 
+                  PC2 = const_b2a.pca$x[,2], 
+                  PC3 = const_b2a.pca$x[,3], 
+                  PC4 = const_b2a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b2a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+const_b2b.pca = cbind(clr_const_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                      clr_const_b2b_base %>% cbind("real" = deleuze:::clr(data.frame(b2b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b2b.pca$sdev[1]^2/sum(const_b2b.pca$sdev^2),4) * 100
+pc2 <- round(const_b2b.pca$sdev[2]^2/sum(const_b2b.pca$sdev^2),4) * 100
+pc3 <- round(const_b2b.pca$sdev[3]^2/sum(const_b2b.pca$sdev^2),4) * 100
+pc4 <- round(const_b2b.pca$sdev[4]^2/sum(const_b2b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b2b.pca$x[,1], 
+                  PC2 = const_b2b.pca$x[,2], 
+                  PC3 = const_b2b.pca$x[,3], 
+                  PC4 = const_b2b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b2b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+const_b2c.pca = cbind(clr_const_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                      clr_const_b2c_base %>% cbind("real" = deleuze:::clr(data.frame(b2c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b2c.pca$sdev[1]^2/sum(const_b2c.pca$sdev^2),4) * 100
+pc2 <- round(const_b2c.pca$sdev[2]^2/sum(const_b2c.pca$sdev^2),4) * 100
+pc3 <- round(const_b2c.pca$sdev[3]^2/sum(const_b2c.pca$sdev^2),4) * 100
+pc4 <- round(const_b2c.pca$sdev[4]^2/sum(const_b2c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b2c.pca$x[,1], 
+                  PC2 = const_b2c.pca$x[,2] * -1, 
+                  PC3 = const_b2c.pca$x[,3], 
+                  PC4 = const_b2c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b2c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+unif_b2a.pca = cbind(clr_unif_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                     clr_unif_b2a_base %>% cbind("real" = deleuze:::clr(data.frame(b2a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b2a.pca$sdev[1]^2/sum(unif_b2a.pca$sdev^2),4) * 100
+pc2 <- round(unif_b2a.pca$sdev[2]^2/sum(unif_b2a.pca$sdev^2),4) * 100
+pc3 <- round(unif_b2a.pca$sdev[3]^2/sum(unif_b2a.pca$sdev^2),4) * 100
+pc4 <- round(unif_b2a.pca$sdev[4]^2/sum(unif_b2a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b2a.pca$x[,1], 
+                  PC2 = unif_b2a.pca$x[,2], 
+                  PC3 = unif_b2a.pca$x[,3], 
+                  PC4 = unif_b2a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b2a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+unif_b2b.pca = cbind(clr_unif_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                     clr_unif_b2b_base %>% cbind("real" = deleuze:::clr(data.frame(b2b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b2b.pca$sdev[1]^2/sum(unif_b2b.pca$sdev^2),4) * 100
+pc2 <- round(unif_b2b.pca$sdev[2]^2/sum(unif_b2b.pca$sdev^2),4) * 100
+pc3 <- round(unif_b2b.pca$sdev[3]^2/sum(unif_b2b.pca$sdev^2),4) * 100
+pc4 <- round(unif_b2b.pca$sdev[4]^2/sum(unif_b2b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b2b.pca$x[,1], 
+                  PC2 = unif_b2b.pca$x[,2], 
+                  PC3 = unif_b2b.pca$x[,3], 
+                  PC4 = unif_b2b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b2b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+unif_b2c.pca = cbind(clr_unif_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                     clr_unif_b2c_base %>% cbind("real" = deleuze:::clr(data.frame(b2c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b2c.pca$sdev[1]^2/sum(unif_b2c.pca$sdev^2),4) * 100
+pc2 <- round(unif_b2c.pca$sdev[2]^2/sum(unif_b2c.pca$sdev^2),4) * 100
+pc3 <- round(unif_b2c.pca$sdev[3]^2/sum(unif_b2c.pca$sdev^2),4) * 100
+pc4 <- round(unif_b2c.pca$sdev[4]^2/sum(unif_b2c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b2c.pca$x[,1], 
+                  PC2 = unif_b2c.pca$x[,2], 
+                  PC3 = unif_b2c.pca$x[,3], 
+                  PC4 = unif_b2c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b2c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+logunif_b2a.pca = cbind(clr_logunif_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                        clr_logunif_b2a_base %>% cbind("real" = deleuze:::clr(data.frame(b2a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b2a.pca$sdev[1]^2/sum(logunif_b2a.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b2a.pca$sdev[2]^2/sum(logunif_b2a.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b2a.pca$sdev[3]^2/sum(logunif_b2a.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b2a.pca$sdev[4]^2/sum(logunif_b2a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b2a.pca$x[,1], 
+                  PC2 = logunif_b2a.pca$x[,2] * -1, 
+                  PC3 = logunif_b2a.pca$x[,3], 
+                  PC4 = logunif_b2a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b2a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+logunif_b2b.pca = cbind(clr_logunif_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                        clr_logunif_b2b_base %>% cbind("real" = deleuze:::clr(data.frame(b2b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b2b.pca$sdev[1]^2/sum(logunif_b2b.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b2b.pca$sdev[2]^2/sum(logunif_b2b.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b2b.pca$sdev[3]^2/sum(logunif_b2b.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b2b.pca$sdev[4]^2/sum(logunif_b2b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b2b.pca$x[,1], 
+                  PC2 = logunif_b2b.pca$x[,2] * -1, 
+                  PC3 = logunif_b2b.pca$x[,3], 
+                  PC4 = logunif_b2b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b2b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+logunif_b2c.pca = cbind(clr_logunif_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                        clr_logunif_b2c_base %>% cbind("real" = deleuze:::clr(data.frame(b2c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b2c.pca$sdev[1]^2/sum(logunif_b2c.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b2c.pca$sdev[2]^2/sum(logunif_b2c.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b2c.pca$sdev[3]^2/sum(logunif_b2c.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b2c.pca$sdev[4]^2/sum(logunif_b2c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b2c.pca$x[,1], 
+                  PC2 = logunif_b2c.pca$x[,2] * -1, 
+                  PC3 = logunif_b2c.pca$x[,3], 
+                  PC4 = logunif_b2c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b2c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+new_b2a.pca = cbind(clr_new_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                    clr_new_b2a_base %>% cbind("real" = deleuze:::clr(data.frame(b2a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b2a.pca$sdev[1]^2/sum(new_b2a.pca$sdev^2),4) * 100
+pc2 <- round(new_b2a.pca$sdev[2]^2/sum(new_b2a.pca$sdev^2),4) * 100
+pc3 <- round(new_b2a.pca$sdev[3]^2/sum(new_b2a.pca$sdev^2),4) * 100
+pc4 <- round(new_b2a.pca$sdev[4]^2/sum(new_b2a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b2a.pca$x[,1], 
+                  PC2 = new_b2a.pca$x[,2], 
+                  PC3 = new_b2a.pca$x[,3], 
+                  PC4 = new_b2a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b2a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+new_b2b.pca = cbind(clr_new_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                    clr_new_b2b_base %>% cbind("real" = deleuze:::clr(data.frame(b2b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b2b.pca$sdev[1]^2/sum(new_b2b.pca$sdev^2),4) * 100
+pc2 <- round(new_b2b.pca$sdev[2]^2/sum(new_b2b.pca$sdev^2),4) * 100
+pc3 <- round(new_b2b.pca$sdev[3]^2/sum(new_b2b.pca$sdev^2),4) * 100
+pc4 <- round(new_b2b.pca$sdev[4]^2/sum(new_b2b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b2b.pca$x[,1], 
+                  PC2 = new_b2b.pca$x[,2], 
+                  PC3 = new_b2b.pca$x[,3], 
+                  PC4 = new_b2b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b2b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+new_b2c.pca = cbind(clr_new_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                    clr_new_b2c_base %>% cbind("real" = deleuze:::clr(data.frame(b2c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b2c.pca$sdev[1]^2/sum(new_b2c.pca$sdev^2),4) * 100
+pc2 <- round(new_b2c.pca$sdev[2]^2/sum(new_b2c.pca$sdev^2),4) * 100
+pc3 <- round(new_b2c.pca$sdev[3]^2/sum(new_b2c.pca$sdev^2),4) * 100
+pc4 <- round(new_b2c.pca$sdev[4]^2/sum(new_b2c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b2c.pca$x[,1], 
+                  PC2 = new_b2c.pca$x[,2], 
+                  PC3 = new_b2c.pca$x[,3], 
+                  PC4 = new_b2c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b2c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+
+shrunk_b2a.pca = cbind(clr_shrunk_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                       clr_shrunk_b2a_base %>% cbind("real" = deleuze:::clr(data.frame(b2a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b2a.pca$sdev[1]^2/sum(shrunk_b2a.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b2a.pca$sdev[2]^2/sum(shrunk_b2a.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b2a.pca$sdev[3]^2/sum(shrunk_b2a.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b2a.pca$sdev[4]^2/sum(shrunk_b2a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b2a.pca$x[,1], 
+                  PC2 = shrunk_b2a.pca$x[,2], 
+                  PC3 = shrunk_b2a.pca$x[,3], 
+                  PC4 = shrunk_b2a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b2a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+shrunk_b2b.pca = cbind(clr_shrunk_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                       clr_shrunk_b2b_base %>% cbind("real" = deleuze:::clr(data.frame(b2b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b2b.pca$sdev[1]^2/sum(shrunk_b2b.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b2b.pca$sdev[2]^2/sum(shrunk_b2b.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b2b.pca$sdev[3]^2/sum(shrunk_b2b.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b2b.pca$sdev[4]^2/sum(shrunk_b2b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b2b.pca$x[,1], 
+                  PC2 = shrunk_b2b.pca$x[,2], 
+                  PC3 = shrunk_b2b.pca$x[,3], 
+                  PC4 = shrunk_b2b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b2b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+shrunk_b2c.pca = cbind(clr_shrunk_b2_base  %>% cbind("real" = deleuze:::clr(data.frame(b2 ))[,1]), 
+                       clr_shrunk_b2c_base %>% cbind("real" = deleuze:::clr(data.frame(b2c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b2c.pca$sdev[1]^2/sum(shrunk_b2c.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b2c.pca$sdev[2]^2/sum(shrunk_b2c.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b2c.pca$sdev[3]^2/sum(shrunk_b2c.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b2c.pca$sdev[4]^2/sum(shrunk_b2c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b2c.pca$x[,1], 
+                  PC2 = shrunk_b2c.pca$x[,2], 
+                  PC3 = shrunk_b2c.pca$x[,3], 
+                  PC4 = shrunk_b2c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b2c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "30% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+const_b3a.pca = cbind(clr_const_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                      clr_const_b3a_base %>% cbind("real" = deleuze:::clr(data.frame(b3a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b3a.pca$sdev[1]^2/sum(const_b3a.pca$sdev^2),4) * 100
+pc2 <- round(const_b3a.pca$sdev[2]^2/sum(const_b3a.pca$sdev^2),4) * 100
+pc3 <- round(const_b3a.pca$sdev[3]^2/sum(const_b3a.pca$sdev^2),4) * 100
+pc4 <- round(const_b3a.pca$sdev[4]^2/sum(const_b3a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b3a.pca$x[,1], 
+                  PC2 = const_b3a.pca$x[,2] * -1, 
+                  PC3 = const_b3a.pca$x[,3], 
+                  PC4 = const_b3a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b3a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+const_b3b.pca = cbind(clr_const_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                      clr_const_b3b_base %>% cbind("real" = deleuze:::clr(data.frame(b3b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b3b.pca$sdev[1]^2/sum(const_b3b.pca$sdev^2),4) * 100
+pc2 <- round(const_b3b.pca$sdev[2]^2/sum(const_b3b.pca$sdev^2),4) * 100
+pc3 <- round(const_b3b.pca$sdev[3]^2/sum(const_b3b.pca$sdev^2),4) * 100
+pc4 <- round(const_b3b.pca$sdev[4]^2/sum(const_b3b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b3b.pca$x[,1], 
+                  PC2 = const_b3b.pca$x[,2], 
+                  PC3 = const_b3b.pca$x[,3], 
+                  PC4 = const_b3b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b3b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+const_b3c.pca = cbind(clr_const_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                      clr_const_b3c_base %>% cbind("real" = deleuze:::clr(data.frame(b3c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(const_b3c.pca$sdev[1]^2/sum(const_b3c.pca$sdev^2),4) * 100
+pc2 <- round(const_b3c.pca$sdev[2]^2/sum(const_b3c.pca$sdev^2),4) * 100
+pc3 <- round(const_b3c.pca$sdev[3]^2/sum(const_b3c.pca$sdev^2),4) * 100
+pc4 <- round(const_b3c.pca$sdev[4]^2/sum(const_b3c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = const_b3c.pca$x[,1], 
+                  PC2 = const_b3c.pca$x[,2], 
+                  PC3 = const_b3c.pca$x[,3], 
+                  PC4 = const_b3c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+const_b3c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+unif_b3a.pca = cbind(clr_unif_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                     clr_unif_b3a_base %>% cbind("real" = deleuze:::clr(data.frame(b3a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b3a.pca$sdev[1]^2/sum(unif_b3a.pca$sdev^2),4) * 100
+pc2 <- round(unif_b3a.pca$sdev[2]^2/sum(unif_b3a.pca$sdev^2),4) * 100
+pc3 <- round(unif_b3a.pca$sdev[3]^2/sum(unif_b3a.pca$sdev^2),4) * 100
+pc4 <- round(unif_b3a.pca$sdev[4]^2/sum(unif_b3a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b3a.pca$x[,1], 
+                  PC2 = unif_b3a.pca$x[,2] * -1, 
+                  PC3 = unif_b3a.pca$x[,3], 
+                  PC4 = unif_b3a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b3a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+unif_b3b.pca = cbind(clr_unif_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                     clr_unif_b3b_base %>% cbind("real" = deleuze:::clr(data.frame(b3b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b3b.pca$sdev[1]^2/sum(unif_b3b.pca$sdev^2),4) * 100
+pc2 <- round(unif_b3b.pca$sdev[2]^2/sum(unif_b3b.pca$sdev^2),4) * 100
+pc3 <- round(unif_b3b.pca$sdev[3]^2/sum(unif_b3b.pca$sdev^2),4) * 100
+pc4 <- round(unif_b3b.pca$sdev[4]^2/sum(unif_b3b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b3b.pca$x[,1], 
+                  PC2 = unif_b3b.pca$x[,2], 
+                  PC3 = unif_b3b.pca$x[,3], 
+                  PC4 = unif_b3b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b3b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+unif_b3c.pca = cbind(clr_unif_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                     clr_unif_b3c_base %>% cbind("real" = deleuze:::clr(data.frame(b3c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(unif_b3c.pca$sdev[1]^2/sum(unif_b3c.pca$sdev^2),4) * 100
+pc2 <- round(unif_b3c.pca$sdev[2]^2/sum(unif_b3c.pca$sdev^2),4) * 100
+pc3 <- round(unif_b3c.pca$sdev[3]^2/sum(unif_b3c.pca$sdev^2),4) * 100
+pc4 <- round(unif_b3c.pca$sdev[4]^2/sum(unif_b3c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = unif_b3c.pca$x[,1], 
+                  PC2 = unif_b3c.pca$x[,2] * -1, 
+                  PC3 = unif_b3c.pca$x[,3], 
+                  PC4 = unif_b3c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+unif_b3c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+logunif_b3a.pca = cbind(clr_logunif_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                        clr_logunif_b3a_base %>% cbind("real" = deleuze:::clr(data.frame(b3a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b3a.pca$sdev[1]^2/sum(logunif_b3a.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b3a.pca$sdev[2]^2/sum(logunif_b3a.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b3a.pca$sdev[3]^2/sum(logunif_b3a.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b3a.pca$sdev[4]^2/sum(logunif_b3a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b3a.pca$x[,1], 
+                  PC2 = logunif_b3a.pca$x[,2], 
+                  PC3 = logunif_b3a.pca$x[,3], 
+                  PC4 = logunif_b3a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b3a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+logunif_b3b.pca = cbind(clr_logunif_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                        clr_logunif_b3b_base %>% cbind("real" = deleuze:::clr(data.frame(b3b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b3b.pca$sdev[1]^2/sum(logunif_b3b.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b3b.pca$sdev[2]^2/sum(logunif_b3b.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b3b.pca$sdev[3]^2/sum(logunif_b3b.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b3b.pca$sdev[4]^2/sum(logunif_b3b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b3b.pca$x[,1], 
+                  PC2 = logunif_b3b.pca$x[,2] * -1, 
+                  PC3 = logunif_b3b.pca$x[,3], 
+                  PC4 = logunif_b3b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b3b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+logunif_b3c.pca = cbind(clr_logunif_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                        clr_logunif_b3c_base %>% cbind("real" = deleuze:::clr(data.frame(b3c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(logunif_b3c.pca$sdev[1]^2/sum(logunif_b3c.pca$sdev^2),4) * 100
+pc2 <- round(logunif_b3c.pca$sdev[2]^2/sum(logunif_b3c.pca$sdev^2),4) * 100
+pc3 <- round(logunif_b3c.pca$sdev[3]^2/sum(logunif_b3c.pca$sdev^2),4) * 100
+pc4 <- round(logunif_b3c.pca$sdev[4]^2/sum(logunif_b3c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = logunif_b3c.pca$x[,1], 
+                  PC2 = logunif_b3c.pca$x[,2], 
+                  PC3 = logunif_b3c.pca$x[,3], 
+                  PC4 = logunif_b3c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+logunif_b3c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+new_b3a.pca = cbind(clr_new_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                    clr_new_b3a_base %>% cbind("real" = deleuze:::clr(data.frame(b3a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b3a.pca$sdev[1]^2/sum(new_b3a.pca$sdev^2),4) * 100
+pc2 <- round(new_b3a.pca$sdev[2]^2/sum(new_b3a.pca$sdev^2),4) * 100
+pc3 <- round(new_b3a.pca$sdev[3]^2/sum(new_b3a.pca$sdev^2),4) * 100
+pc4 <- round(new_b3a.pca$sdev[4]^2/sum(new_b3a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b3a.pca$x[,1], 
+                  PC2 = new_b3a.pca$x[,2], 
+                  PC3 = new_b3a.pca$x[,3], 
+                  PC4 = new_b3a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b3a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+new_b3b.pca = cbind(clr_new_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                    clr_new_b3b_base %>% cbind("real" = deleuze:::clr(data.frame(b3b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b3b.pca$sdev[1]^2/sum(new_b3b.pca$sdev^2),4) * 100
+pc2 <- round(new_b3b.pca$sdev[2]^2/sum(new_b3b.pca$sdev^2),4) * 100
+pc3 <- round(new_b3b.pca$sdev[3]^2/sum(new_b3b.pca$sdev^2),4) * 100
+pc4 <- round(new_b3b.pca$sdev[4]^2/sum(new_b3b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b3b.pca$x[,1], 
+                  PC2 = new_b3b.pca$x[,2], 
+                  PC3 = new_b3b.pca$x[,3], 
+                  PC4 = new_b3b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b3b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+new_b3c.pca = cbind(clr_new_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                    clr_new_b3c_base %>% cbind("real" = deleuze:::clr(data.frame(b3c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(new_b3c.pca$sdev[1]^2/sum(new_b3c.pca$sdev^2),4) * 100
+pc2 <- round(new_b3c.pca$sdev[2]^2/sum(new_b3c.pca$sdev^2),4) * 100
+pc3 <- round(new_b3c.pca$sdev[3]^2/sum(new_b3c.pca$sdev^2),4) * 100
+pc4 <- round(new_b3c.pca$sdev[4]^2/sum(new_b3c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = new_b3c.pca$x[,1], 
+                  PC2 = new_b3c.pca$x[,2], 
+                  PC3 = new_b3c.pca$x[,3], 
+                  PC4 = new_b3c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+new_b3c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+
+
+
+
+shrunk_b3a.pca = cbind(clr_shrunk_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                       clr_shrunk_b3a_base %>% cbind("real" = deleuze:::clr(data.frame(b3a))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b3a.pca$sdev[1]^2/sum(shrunk_b3a.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b3a.pca$sdev[2]^2/sum(shrunk_b3a.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b3a.pca$sdev[3]^2/sum(shrunk_b3a.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b3a.pca$sdev[4]^2/sum(shrunk_b3a.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b3a.pca$x[,1], 
+                  PC2 = shrunk_b3a.pca$x[,2], 
+                  PC3 = shrunk_b3a.pca$x[,3], 
+                  PC4 = shrunk_b3a.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b3a = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+shrunk_b3b.pca = cbind(clr_shrunk_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                       clr_shrunk_b3b_base %>% cbind("real" = deleuze:::clr(data.frame(b3b))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b3b.pca$sdev[1]^2/sum(shrunk_b3b.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b3b.pca$sdev[2]^2/sum(shrunk_b3b.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b3b.pca$sdev[3]^2/sum(shrunk_b3b.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b3b.pca$sdev[4]^2/sum(shrunk_b3b.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b3b.pca$x[,1], 
+                  PC2 = shrunk_b3b.pca$x[,2], 
+                  PC3 = shrunk_b3b.pca$x[,3], 
+                  PC4 = shrunk_b3b.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b3b = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+
+shrunk_b3c.pca = cbind(clr_shrunk_b3_base  %>% cbind("real" = deleuze:::clr(data.frame(b3 ))[,1]), 
+                       clr_shrunk_b3c_base %>% cbind("real" = deleuze:::clr(data.frame(b3c))[,1])) %>% 
+  t() %>%
+  prcomp()
+
+#Extract the amount of variance the first four components explain for plotting. 
+pc1 <- round(shrunk_b3c.pca$sdev[1]^2/sum(shrunk_b3c.pca$sdev^2),4) * 100
+pc2 <- round(shrunk_b3c.pca$sdev[2]^2/sum(shrunk_b3c.pca$sdev^2),4) * 100
+pc3 <- round(shrunk_b3c.pca$sdev[3]^2/sum(shrunk_b3c.pca$sdev^2),4) * 100
+pc4 <- round(shrunk_b3c.pca$sdev[4]^2/sum(shrunk_b3c.pca$sdev^2),4) * 100
+
+#Extract the scores for every sample for the first four components for plotting. 
+pca  = data.frame(PC1 = shrunk_b3c.pca$x[,1], 
+                  PC2 = shrunk_b3c.pca$x[,2] * -1, 
+                  PC3 = shrunk_b3c.pca$x[,3], 
+                  PC4 = shrunk_b3c.pca$x[,4])
+
+pca$samples = factor(x = c(rep(seq(1000,20000, by = 1000), each = 100), "real"), 
+                     levels = unique(c(seq(1000,20000, by = 1000), "real")))
+
+pca$source = rep(c("A","B"), each = 2001)
+
+shrunk_b3c = ggplot(pca) +  
+  
+  aes(x = PC1, y = PC2, fill = samples, group = interaction(samples,source)) +
+  
+  #Create the points and ellipses
+  stat_ellipse(geom = "polygon", alpha = 1/4) +
+  geom_point(col = "black", shape = 21, 
+             aes(size = samples == "real")) + 
+  #Adjust appearance
+  
+  #Adjust labels
+  ggtitle("", subtitle = "50% Rare features") + 
+  xlab(paste("PC1: ", pc1,  "%", sep="")) + 
+  ylab(paste("PC2: ", pc2,  "%", sep="")) +
+  theme_bw() +
+  theme(legend.position = 'bottom') 
+```
+
+``` r
+  ((const_b1a   | const_b1b   | const_b1c   | const_b2a   | const_b2b   | const_b2c   | const_b3a   | const_b3b   | const_b3c   ))/
+  ((unif_b1a    | unif_b1b    | unif_b1c    | unif_b2a    | unif_b2b    | unif_b2c    | unif_b3a    | unif_b3b    | unif_b3c    ))/
+  ((logunif_b1a | logunif_b1b | logunif_b1c | logunif_b2a | logunif_b2b | logunif_b2c | logunif_b3a | logunif_b3b | logunif_b3c ))/
+  ((new_b1a     | new_b1b     | new_b1c     | new_b2a     | new_b2b     | new_b2c     | new_b3a     | new_b3b     | new_b3c     ))/
+  ((shrunk_b1a  | shrunk_b1b  | shrunk_b1c  | shrunk_b2a  | shrunk_b2b  | shrunk_b2c  | shrunk_b3a  | shrunk_b3b  | shrunk_b3c  )) +
+  patchwork::plot_layout(guides = 'collect')  & theme(legend.position = 'bottom')
+```
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+    ## Warning: Using size for a discrete variable is not advised.
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+![](volatility_files/figure-gfm/plot%20PCAs%20wide-1.png)<!-- -->
