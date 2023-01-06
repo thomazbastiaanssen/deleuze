@@ -2108,7 +2108,7 @@ pc4 <- round(shrunk_b3a.pca$sdev[4]^2/sum(shrunk_b3a.pca$sdev^2),4) * 100
 
 #Extract the scores for every sample for the first four components for plotting. 
 pca  = data.frame(PC1 = shrunk_b3a.pca$x[,1], 
-                  PC2 = shrunk_b3a.pca$x[,2], 
+                  PC2 = shrunk_b3a.pca$x[,2] * -1, 
                   PC3 = shrunk_b3a.pca$x[,3], 
                   PC4 = shrunk_b3a.pca$x[,4])
 
@@ -2186,7 +2186,7 @@ pc4 <- round(shrunk_b3c.pca$sdev[4]^2/sum(shrunk_b3c.pca$sdev^2),4) * 100
 
 #Extract the scores for every sample for the first four components for plotting. 
 pca  = data.frame(PC1 = shrunk_b3c.pca$x[,1], 
-                  PC2 = shrunk_b3c.pca$x[,2] * -1, 
+                  PC2 = shrunk_b3c.pca$x[,2], 
                   PC3 = shrunk_b3c.pca$x[,3], 
                   PC4 = shrunk_b3c.pca$x[,4])
 
