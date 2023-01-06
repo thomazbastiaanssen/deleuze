@@ -1,0 +1,89 @@
+---
+output:
+  md_document:
+    variant: gfm
+---
+For benchmarking click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/benchmarking.md) 
+
+For code on single sample consistency click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/permanova.md)
+
+For code on two-sample consistency click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/volatility.md)
+
+(put on their own page as it's slow to knit)
+
+```{r setup, message = FALSE}
+#devtools::install_github("thomazbastiaanssen/volatility")
+library(tidyverse)
+library(deleuze)
+library(patchwork)
+library(Tjazi)
+library(vegan)
+
+data = volatility::vola_genus_table$Validation_Pre_Control_2
+
+data
+
+```
+
+```{r estimation of the geometric mean}
+#comparing the distributions
+#comparing mean and SD of the resampled and approximated distributions
+knitr::kable(t(data.frame("observed" = 
+                            c("mean"   = mean(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), 
+                              "sd"     = sd(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T))), 
+                          "approximated" = 
+                            c("mean" = mean(getBetaMeans(data, log_transformed = T)), 
+                              "sd"   = sqrt(sum(getBetaVars(count_sample = data, log_transformed = T)) /(length(data)* length(data)))))
+               )
+             )
+
+
+#Overlaid:
+plot(density(sampleGeomMeam(samples = 10000, count_sample = data, log_transformed = T)), 
+     col = "red", main = "Comparing the sampled geometric mean (red)\n to the approximated distribution (black)")
+
+lines(density(sampleGeomMeanApprox(samples = 10000, count_sample = data, log_transformed = T)))
+
+
+```
+
+```{r comparing CLR to approx, out.width = '100%', fig.height = 8}
+#real sampled data
+
+a = sampleCLR(10000, data) %>%
+  data.frame() %>%
+  mutate(sample = as.character(1:10000)) %>%
+  pivot_longer(!sample) %>%
+  
+  filter(name %in% paste0("X", 1:20)) %>%
+  mutate(type = "sampled")
+
+#sampled from approximation
+b = sampleCLRApprox(samples = 10000, data) %>%
+  data.frame() %>%
+  mutate(sample = as.character(1:10000)) %>% 
+  pivot_longer(!sample) %>%
+  
+  filter(name %in% paste0("X", 1:20)) %>%
+  mutate(type = "approx")
+
+rbind(a, b) %>%
+  filter(name %in% paste0("X", 1:15)) %>%
+
+  mutate(name = paste(name, "n counts =", data[1:15])) %>%
+  mutate(name = factor(name, levels = paste0("X", 1:15, " n counts = ", data[1:15]))) %>%
+  
+
+  ggplot() +
+  aes(x = value, fill = type) +
+  
+  geom_density(alpha = 2/3) +
+  
+  facet_wrap(~name, scales = "free", ncol = 3) +
+  theme_bw() +
+  theme(legend.position = 'bottom') + 
+  ggtitle("Notice that the zero-count features such as X13\n have a much higher spread than high rollers like X7")
+
+
+```
+
