@@ -2448,3 +2448,2405 @@ shrunk_b3c = ggplot(pca) +
     ## Too few points to calculate an ellipse
 
 ![](volatility_files/figure-gfm/plot%20PCAs%20wide-1.png)<!-- -->
+
+``` r
+dist_logunif_b1a <- cbind(clr_logunif_b1_base, clr_logunif_b1a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b1a <- cbind(clr_const_b1_base, clr_const_b1a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b1a <- cbind(clr_unif_b1_base, clr_unif_b1a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b1a <- cbind(clr_shrunk_b1_base, clr_shrunk_b1a_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b1a <- cbind(clr_new_b1_base, clr_new_b1a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+
+
+dist_logunif_b1b <- cbind(clr_logunif_b1_base, clr_logunif_b1b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b1b <- cbind(clr_const_b1_base, clr_const_b1b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b1b <- cbind(clr_unif_b1_base, clr_unif_b1b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b1b <- cbind(clr_shrunk_b1_base, clr_shrunk_b1b_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b1b <- cbind(clr_new_b1_base, clr_new_b1b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+
+
+dist_logunif_b1c <- cbind(clr_logunif_b1_base, clr_logunif_b1c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b1c <- cbind(clr_const_b1_base, clr_const_b1c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b1c <- cbind(clr_unif_b1_base, clr_unif_b1c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b1c <- cbind(clr_shrunk_b1_base, clr_shrunk_b1c_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b1c <- cbind(clr_new_b1_base, clr_new_b1c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+```
+
+``` r
+dist_logunif_b2a <- cbind(clr_logunif_b2_base, clr_logunif_b2a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b2a <- cbind(clr_const_b2_base, clr_const_b2a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b2a <- cbind(clr_unif_b2_base, clr_unif_b2a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b2a <- cbind(clr_shrunk_b2_base, clr_shrunk_b2a_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b2a <- cbind(clr_new_b2_base, clr_new_b2a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+```
+
+``` r
+dist_logunif_b2b <- cbind(clr_logunif_b2_base, clr_logunif_b2b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b2b <- cbind(clr_const_b2_base, clr_const_b2b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b2b <- cbind(clr_unif_b2_base, clr_unif_b2b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b2b <- cbind(clr_shrunk_b2_base, clr_shrunk_b2b_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b2b <- cbind(clr_new_b2_base, clr_new_b2b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+```
+
+``` r
+dist_logunif_b2c <- cbind(clr_logunif_b2_base, clr_logunif_b2c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b2c <- cbind(clr_const_b2_base, clr_const_b2c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b2c <- cbind(clr_unif_b2_base, clr_unif_b2c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b2c <- cbind(clr_shrunk_b2_base, clr_shrunk_b2c_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b2c <- cbind(clr_new_b2_base, clr_new_b2c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+```
+
+``` r
+dist_logunif_b3a <- cbind(clr_logunif_b3_base, clr_logunif_b3a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b3a <- cbind(clr_const_b3_base, clr_const_b3a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b3a <- cbind(clr_unif_b3_base, clr_unif_b3a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b3a <- cbind(clr_shrunk_b3_base, clr_shrunk_b3a_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b3a <- cbind(clr_new_b3_base, clr_new_b3a_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+
+
+dist_logunif_b3b <- cbind(clr_logunif_b3_base, clr_logunif_b3b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b3b <- cbind(clr_const_b3_base, clr_const_b3b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b3b <- cbind(clr_unif_b3_base, clr_unif_b3b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b3b <- cbind(clr_shrunk_b3_base, clr_shrunk_b3b_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b3b <- cbind(clr_new_b3_base, clr_new_b3b_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+
+
+dist_logunif_b3c <- cbind(clr_logunif_b3_base, clr_logunif_b3c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_const_b3c <- cbind(clr_const_b3_base, clr_const_b3c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()  
+
+dist_unif_b3c <- cbind(clr_unif_b3_base, clr_unif_b3c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_shrunk_b3c <- cbind(clr_shrunk_b3_base, clr_shrunk_b3c_base) %>%
+  t() %>%
+  dist(x = .,method = "euclidean") %>% as.matrix() %>% data.frame()
+
+dist_new_b3c <- cbind(clr_new_b3_base, clr_new_b3c_base) %>%
+  t() %>%
+  dist(x = ., method = "euclidean") %>% as.matrix() %>% data.frame()
+```
+
+``` r
+dep = rep(seq(1000,20000, by = 1000), each = 100)
+names(dep) = as.character(1:2000)          
+
+
+long_dist_const_b1a = dist_const_b1a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b1a = dist_logunif_b1a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b1a = dist_unif_b1a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b1a = dist_new_b1a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b1a = dist_shrunk_b1a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b1b = dist_const_b1b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b1b = dist_logunif_b1b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b1b = dist_unif_b1b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b1b = dist_new_b1b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b1b = dist_shrunk_b1b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b1c = dist_const_b1c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b1c = dist_logunif_b1c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b1c = dist_unif_b1c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b1c = dist_new_b1c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b1c = dist_shrunk_b1c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b2a = dist_const_b2a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b2a = dist_logunif_b2a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b2a = dist_unif_b2a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b2a = dist_new_b2a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b2a = dist_shrunk_b2a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b2b = dist_const_b2b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b2b = dist_logunif_b2b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b2b = dist_unif_b2b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b2b = dist_new_b2b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b2b = dist_shrunk_b2b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b2c = dist_const_b2c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b2c = dist_logunif_b2c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b2c = dist_unif_b2c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b2c = dist_new_b2c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b2c = dist_shrunk_b2c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b3a = dist_const_b3a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b3a = dist_logunif_b3a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b3a = dist_unif_b3a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b3a = dist_new_b3a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b3a = dist_shrunk_b3a %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b3b = dist_const_b3b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b3b = dist_logunif_b3b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b3b = dist_unif_b3b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b3b = dist_new_b3b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b3b = dist_shrunk_b3b %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_const_b3c = dist_const_b3c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_logunif_b3c = dist_logunif_b3c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_unif_b3c = dist_unif_b3c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_new_b3c = dist_new_b3c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+long_dist_shrunk_b3c = dist_shrunk_b3c %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  
+  filter(str_detect(name,"\\.")) %>% 
+  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = round(mean(value) - sqrt(20), 1),
+            var  = round(var(value), 2)) %>% 
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+``` r
+p_const_b1a_var = long_dist_const_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("Constant replacement", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b1a_mean = long_dist_const_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("Constant replacement", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b1a_var = long_dist_logunif_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("Log-uniform replacement", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b1a_mean = long_dist_logunif_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("Log-uniform replacement", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b1a_var = long_dist_unif_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("Uniform replacement", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b1a_mean = long_dist_unif_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("Uniform replacement", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b1a_var = long_dist_new_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("Parameterization", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b1a_mean = long_dist_new_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("Parameterization", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b1a_var = long_dist_shrunk_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("Arithmetic shrinkage", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b1a_mean = long_dist_shrunk_b1a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("Arithmetic shrinkage", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_const_b1b_var = long_dist_const_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b1b_mean = long_dist_const_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b1b_var = long_dist_logunif_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b1b_mean = long_dist_logunif_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b1b_var = long_dist_unif_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b1b_mean = long_dist_unif_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b1b_var = long_dist_new_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b1b_mean = long_dist_new_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b1b_var = long_dist_shrunk_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b1b_mean = long_dist_shrunk_b1b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b1c_var = long_dist_const_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b1c_mean = long_dist_const_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b1c_var = long_dist_logunif_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b1c_mean = long_dist_logunif_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b1c_var = long_dist_unif_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b1c_mean = long_dist_unif_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b1c_var = long_dist_new_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b1c_mean = long_dist_new_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b1c_var = long_dist_shrunk_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b1c_mean = long_dist_shrunk_b1c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+
+p_const_b2a_var = long_dist_const_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b2a_mean = long_dist_const_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b2a_var = long_dist_logunif_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b2a_mean = long_dist_logunif_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b2a_var = long_dist_unif_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b2a_mean = long_dist_unif_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b2a_var = long_dist_new_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b2a_mean = long_dist_new_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b2a_var = long_dist_shrunk_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b2a_mean = long_dist_shrunk_b2a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_const_b2b_var = long_dist_const_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b2b_mean = long_dist_const_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b2b_var = long_dist_logunif_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b2b_mean = long_dist_logunif_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b2b_var = long_dist_unif_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b2b_mean = long_dist_unif_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b2b_var = long_dist_new_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b2b_mean = long_dist_new_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b2b_var = long_dist_shrunk_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b2b_mean = long_dist_shrunk_b2b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b2c_var = long_dist_const_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b2c_mean = long_dist_const_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b2c_var = long_dist_logunif_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b2c_mean = long_dist_logunif_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b2c_var = long_dist_unif_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b2c_mean = long_dist_unif_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b2c_var = long_dist_new_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b2c_mean = long_dist_new_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b2c_var = long_dist_shrunk_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b2c_mean = long_dist_shrunk_b2c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "30% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+
+
+p_const_b3a_var = long_dist_const_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b3a_mean = long_dist_const_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b3a_var = long_dist_logunif_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b3a_mean = long_dist_logunif_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b3a_var = long_dist_unif_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b3a_mean = long_dist_unif_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b3a_var = long_dist_new_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b3a_mean = long_dist_new_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b3a_var = long_dist_shrunk_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b3a_mean = long_dist_shrunk_b3a %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_const_b3b_var = long_dist_const_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b3b_mean = long_dist_const_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b3b_var = long_dist_logunif_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b3b_mean = long_dist_logunif_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b3b_var = long_dist_unif_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b3b_mean = long_dist_unif_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b3b_var = long_dist_new_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b3b_mean = long_dist_new_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b3b_var = long_dist_shrunk_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b3b_mean = long_dist_shrunk_b3b %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b3c_var = long_dist_const_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_const_b3c_mean = long_dist_const_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b3c_var = long_dist_logunif_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_logunif_b3c_mean = long_dist_logunif_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b3c_var = long_dist_unif_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_unif_b3c_mean = long_dist_unif_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+
+p_new_b3c_var = long_dist_new_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_new_b3c_mean = long_dist_new_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b3c_var = long_dist_shrunk_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = var, label = var) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+p_shrunk_b3c_mean = long_dist_shrunk_b3c %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = mean) +
+   
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient(low = "white", high = "red", limits = c(0,8.5), "Error from true mean") +
+  theme_bw() +
+  ggtitle("", subtitle = "50% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+```
+
+``` r
+  ((p_const_b1a_mean   | p_const_b1b_mean   | p_const_b1c_mean   | p_const_b2a_mean   | p_const_b2b_mean   | p_const_b2c_mean   | p_const_b3a_mean   | p_const_b3b_mean   | p_const_b3c_mean   ))/
+((p_unif_b1a_mean    | p_unif_b1b_mean    | p_unif_b1c_mean    | p_unif_b2a_mean    | p_unif_b2b_mean    | p_unif_b2c_mean    | p_unif_b3a_mean    | p_unif_b3b_mean    | p_unif_b3c_mean    ))/
+ ((p_logunif_b1a_mean | p_logunif_b1b_mean | p_logunif_b1c_mean | p_logunif_b2a_mean | p_logunif_b2b_mean | p_logunif_b2c_mean | p_logunif_b3a_mean | p_logunif_b3b_mean | p_logunif_b3c_mean ))/
+ ((p_new_b1a_mean     | p_new_b1b_mean     | p_new_b1c_mean     | p_new_b2a_mean     | p_new_b2b_mean     | p_new_b2c_mean     | p_new_b3a_mean     | p_new_b3b_mean     | p_new_b3c_mean     ))/
+  ((p_shrunk_b1a_mean  | p_shrunk_b1b_mean  | p_shrunk_b1c_mean  | p_shrunk_b2a_mean  | p_shrunk_b2b_mean  | p_shrunk_b2c_mean  | p_shrunk_b3a_mean  | p_shrunk_b3b_mean  | p_shrunk_b3c_mean  )) +
+  patchwork::plot_layout(guides = 'collect')  & theme(legend.position = 'bottom')
+```
+
+![](volatility_files/figure-gfm/plot%20mean%20heatmaps%20wide-1.png)<!-- -->
+
+``` r
+  ((p_const_b1a_var   | p_const_b1b_var   | p_const_b1c_var   | p_const_b2a_var   | p_const_b2b_var   | p_const_b2c_var   | p_const_b3a_var   | p_const_b3b_var   | p_const_b3c_var   ))/
+  ((p_unif_b1a_var    | p_unif_b1b_var    | p_unif_b1c_var    | p_unif_b2a_var    | p_unif_b2b_var    | p_unif_b2c_var    | p_unif_b3a_var    | p_unif_b3b_var    | p_unif_b3c_var    ))/
+  ((p_logunif_b1a_var | p_logunif_b1b_var | p_logunif_b1c_var | p_logunif_b2a_var | p_logunif_b2b_var | p_logunif_b2c_var | p_logunif_b3a_var | p_logunif_b3b_var | p_logunif_b3c_var ))/
+  ((p_new_b1a_var     | p_new_b1b_var     | p_new_b1c_var     | p_new_b2a_var     | p_new_b2b_var     | p_new_b2c_var     | p_new_b3a_var     | p_new_b3b_var     | p_new_b3c_var     ))/
+  ((p_shrunk_b1a_var  | p_shrunk_b1b_var  | p_shrunk_b1c_var  | p_shrunk_b2a_var  | p_shrunk_b2b_var  | p_shrunk_b2c_var  | p_shrunk_b3a_var  | p_shrunk_b3b_var  | p_shrunk_b3c_var  )) +
+  patchwork::plot_layout(guides = 'collect')  & theme(legend.position = 'bottom')
+```
+
+![](volatility_files/figure-gfm/plot%20var%20heatmaps%20wide-1.png)<!-- -->
