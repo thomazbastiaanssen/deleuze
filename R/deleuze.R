@@ -145,9 +145,9 @@ estVol <- function(count_table, cols_as_features = F, adjust = T){
   
   vars <- apply(X      = estMeans,
                 MARGIN = margin,
-                FUN    = var)
+                FUN    = sd)
   
-  vars = vars * nsamples
+  #vars = vars 
   
-  sum(vars^2)
+  sum(vars^2) * nsamples
 }
