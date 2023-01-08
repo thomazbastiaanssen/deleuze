@@ -136,3 +136,34 @@ sampleTableCLR <- function(samples, count_table){
   return(CLR_out/samples)
   
 }
+
+#' samples from the approximated probability density function of a longitudinal set of CLR-transformed count samples.  
+#'
+#' @param samples An integer. How many samples should be taken
+#' @param count_table A vector of count data.
+#' 
+#' @returns a matrix with colums as samples and rows as features.
+#' 
+#' @export
+#' 
+sampleLongitudinal <- function(samples, count_table, cols_as_features = F, adjust = F){
+  margin = 1 + cols_as_features
+  #nsamples = dim(count_table)[2-cols_as_features]
+  
+  mus <- getTableMeans(count_table = count_table, cols_as_features = cols_as_features)
+  
+  # if(adjust){
+  #   estVars  <- getTableVars(count_table = count_table, cols_as_features = cols_as_features)
+  # }
+  
+  if(adjust){
+    mus <- sCLR(count_table = count_table, cols_as_features = cols_as_features)
+  }
+  
+  sds <- apply(X = mus, MARGIN = margin, FUN = sd)
+  
+  nrows <- length(sds) 
+  
+  matrix(rnorm(samples * nrows, rep(mus, samples), rep(sds, samples)), nrow=nrows)
+  
+}

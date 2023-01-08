@@ -122,22 +122,22 @@ sCLR <- function(count_table, cols_as_features = F){
   return(res)
 }
 
-#' Estimate volatility from count data.  
+#' Estimate volatility from count data in Aitchision distance.  
 #'
-#' @description compute feature-wise variance over time
+#' @description Compute feature-wise variance over time for a group of measurements.
 #' @param count_table A table of count data with rows as features and columns as samples. 
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
 #' @export
 #'
-estVol <- function(count_table, cols_as_features = F, adjust = T){
+estVolatility <- function(count_table, cols_as_features = F, adjust = T){
   margin = 1 + cols_as_features
-  nsamples = dim(count_table)[2-cols_as_features]
+  #nsamples = dim(count_table)[2-cols_as_features]
   
   estMeans <- getTableMeans(count_table = count_table, cols_as_features = cols_as_features)
   
-  if(adjust){
-    estVars  <- getTableVars(count_table = count_table, cols_as_features = cols_as_features)
-  }
+  # if(adjust){
+  #   estVars  <- getTableVars(count_table = count_table, cols_as_features = cols_as_features)
+  # }
   
   if(adjust){
   estMeans <- sCLR(count_table = count_table, cols_as_features = cols_as_features)
@@ -145,9 +145,8 @@ estVol <- function(count_table, cols_as_features = F, adjust = T){
   
   vars <- apply(X      = estMeans,
                 MARGIN = margin,
-                FUN    = sd)
+                FUN    = var)
   
-  #vars = vars 
-  
-  sum(vars^2) * nsamples
+  sum(vars) 
 }
+
