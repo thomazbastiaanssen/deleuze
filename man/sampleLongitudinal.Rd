@@ -7,9 +7,13 @@
 sampleLongitudinal(samples, count_table, cols_as_features = F, adjust = F)
 }
 \arguments{
-\item{samples}{An integer. How many samples should be taken}
+\item{samples}{An integer. How many samples should be taken.}
 
 \item{count_table}{A vector of count data.}
+
+\item{cols_as_features}{A boolean. Toggles whether rows or columns are samples.}
+
+\item{adjust}{A boolean. Whether to Apply shrinkage. Experimental.}
 }
 \value{
 a matrix with colums as samples and rows as features.

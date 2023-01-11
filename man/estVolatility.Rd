@@ -10,6 +10,8 @@ estVolatility(count_table, cols_as_features = F, adjust = T)
 \item{count_table}{A table of count data with rows as features and columns as samples.}
 
 \item{cols_as_features}{A boolean. Toggles whether rows or columns are samples.}
+
+\item{adjust}{A boolean. Whether to Apply shrinkage. Experimental.}
 }
 \description{
 Compute feature-wise variance over time for a group of measurements.

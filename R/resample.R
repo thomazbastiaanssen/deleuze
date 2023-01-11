@@ -105,8 +105,8 @@ sampleCLRApprox <- function(samples, count_sample){
   
   sd_hat = sqrt(
     (getBetaVars(count_sample = count_sample, log_transformed = T)) +  
-    (sum(getBetaVars(count_sample = count_sample, log_transformed = T)) / (length(count_sample)* length(count_sample)))
-    )
+      (sum(getBetaVars(count_sample = count_sample, log_transformed = T)) / (length(count_sample)* length(count_sample)))
+  )
   
   log_ratios = mapply(FUN = rnorm, 
                       mean = mu_hat, 
@@ -131,7 +131,7 @@ sampleTableCLR <- function(samples, count_table){
     CLR_out = CLR_out + apply(X = count_table,
                               MARGIN = 2, 
                               FUN = function(x){sampleCLRApprox(count_sample = x,samples = 1)}
-                                )
+    )
   }
   return(CLR_out/samples)
   
@@ -139,8 +139,10 @@ sampleTableCLR <- function(samples, count_table){
 
 #' samples from the approximated probability density function of a longitudinal set of CLR-transformed count samples.  
 #'
-#' @param samples An integer. How many samples should be taken
+#' @param samples An integer. How many samples should be taken.
 #' @param count_table A vector of count data.
+#' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
+#' @param adjust A boolean. Whether to Apply shrinkage. Experimental.
 #' 
 #' @returns a matrix with colums as samples and rows as features.
 #' 

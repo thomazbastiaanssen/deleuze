@@ -127,6 +127,8 @@ sCLR <- function(count_table, cols_as_features = F){
 #' @description Compute feature-wise variance over time for a group of measurements.
 #' @param count_table A table of count data with rows as features and columns as samples. 
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
+#' @param adjust A boolean. Whether to Apply shrinkage. Experimental.
+#' 
 #' @export
 #'
 estVolatility <- function(count_table, cols_as_features = F, adjust = T){
@@ -143,6 +145,9 @@ estVolatility <- function(count_table, cols_as_features = F, adjust = T){
 #' @description Compute feature-wise variance over time for a group of measurements.
 #' @param count_table A table of count data with rows as features and columns as samples. 
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
+#' @param adjust A boolean. Whether to Apply shrinkage. Experimental.
+#' 
+#' @importFrom stats sd var
 #' @export
 #'
 estVariance <- function(count_table, cols_as_features = F, adjust = T){
