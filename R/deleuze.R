@@ -130,23 +130,39 @@ sCLR <- function(count_table, cols_as_features = F){
 #' @export
 #'
 estVolatility <- function(count_table, cols_as_features = F, adjust = T){
+
+  vars <- estVariance(count_table = count_table, 
+                      cols_as_features = cols_as_features, 
+                      adjust = adjust)
+  
+  sum(vars) 
+}
+
+#' Estimate by feature variance from count data in Aitchision distance.  
+#'
+#' @description Compute feature-wise variance over time for a group of measurements.
+#' @param count_table A table of count data with rows as features and columns as samples. 
+#' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
+#' @export
+#'
+estVariance <- function(count_table, cols_as_features = F, adjust = T){
   margin = 1 + cols_as_features
   #nsamples = dim(count_table)[2-cols_as_features]
   
-  estMeans <- getTableMeans(count_table = count_table, cols_as_features = cols_as_features)
-  
+  if(!adjust){
+    estMeans <- getTableMeans(count_table = count_table, cols_as_features = cols_as_features)
+  }
   # if(adjust){
   #   estVars  <- getTableVars(count_table = count_table, cols_as_features = cols_as_features)
   # }
   
   if(adjust){
-  estMeans <- sCLR(count_table = count_table, cols_as_features = cols_as_features)
+    estMeans <- sCLR(count_table = count_table, cols_as_features = cols_as_features)
   }
   
-  vars <- apply(X      = estMeans,
-                MARGIN = margin,
-                FUN    = var)
-  
-  sum(vars) 
+  apply(X      = estMeans,
+        MARGIN = margin,
+        FUN    = var)
 }
+
 
