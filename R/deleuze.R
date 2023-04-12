@@ -131,7 +131,7 @@ sCLR <- function(count_table, cols_as_features = F){
 #' 
 #' @export
 #'
-estVolatility <- function(count_table, cols_as_features = F, adjust = T){
+estVolatility <- function(count_table, cols_as_features = F, adjust = F){
 
   vars <- estVariance(count_table = count_table, 
                       cols_as_features = cols_as_features, 
@@ -170,4 +170,24 @@ estVariance <- function(count_table, cols_as_features = F, adjust = T){
         FUN    = var)
 }
 
+#' Estimate volatility from count data in Aitchision distance.  
+#'
+#' @description Compute feature-wise variance over time for a group of measurements.
+#' @param count_table A table of count data with rows as features and columns as samples. 
+#' @param metadata A vector depicting which samples are from the same source or group. 
+#' @param adjust A boolean. Whether to Apply shrinkage. Experimental.
+#' 
+#' @export
+#'
+volatility <- function(count_table, metadata, adjust = T){
+  out_vec = vector(length = length(unique(metadata)))
+  for(m in 1:length(unique(metadata))){
+    out_vec[m] <- estVolatility(count_table = count_table[,metadata == unique(metadata)[m]],
+                                cols_as_features = F, 
+                                adjust = adjust)
+  }
+  return(data.frame(ID = unique(metadata), 
+                    volatility_sq = out_vec, 
+                    volatility = sqrt(out_vec)))
+}
 
