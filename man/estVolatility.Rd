@@ -4,7 +4,7 @@
 \alias{estVolatility}
 \title{Estimate volatility from count data in Aitchision distance.}
 \usage{
-estVolatility(count_table, cols_as_features = F, adjust = T)
+estVolatility(count_table, cols_as_features = FALSE, adjust = FALSE)
 }
 \arguments{
 \item{count_table}{A table of count data with rows as features and columns as samples.}

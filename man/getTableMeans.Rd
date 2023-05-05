@@ -4,7 +4,7 @@
 \alias{getTableMeans}
 \title{Estimate the approximated means from a CLR-transformed count sample.}
 \usage{
-getTableMeans(count_table, CLR_transformed = T, cols_as_features = F)
+getTableMeans(count_table, CLR_transformed = TRUE, cols_as_features = FALSE)
 }
 \arguments{
 \item{count_table}{A table of count data with rows as features and columns as samples.}

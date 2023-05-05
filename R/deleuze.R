@@ -7,7 +7,7 @@
 #' 
 #' @export
 #'
-getTableMeans <- function(count_table, CLR_transformed = T, cols_as_features = F){
+getTableMeans <- function(count_table, CLR_transformed = TRUE, cols_as_features = FALSE){
   margin = 2 - cols_as_features
 
   if(CLR_transformed){
@@ -19,7 +19,7 @@ getTableMeans <- function(count_table, CLR_transformed = T, cols_as_features = F
     table_means = apply(X = count_table, 
                         MARGIN = margin, 
                         FUN = getBetaMeans,
-                        log_transformed = F)
+                        log_transformed = FALSE)
   }
   
   if(cols_as_features){table_means = t(table_means)}
@@ -36,7 +36,7 @@ getTableMeans <- function(count_table, CLR_transformed = T, cols_as_features = F
 #' 
 #' @export
 #'
-getTableVars <- function(count_table, CLR_transformed = T, cols_as_features = F){
+getTableVars <- function(count_table, CLR_transformed = TRUE, cols_as_features = FALSE){
   margin = 2 - cols_as_features
   
   if(CLR_transformed){
@@ -48,7 +48,7 @@ getTableVars <- function(count_table, CLR_transformed = T, cols_as_features = F)
     table_vars = apply(X = count_table, 
                        MARGIN = margin, 
                        FUN = getBetaVars, 
-                       log_transformed = F)
+                       log_transformed = FALSE)
   }
   
   if(cols_as_features){table_vars = t(table_vars)}
@@ -62,7 +62,7 @@ getTableVars <- function(count_table, CLR_transformed = T, cols_as_features = F)
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
 #' @return A table of CLR-transformed data
 #'
-clr <- function(x, cols_as_features = F){
+clr <- function(x, cols_as_features = FALSE){
   margin = 2 - cols_as_features
   apply(X = x, MARGIN = margin, FUN = function(y){log(y)-mean(log(y))})
 }
@@ -74,7 +74,7 @@ clr <- function(x, cols_as_features = F){
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
 #' @return A relative count table shrunk towards the arithmetic mean. 
 #' 
-estQshr <- function(x, cols_as_features = F){
+estQshr <- function(x, cols_as_features = FALSE){
   margin = 2 - cols_as_features
   
   apply(X = x, MARGIN = margin, FUN = function(n){
@@ -109,13 +109,13 @@ estQshr <- function(x, cols_as_features = F){
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
 #' @export
 #'
-sCLR <- function(count_table, cols_as_features = F){
+sCLR <- function(count_table, cols_as_features = FALSE){
  
   #Shrink the count table
   res <- estQshr(count_table, cols_as_features = cols_as_features) 
  
   #CLR transform the shrunk relative count estimates. Leave boolean at FALSE. 
-  res = clr(res, cols_as_features = F)
+  res = clr(res, cols_as_features = FALSE)
  
   if(cols_as_features){res = t(res)}
  
@@ -129,9 +129,9 @@ sCLR <- function(count_table, cols_as_features = F){
 #' @param cols_as_features A boolean. Toggles whether rows or columns are samples.
 #' @param adjust A boolean. Whether to Apply shrinkage. Experimental.
 #' 
-#' @export
+#' 
 #'
-estVolatility <- function(count_table, cols_as_features = F, adjust = F){
+estVolatility <- function(count_table, cols_as_features = FALSE, adjust = FALSE){
 
   vars <- estVariance(count_table = count_table, 
                       cols_as_features = cols_as_features, 
@@ -150,7 +150,7 @@ estVolatility <- function(count_table, cols_as_features = F, adjust = F){
 #' @importFrom stats sd var
 #' @export
 #'
-estVariance <- function(count_table, cols_as_features = F, adjust = T){
+estVariance <- function(count_table, cols_as_features = FALSE, adjust = TRUE){
   margin = 1 + cols_as_features
   #nsamples = dim(count_table)[2-cols_as_features]
   
@@ -179,11 +179,11 @@ estVariance <- function(count_table, cols_as_features = F, adjust = T){
 #' 
 #' @export
 #'
-volatility <- function(count_table, metadata, adjust = T){
+volatility <- function(count_table, metadata, adjust = TRUE){
   out_vec = vector(length = length(unique(metadata)))
   for(m in 1:length(unique(metadata))){
     out_vec[m] <- estVolatility(count_table = count_table[,metadata == unique(metadata)[m]],
-                                cols_as_features = F, 
+                                cols_as_features = FALSE, 
                                 adjust = adjust)
   }
   return(data.frame(ID = unique(metadata), 

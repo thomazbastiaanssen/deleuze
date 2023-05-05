@@ -4,7 +4,7 @@
 \alias{sCLR}
 \title{Shrink and CLR-transform a relative count table.}
 \usage{
-sCLR(count_table, cols_as_features = F)
+sCLR(count_table, cols_as_features = FALSE)
 }
 \arguments{
 \item{count_table}{A table of count data with rows as features and columns as samples.}
