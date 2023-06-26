@@ -75,7 +75,7 @@ est.dist <- boot_dist(X = data, n = 1000, dir_alpha = 4)
 ```
 
 
-```{r prepare plots, fig.width = 5, fig.height = 5, cache=TRUE}
+```{r prepare plots, fig.width = 16, fig.height = 5, cache=TRUE}
 dep <- rep(rep(seq(1000,20000, by = 1000), each = 10), 2)
 names(dep) <- as.character(1:400)      
 
@@ -178,6 +178,6 @@ long_dist2 %>%
 
 
 
-```{r plot, fig.width = 7, fig.height = 7, cache=TRUE}
+```{r plot, fig.width = 16, fig.height = 7, cache=TRUE}
 plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
 ```
