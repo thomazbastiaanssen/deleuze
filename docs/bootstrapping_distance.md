@@ -8,31 +8,26 @@ library(vegan)
 library(LaplacesDemon)
 
 
-pw_diff <- function(x){
-  x = as.data.frame(x)
+#Estimate distance
+boot_dist <- function(X, n, dir_alpha, cl = NULL){
   
-  unlist(outer(1:ncol(x), 1:ncol(x), 
-               function(y,z) x[,y]-x[,z]))
-}
-
-apply_pw_diff <- function(x){
-  res <- matrix(0, 
-                nrow = nrow(x[[1]]), ncol = ncol(x[[1]])^2, 
-                dimnames = list(rownames(x[[1]]), 
-                                c(
-                                  outer(
-                                    colnames(as.data.frame(x[[1]])), 
-                                    colnames(as.data.frame(x[[1]])), paste, sep="_"))
-                                
-                )
-  )
+  X = as.matrix(X)
+  stopifnot("bayes_boot_diff takes a matrix without zeroes" = !any(X==0))
   
-  for(i in 1:length(x)){
-    res <- res + pw_diff(x[[i]])
-    
-    print(paste("Finished iteration", i))
-  }
-  return(res/length(x))
+  #Could be sped up with Rcpp:
+  X.arr = replicate(n = n, X  * t(rdirichlet(ncol(X), alpha = rep(dir_alpha, nrow(X)))), simplify = "array")
+  
+  #CLR each iteration
+  X.arr = apply(X = X.arr, MARGIN = 3, FUN = deleuze:::clr, simplify = "list")
+  
+  #Sum your list of matrices
+  X.arr = Reduce("+", X.arr)/n
+  
+  #Calculate the euclidean distance over the summed CLR-transformed matrix
+  out_mat = dist(t(X.arr), method = "euclidean", diag = T, upper = T)
+  
+  return(out_mat)
+  
 }
 ```
 
@@ -58,156 +53,39 @@ res_b1a = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x
 res_b1_prob  <- getTableMeans(res_b1,  CLR_transformed = F)
 res_b1a_prob <- getTableMeans(res_b1a, CLR_transformed = F)
 
-data = cbind(res_b1_prob, res_b1a_prob)
-
-data.arr = replicate(n = 100, data  * t(rdirichlet(ncol(data), alpha = rep(4, nrow(data)))))
-
-data.exp <- apply(X = data.arr, MARGIN = 3, FUN = deleuze:::clr, simplify = F)
+data = as.data.frame(cbind(res_b1_prob, res_b1a_prob))
 ```
 
 ``` r
-#This is a slow step.
-meandiff <- apply_pw_diff(data.exp)
-```
-
-    ## [1] "Finished iteration 1"
-    ## [1] "Finished iteration 2"
-    ## [1] "Finished iteration 3"
-    ## [1] "Finished iteration 4"
-    ## [1] "Finished iteration 5"
-    ## [1] "Finished iteration 6"
-    ## [1] "Finished iteration 7"
-    ## [1] "Finished iteration 8"
-    ## [1] "Finished iteration 9"
-    ## [1] "Finished iteration 10"
-    ## [1] "Finished iteration 11"
-    ## [1] "Finished iteration 12"
-    ## [1] "Finished iteration 13"
-    ## [1] "Finished iteration 14"
-    ## [1] "Finished iteration 15"
-    ## [1] "Finished iteration 16"
-    ## [1] "Finished iteration 17"
-    ## [1] "Finished iteration 18"
-    ## [1] "Finished iteration 19"
-    ## [1] "Finished iteration 20"
-    ## [1] "Finished iteration 21"
-    ## [1] "Finished iteration 22"
-    ## [1] "Finished iteration 23"
-    ## [1] "Finished iteration 24"
-    ## [1] "Finished iteration 25"
-    ## [1] "Finished iteration 26"
-    ## [1] "Finished iteration 27"
-    ## [1] "Finished iteration 28"
-    ## [1] "Finished iteration 29"
-    ## [1] "Finished iteration 30"
-    ## [1] "Finished iteration 31"
-    ## [1] "Finished iteration 32"
-    ## [1] "Finished iteration 33"
-    ## [1] "Finished iteration 34"
-    ## [1] "Finished iteration 35"
-    ## [1] "Finished iteration 36"
-    ## [1] "Finished iteration 37"
-    ## [1] "Finished iteration 38"
-    ## [1] "Finished iteration 39"
-    ## [1] "Finished iteration 40"
-    ## [1] "Finished iteration 41"
-    ## [1] "Finished iteration 42"
-    ## [1] "Finished iteration 43"
-    ## [1] "Finished iteration 44"
-    ## [1] "Finished iteration 45"
-    ## [1] "Finished iteration 46"
-    ## [1] "Finished iteration 47"
-    ## [1] "Finished iteration 48"
-    ## [1] "Finished iteration 49"
-    ## [1] "Finished iteration 50"
-    ## [1] "Finished iteration 51"
-    ## [1] "Finished iteration 52"
-    ## [1] "Finished iteration 53"
-    ## [1] "Finished iteration 54"
-    ## [1] "Finished iteration 55"
-    ## [1] "Finished iteration 56"
-    ## [1] "Finished iteration 57"
-    ## [1] "Finished iteration 58"
-    ## [1] "Finished iteration 59"
-    ## [1] "Finished iteration 60"
-    ## [1] "Finished iteration 61"
-    ## [1] "Finished iteration 62"
-    ## [1] "Finished iteration 63"
-    ## [1] "Finished iteration 64"
-    ## [1] "Finished iteration 65"
-    ## [1] "Finished iteration 66"
-    ## [1] "Finished iteration 67"
-    ## [1] "Finished iteration 68"
-    ## [1] "Finished iteration 69"
-    ## [1] "Finished iteration 70"
-    ## [1] "Finished iteration 71"
-    ## [1] "Finished iteration 72"
-    ## [1] "Finished iteration 73"
-    ## [1] "Finished iteration 74"
-    ## [1] "Finished iteration 75"
-    ## [1] "Finished iteration 76"
-    ## [1] "Finished iteration 77"
-    ## [1] "Finished iteration 78"
-    ## [1] "Finished iteration 79"
-    ## [1] "Finished iteration 80"
-    ## [1] "Finished iteration 81"
-    ## [1] "Finished iteration 82"
-    ## [1] "Finished iteration 83"
-    ## [1] "Finished iteration 84"
-    ## [1] "Finished iteration 85"
-    ## [1] "Finished iteration 86"
-    ## [1] "Finished iteration 87"
-    ## [1] "Finished iteration 88"
-    ## [1] "Finished iteration 89"
-    ## [1] "Finished iteration 90"
-    ## [1] "Finished iteration 91"
-    ## [1] "Finished iteration 92"
-    ## [1] "Finished iteration 93"
-    ## [1] "Finished iteration 94"
-    ## [1] "Finished iteration 95"
-    ## [1] "Finished iteration 96"
-    ## [1] "Finished iteration 97"
-    ## [1] "Finished iteration 98"
-    ## [1] "Finished iteration 99"
-    ## [1] "Finished iteration 100"
-
-``` r
-meansq   <- meandiff^2
-
-meandist <- sqrt(colSums(meansq))
-
-
-
-meandistmat <- meandist %>% matrix(data = ., 
-                                   nrow = nrow(outer(
-                                     colnames(as.data.frame(data)), 
-                                     colnames(as.data.frame(data)), 
-                                     paste, sep="_"))
-) %>% data.frame()
+est.dist <- boot_dist(X = data, n = 1000, dir_alpha = 4)
 ```
 
 ``` r
 dep <- rep(rep(seq(1000,20000, by = 1000), each = 10), 2)
-names(dep) <- as.character(1:400)          
+names(dep) <- as.character(1:400)      
 
-long_dist = meandistmat %>% 
+long_dist1 = data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
   filter(!str_detect(ID,"\\.")) %>% 
   mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
   
   mutate(name = str_remove(name, "\\.")) %>% 
   mutate(name = str_remove(name, "X")) %>% 
-
-  filter(as.numeric(ID)   <= 200) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   >= 201) %>% 
   filter(as.numeric(name) >= 201) %>% 
+  filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
   mutate(name = dep[name]) %>% 
   group_by(ID,name) %>% 
-  summarise(mean = round(mean(value) - sqrt(20), 1),
-            var  = round(var(value), 2)) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>%
   ungroup()
 ```
 
@@ -215,33 +93,89 @@ long_dist = meandistmat %>%
     ## argument.
 
 ``` r
-long_dist %>% 
+plot_dist1 <- long_dist1 %>% 
   ggplot() +
-  aes(x = ID, y = name, fill = mean, label = mean) +
+  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,3), "Delta from true mean") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,7), "Delta from true mean") +
   theme_bw() +
-  ggtitle("New method", subtitle = "10% Rare features") +
+  ggtitle("Within sample offset 1", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
+
+long_dist2 = data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   < 201) %>% 
+  filter(as.numeric(name) < 201) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup()
 ```
 
-![](bootstrapping_distance_files/figure-gfm/prepare%20plottingdata-1.png)<!-- -->
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
 
 ``` r
-long_dist %>% 
+plot_dist2 <- long_dist2 %>% 
   ggplot() +
-  aes(x = ID, y = name, fill = var, label = var) +
+  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,7), "Delta from true mean") +
   theme_bw() +
-  ggtitle("New method", subtitle = "10% Rare features") +
+  ggtitle("Within sample offset 2", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 2)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,1), "Delta from true mean") +
+  theme_bw() +
+  ggtitle("Offset is not strongly dependent composition", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
 ```
 
-![](bootstrapping_distance_files/figure-gfm/prepare%20plottingdata-2.png)<!-- -->
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-1.png)<!-- -->
+
+``` r
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>%
+  .$diff_mean %>% 
+  hist(., breaks = 30)
+```
+
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-2.png)<!-- -->
+
+``` r
+plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
+```
+
+![](bootstrapping_distance_files/figure-gfm/plot-1.png)<!-- -->

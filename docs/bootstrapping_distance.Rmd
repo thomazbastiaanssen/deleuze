@@ -14,33 +14,27 @@ library(vegan)
 library(LaplacesDemon)
 
 
-pw_diff <- function(x){
-  x = as.data.frame(x)
+#Estimate distance
+boot_dist <- function(X, n, dir_alpha, cl = NULL){
   
-  unlist(outer(1:ncol(x), 1:ncol(x), 
-               function(y,z) x[,y]-x[,z]))
-}
-
-apply_pw_diff <- function(x){
-  res <- matrix(0, 
-                nrow = nrow(x[[1]]), ncol = ncol(x[[1]])^2, 
-                dimnames = list(rownames(x[[1]]), 
-                                c(
-                                  outer(
-                                    colnames(as.data.frame(x[[1]])), 
-                                    colnames(as.data.frame(x[[1]])), paste, sep="_"))
-                                
-                )
-  )
+  X = as.matrix(X)
+  stopifnot("bayes_boot_diff takes a matrix without zeroes" = !any(X==0))
   
-  for(i in 1:length(x)){
-    res <- res + pw_diff(x[[i]])
-    
-    print(paste("Finished iteration", i))
-  }
-  return(res/length(x))
+  #Could be sped up with Rcpp:
+  X.arr = replicate(n = n, X  * t(rdirichlet(ncol(X), alpha = rep(dir_alpha, nrow(X)))), simplify = "array")
+  
+  #CLR each iteration
+  X.arr = apply(X = X.arr, MARGIN = 3, FUN = deleuze:::clr, simplify = "list")
+  
+  #Sum your list of matrices
+  X.arr = Reduce("+", X.arr)/n
+  
+  #Calculate the euclidean distance over the summed CLR-transformed matrix
+  out_mat = dist(t(X.arr), method = "euclidean", diag = T, upper = T)
+  
+  return(out_mat)
+  
 }
-
 
 
 ```
@@ -69,89 +63,121 @@ res_b1a = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x
 res_b1_prob  <- getTableMeans(res_b1,  CLR_transformed = F)
 res_b1a_prob <- getTableMeans(res_b1a, CLR_transformed = F)
 
-data = cbind(res_b1_prob, res_b1a_prob)
+data = as.data.frame(cbind(res_b1_prob, res_b1a_prob))
 
-data.arr = replicate(n = 100, data  * t(rdirichlet(ncol(data), alpha = rep(4, nrow(data)))))
 
-data.exp <- apply(X = data.arr, MARGIN = 3, FUN = deleuze:::clr, simplify = F)
+
 
 ```
-
-```{r calculate difference, fig.width = 5, fig.height = 5, cache=TRUE}
-#This is a slow step.
-meandiff <- apply_pw_diff(data.exp)
-```
-
 
 ```{r calculate distance matrix, fig.width = 5, fig.height = 5, cache=TRUE}
-
-meansq   <- meandiff^2
-
-meandist <- sqrt(colSums(meansq))
-
-
-
-meandistmat <- meandist %>% matrix(data = ., 
-                                   nrow = nrow(outer(
-                                     colnames(as.data.frame(data)), 
-                                     colnames(as.data.frame(data)), 
-                                     paste, sep="_"))
-) %>% data.frame()
-
-
+est.dist <- boot_dist(X = data, n = 1000, dir_alpha = 4)
 ```
 
 
-
-```{r prepare plottingdata, fig.width = 7, fig.height = 7, cache=TRUE}
-
+```{r prepare plots, fig.width = 5, fig.height = 5, cache=TRUE}
 dep <- rep(rep(seq(1000,20000, by = 1000), each = 10), 2)
-names(dep) <- as.character(1:400)          
+names(dep) <- as.character(1:400)      
 
-long_dist = meandistmat %>% 
+long_dist1 = data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
   filter(!str_detect(ID,"\\.")) %>% 
   mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
   
   mutate(name = str_remove(name, "\\.")) %>% 
   mutate(name = str_remove(name, "X")) %>% 
-
-  filter(as.numeric(ID)   <= 200) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   >= 201) %>% 
   filter(as.numeric(name) >= 201) %>% 
+  filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
   mutate(name = dep[name]) %>% 
   group_by(ID,name) %>% 
-  summarise(mean = round(mean(value) - sqrt(20), 1),
-            var  = round(var(value), 2)) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>%
   ungroup()
 
-
-long_dist %>% 
+plot_dist1 <- long_dist1 %>% 
   ggplot() +
-  aes(x = ID, y = name, fill = mean, label = mean) +
+  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,3), "Delta from true mean") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,7), "Delta from true mean") +
   theme_bw() +
-  ggtitle("New method", subtitle = "10% Rare features") +
+  ggtitle("Within sample offset 1", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+long_dist2 = data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   < 201) %>% 
+  filter(as.numeric(name) < 201) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup()
+
+plot_dist2 <- long_dist2 %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,7), "Delta from true mean") +
+  theme_bw() +
+  ggtitle("Within sample offset 2", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
 
 
-long_dist %>% 
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>% 
   ggplot() +
-  aes(x = ID, y = name, fill = var, label = var) +
+  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 2)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient(low = "white", high = "blue", limits = c(0,1.5), "Variance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,1), "Delta from true mean") +
   theme_bw() +
-  ggtitle("New method", subtitle = "10% Rare features") +
+  ggtitle("Offset is not strongly dependent composition", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
 
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>%
+  .$diff_mean %>% 
+  hist(., breaks = 30)
+
+
+
+```
+
+
+
+```{r plot, fig.width = 7, fig.height = 7, cache=TRUE}
+plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
 ```
