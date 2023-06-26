@@ -4,7 +4,7 @@
 \alias{clr}
 \title{compute CLR using Aitchison's method}
 \usage{
-clr(x, cols_as_features = F)
+clr(x, cols_as_features = FALSE)
 }
 \arguments{
 \item{x}{A table of compositional data without zeroes.}

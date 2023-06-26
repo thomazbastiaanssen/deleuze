@@ -4,7 +4,7 @@
 \alias{estQshr}
 \title{Compute shrunk proportions using the 'qsh' method described by Ionas Erb \href{https://doi.org/10.48550/arXiv.2205.09215}{here}.}
 \usage{
-estQshr(x, cols_as_features = F)
+estQshr(x, cols_as_features = FALSE)
 }
 \arguments{
 \item{x}{A table of compositional data.}

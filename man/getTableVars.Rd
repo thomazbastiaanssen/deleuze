@@ -4,7 +4,7 @@
 \alias{getTableVars}
 \title{Estimate the approximated vars from a CLR-transformed count sample.}
 \usage{
-getTableVars(count_table, CLR_transformed = T, cols_as_features = F)
+getTableVars(count_table, CLR_transformed = TRUE, cols_as_features = FALSE)
 }
 \arguments{
 \item{count_table}{A table of count data with rows as features and columns as samples.}
