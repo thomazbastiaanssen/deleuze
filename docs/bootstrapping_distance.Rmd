@@ -391,7 +391,7 @@ p_geom_mean + p_arith_mean + plot_layout(guides = 'collect')
 
 
 
-```{r pursue_offset, fig.width = 14, fig.height = 7, cache=TRUE}
+```{r pursue_offset, fig.width = 14, fig.height = 14, cache=TRUE}
 
 cora <- data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
@@ -429,8 +429,8 @@ cora <- data.frame(as.matrix(est.dist)) %>%
   geom_point() +
   theme_bw() +
   ggtitle("Comparing errors - normalised by arith_mean", subtitle = "10% Rare features") +
-  xlab("Between Group Error") +
-  ylab("Within Group Error")
+  xlab("Within Group Error") +
+  ylab("Between Group Error")
 
 corg <- data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
@@ -468,9 +468,92 @@ corg <- data.frame(as.matrix(est.dist)) %>%
   geom_point() +
   theme_bw() +
   ggtitle("Comparing errors - normalised by geom_mean", subtitle = "10% Rare features") +
-  xlab("Between Group Error") +
-  ylab("Within Group Error")
+  xlab("Within Group Error") +
+  ylab("Between Group Error")
 
 
-cora + corg + plot_layout(guides = 'collect')
+
+corc <- data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   <= 201) %>% 
+  filter(as.numeric(name) >  201) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup() %>% 
+  mutate(mean_s1 = long_dist1$mean, 
+         mean_s2 = long_dist2$mean) %>% 
+  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_offset = ((mean - sqrt(20) ) +  mean_s)/2 ) %>% 
+  mutate(mean_from_20 = mean_offset) %>% 
+  mutate(mindepth = pmin(ID, name)) %>% 
+  
+  ggplot() +
+  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  
+  geom_point() +
+  theme_bw() +
+  ggtitle("Comparing errors - normalised by arith_mean", subtitle = "10% Rare features") +
+  xlab("Within Group Error") +
+  ylab("Between Group Error")
+
+cord <- data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   <= 201) %>% 
+  filter(as.numeric(name) >  201) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup() %>% 
+  mutate(mean_s1 = long_dist1$mean, 
+         mean_s2 = long_dist2$mean) %>% 
+
+  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_offset = sqrt(((mean - sqrt(20)) *  mean_s)) ) %>% 
+  mutate(mean_from_20 = mean_offset) %>% 
+  mutate(mindepth = pmin(ID, name)) %>% 
+  
+  ggplot() +
+  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  
+  geom_point() +
+  theme_bw() +
+  ggtitle("Comparing errors - normalised by geom_mean", subtitle = "10% Rare features") +
+  xlab("Within Group Error") +
+  ylab("Between Group Error")
+
+
+
+(cora + corg) /
+  (corc  + cord)+ plot_layout(guides = 'collect')
 ```
