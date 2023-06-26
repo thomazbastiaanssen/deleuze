@@ -48,7 +48,6 @@ apply_pw_diff <- function(x){
 ```{r prepare data, fig.width = 5, fig.height = 5, cache=TRUE}
 
 
-set.seed(12345)
 b1  <-      c(rep(1, 10), rep(5, 20), rep(15, 20), rep(40, 20), rep(80, 20), rep(100, 5), rep(250, 5) )
 b1a <- b1 * c(rep(1, 10), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 60) ) 
 
@@ -104,7 +103,7 @@ meandistmat <- meandist %>% matrix(data = .,
 
 
 
-```{r prepare data, fig.width = 7, fig.height = 7, cache=TRUE}
+```{r prepare plottingdata, fig.width = 7, fig.height = 7, cache=TRUE}
 
 dep <- rep(rep(seq(1000,20000, by = 1000), each = 10), 2)
 names(dep) <- as.character(1:400)          
