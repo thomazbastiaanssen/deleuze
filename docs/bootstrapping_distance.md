@@ -188,34 +188,6 @@ plot_dist2 <- long_dist2 %>%
   ylab("Sampling depth of second sample")
 
 
-long_dist2 %>% 
-  mutate(mean2 = long_dist1$mean) %>% 
-  mutate(diff_mean = mean - mean2) %>% 
-  ggplot() +
-  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 1)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,1), "Delta from true mean") +
-  theme_bw() +
-  ggtitle("Offset is not strongly dependent composition", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
-```
-
-![](bootstrapping_distance_files/figure-gfm/prepare%20plots-2.png)<!-- -->
-
-``` r
-long_dist2 %>% 
-  mutate(mean2 = long_dist1$mean) %>% 
-  mutate(diff_mean = mean - mean2) %>%
-  .$diff_mean %>% 
-  hist(., breaks = 30)
-```
-
-![](bootstrapping_distance_files/figure-gfm/prepare%20plots-3.png)<!-- -->
-
-``` r
 data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
@@ -260,7 +232,7 @@ data.frame(as.matrix(est.dist)) %>%
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
 
-![](bootstrapping_distance_files/figure-gfm/prepare%20plots-4.png)<!-- -->
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-2.png)<!-- -->
 
 ``` r
 data.frame(as.matrix(est.dist)) %>% 
@@ -290,7 +262,7 @@ data.frame(as.matrix(est.dist)) %>%
          mean_s2 = long_dist2$mean) %>% 
   mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
   #mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
-  mutate(mean_from_20 = mean_s - sqrt(20)) %>% 
+  mutate(mean_from_20 = mean - sqrt(20)) %>% 
   
   ggplot() +
   aes(x = ID, y = name, fill = mean_from_20, label = round(mean_from_20, 1)) +
@@ -307,7 +279,42 @@ data.frame(as.matrix(est.dist)) %>%
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
 
-![](bootstrapping_distance_files/figure-gfm/prepare%20plots-5.png)<!-- -->
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-3.png)<!-- -->
+
+``` r
+#Let's see if we can find out where this bias comes from.
+plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
+```
+
+![](bootstrapping_distance_files/figure-gfm/plot-1.png)<!-- -->
+
+``` r
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 1)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,1), "Delta from true mean") +
+  theme_bw() +
+  ggtitle("Offset is not strongly dependent composition", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+```
+
+![](bootstrapping_distance_files/figure-gfm/plot-2.png)<!-- -->
+
+``` r
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>%
+  .$diff_mean %>% 
+  hist(., breaks = 30, main = "Difference between offsets of Sample 1 & 2" )
+```
+
+![](bootstrapping_distance_files/figure-gfm/plot-3.png)<!-- -->
 
 ``` r
 data.frame(as.matrix(est.dist)) %>% 
@@ -354,7 +361,7 @@ data.frame(as.matrix(est.dist)) %>%
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
 
-![](bootstrapping_distance_files/figure-gfm/prepare%20plots-6.png)<!-- -->
+![](bootstrapping_distance_files/figure-gfm/plot-4.png)<!-- -->
 
 ``` r
 data.frame(as.matrix(est.dist)) %>% 
@@ -401,10 +408,4 @@ data.frame(as.matrix(est.dist)) %>%
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
 
-![](bootstrapping_distance_files/figure-gfm/prepare%20plots-7.png)<!-- -->
-
-``` r
-plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
-```
-
-![](bootstrapping_distance_files/figure-gfm/plot-1.png)<!-- -->
+![](bootstrapping_distance_files/figure-gfm/plot-5.png)<!-- -->

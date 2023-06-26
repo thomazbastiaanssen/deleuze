@@ -186,27 +186,6 @@ plot_dist2 <- long_dist2 %>%
   ylab("Sampling depth of second sample")
 
 
-long_dist2 %>% 
-  mutate(mean2 = long_dist1$mean) %>% 
-  mutate(diff_mean = mean - mean2) %>% 
-  ggplot() +
-  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 1)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,1), "Delta from true mean") +
-  theme_bw() +
-  ggtitle("Offset is not strongly dependent composition", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
-
-long_dist2 %>% 
-  mutate(mean2 = long_dist1$mean) %>% 
-  mutate(diff_mean = mean - mean2) %>%
-  .$diff_mean %>% 
-  hist(., breaks = 30)
-
-
 data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
@@ -275,7 +254,7 @@ data.frame(as.matrix(est.dist)) %>%
          mean_s2 = long_dist2$mean) %>% 
   mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
   #mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
-  mutate(mean_from_20 = mean_s - sqrt(20)) %>% 
+  mutate(mean_from_20 = mean - sqrt(20)) %>% 
   
   ggplot() +
   aes(x = ID, y = name, fill = mean_from_20, label = round(mean_from_20, 1)) +
@@ -287,6 +266,39 @@ data.frame(as.matrix(est.dist)) %>%
   ggtitle("Error from true distance", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
+
+
+```
+
+
+
+```{r plot, fig.width = 16, fig.height = 7, cache=TRUE}
+#Let's see if we can find out where this bias comes from.
+plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
+
+
+
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 1)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,1), "Delta from true mean") +
+  theme_bw() +
+  ggtitle("Offset is not strongly dependent composition", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+long_dist2 %>% 
+  mutate(mean2 = long_dist1$mean) %>% 
+  mutate(diff_mean = mean - mean2) %>%
+  .$diff_mean %>% 
+  hist(., breaks = 30, main = "Difference between offsets of Sample 1 & 2" )
+
+
 
 data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
@@ -369,11 +381,4 @@ data.frame(as.matrix(est.dist)) %>%
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
 
-
-```
-
-
-
-```{r plot, fig.width = 16, fig.height = 7, cache=TRUE}
-plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
 ```
