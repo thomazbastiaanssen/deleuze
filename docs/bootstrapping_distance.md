@@ -151,7 +151,7 @@ long_dist2 %>%
   mutate(mean2 = long_dist1$mean) %>% 
   mutate(diff_mean = mean - mean2) %>% 
   ggplot() +
-  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 2)) +
+  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
