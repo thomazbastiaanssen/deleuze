@@ -116,16 +116,12 @@ long_dist = meandistmat %>%
   filter(!str_detect(ID,"\\.")) %>% 
   mutate(ID = str_remove(ID, "X")) %>% 
   
-  #filter(str_detect(name,"\\.")) %>% 
-  mutate(name = str_remove(name, "\\..")) %>% 
+  mutate(name = str_remove(name, "\\.")) %>% 
   mutate(name = str_remove(name, "X")) %>% 
-  # filter(!is.na(ID)) %>% 
-  # filter(!is.na(name)) %>% 
-  # 
 
-  filter(ID != name) %>% 
   filter(as.numeric(ID)   <= 200) %>% 
   filter(as.numeric(name) >= 201) %>% 
+  
   mutate(ID   = dep[ID]) %>% 
   mutate(name = dep[name]) %>% 
   group_by(ID,name) %>% 
