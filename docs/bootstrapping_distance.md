@@ -634,9 +634,9 @@ data.frame(as.matrix(est.dist)) %>%
  #  .$mean_offset %>% mean
   #mutate(mean_offset = mean_offset - sqrt(20)*0.85) %>% 
 
-  mutate(mean_from_20 = mean_offset - sqrt(20)*0.85) %>% 
+  #mutate(mean_from_20 = mean_offset - sqrt(20)*0.85) %>% 
   
-  #mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
   
   mutate(mindepth = pmin(ID, name)) %>% 
   
