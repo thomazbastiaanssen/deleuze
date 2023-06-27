@@ -1,3 +1,16 @@
+Maximally detectable aitchison distance between samples from count data
+may be bounded by 1) number of features - because big distances require
+some features to be proportionally very low, making them meaninglessly
+close to zero for sampling purposes  
+2) sequencing depth - more likely to have very low values be zero and
+thus indistinguishable from other very low values
+
+This is likely not unique to Aitchison distance but rather due to the
+nature of sampling.
+
+q: can we determine maximum distance for a given depth and number of
+features?
+
 ``` r
 set.seed(12345)
 library(tidyverse)
@@ -56,7 +69,7 @@ perturb_by <- function(x, by, prop = 1){
 ```
 
 ``` r
-b1  <-      c(rep(1, 10), rep(5, 20), rep(15, 20), rep(40, 20), rep(80, 20), rep(100, 5), rep(250, 5) )
+b1  <-      rep(0.001, 1000)
 b1a <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 10) %>% {exp(.) / sum(exp(.))}
 b1b <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 20) %>% {exp(.) / sum(exp(.))}
 b1c <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 30) %>% {exp(.) / sum(exp(.))}
@@ -64,44 +77,44 @@ b1d <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 40) %>% {exp(.
 b1e <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 50) %>% {exp(.) / sum(exp(.))}
 
 res_b1 = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
-  table(factor(sample(paste0("feature_",1:100), 
+  table(factor(sample(paste0("feature_",1:length(b1)), 
                       prob = b1, 
-                      replace = T, size = x), levels = paste0("feature_",1:100)))
+                      replace = T, size = x), levels = paste0("feature_",1:length(b1))))
   
 })
 
 res_b1a = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
-  table(factor(sample(paste0("feature_",1:100), 
+  table(factor(sample(paste0("feature_",1:length(b1)), 
                       prob = b1a, 
-                      replace = T, size = x), levels = paste0("feature_",1:100)))
+                      replace = T, size = x), levels = paste0("feature_",1:length(b1))))
   
 })
 
 res_b1b = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
-  table(factor(sample(paste0("feature_",1:100), 
+  table(factor(sample(paste0("feature_",1:length(b1)), 
                       prob = b1b, 
-                      replace = T, size = x), levels = paste0("feature_",1:100)))
+                      replace = T, size = x), levels = paste0("feature_",1:length(b1))))
   
 })
 
 res_b1c = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
-  table(factor(sample(paste0("feature_",1:100), 
+  table(factor(sample(paste0("feature_",1:length(b1)), 
                       prob = b1c, 
-                      replace = T, size = x), levels = paste0("feature_",1:100)))
+                      replace = T, size = x), levels = paste0("feature_",1:length(b1))))
   
 })
 
 res_b1d = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
-  table(factor(sample(paste0("feature_",1:100), 
+  table(factor(sample(paste0("feature_",1:length(b1)), 
                       prob = b1d, 
-                      replace = T, size = x), levels = paste0("feature_",1:100)))
+                      replace = T, size = x), levels = paste0("feature_",1:length(b1))))
   
 })
 
 res_b1e = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
-  table(factor(sample(paste0("feature_",1:100), 
+  table(factor(sample(paste0("feature_",1:length(b1)), 
                       prob = b1e, 
-                      replace = T, size = x), levels = paste0("feature_",1:100)))
+                      replace = T, size = x), levels = paste0("feature_",1:length(b1))))
   
 })
 
