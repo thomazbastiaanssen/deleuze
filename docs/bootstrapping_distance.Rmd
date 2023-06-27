@@ -88,28 +88,28 @@ res_b1a = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x
 
 res_b1b = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
-                      prob = b1a, 
+                      prob = b1b, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
 res_b1c = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
-                      prob = b1a, 
+                      prob = b1c, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
 res_b1d = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
-                      prob = b1a, 
+                      prob = b1d, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
 res_b1e = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
-                      prob = b1a, 
+                      prob = b1e, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
@@ -304,7 +304,7 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "V")) %>% 
   
   filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401 & as.numeric(ID)   < 601) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) > 601 & as.numeric(name) < 601) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) > 401 & as.numeric(name) < 601) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
