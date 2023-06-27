@@ -63,42 +63,42 @@ b1c <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 30) %>% {exp(.
 b1d <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 40) %>% {exp(.) / sum(exp(.))}
 b1e <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 50) %>% {exp(.) / sum(exp(.))}
 
-res_b1 = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+res_b1 = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
                       prob = b1, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
-res_b1a = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+res_b1a = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
                       prob = b1a, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
-res_b1b = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+res_b1b = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
                       prob = b1b, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
-res_b1c = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+res_b1c = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
                       prob = b1c, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
-res_b1d = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+res_b1d = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
                       prob = b1d, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
   
 })
 
-res_b1e = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+res_b1e = sapply(X = rep(seq(10000,200000, by = 10000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
                       prob = b1e, 
                       replace = T, size = x), levels = paste0("feature_",1:100)))
@@ -121,7 +121,7 @@ est.dist <- boot_dist(X = data, n = 1000, dir_alpha = 4)
 ```
 
 ``` r
-dep <- rep(rep(seq(1000,20000, by = 1000), each = 10), 6)
+dep <- rep(rep(seq(10,200, by = 10), each = 10), 6)
 names(dep) <- as.character(1:ncol(data))      
 
 long_dist1 = data.frame(as.matrix(est.dist)) %>% 
@@ -162,8 +162,8 @@ plot_dist1 <- long_dist1 %>%
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,7), "Delta from true mean") +
   theme_bw() +
   ggtitle("Within sample offset 1", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 
 p_geom_mean <- data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
@@ -200,8 +200,8 @@ p_geom_mean <- data.frame(as.matrix(est.dist)) %>%
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-3,3), "Error from ground truth") +
   theme_bw() +
   ggtitle("Error from true distance - normalised by geom_mean", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -244,8 +244,8 @@ p_arith_mean <- data.frame(as.matrix(est.dist)) %>%
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-3,3), "Error from ground truth") +
   theme_bw() +
   ggtitle("Error from true distance - normalised by arith_mean", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -280,11 +280,11 @@ data.frame(as.matrix(est.dist)) %>%
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
   theme_bw() +
   ggtitle("Estimated distance, should be 10", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -321,11 +321,11 @@ data.frame(as.matrix(est.dist)) %>%
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
   theme_bw() +
   ggtitle("Estimated distance, should be 20", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -362,11 +362,11 @@ data.frame(as.matrix(est.dist)) %>%
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
   theme_bw() +
   ggtitle("Estimated distance, should be 30", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -403,11 +403,11 @@ data.frame(as.matrix(est.dist)) %>%
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
   theme_bw() +
   ggtitle("Estimated distance, should be 40", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -444,11 +444,11 @@ data.frame(as.matrix(est.dist)) %>%
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
   theme_bw() +
   ggtitle("Estimated distance, should be 50", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -492,8 +492,8 @@ data.frame(as.matrix(est.dist)) %>%
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-3,3), "Error from ground truth") +
   theme_bw() +
   ggtitle("Error from true distance", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
@@ -797,8 +797,8 @@ data.frame(as.matrix(est.dist)) %>%
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1.5,1.5), "Delta from true mean") +
   theme_bw() +
   ggtitle("Error from true distance after regressing out within-sample error", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
+  xlab("Sampling depth of first sample x 1K") +
+  ylab("Sampling depth of second sample x 1K")
 ```
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
