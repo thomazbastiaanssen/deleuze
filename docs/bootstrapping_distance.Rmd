@@ -557,3 +557,113 @@ cord <- data.frame(as.matrix(est.dist)) %>%
 (cora + corg) /
   (corc  + cord)+ plot_layout(guides = 'collect')
 ```
+```{r We must go deeper, fig.width = 14, fig.height = 14, cache=TRUE}
+
+data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   <= 201) %>% 
+  filter(as.numeric(name) >  201) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup() %>% 
+  
+  mutate(mean_s1 = long_dist1$mean, 
+         mean_s2 = long_dist2$mean) %>% 
+  
+  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = mean_s * coefficients(lm(mean~mean_s))[2]) %>% 
+
+ # mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
+ 
+  mutate(mean_offset = (mean - mean_s) ) %>% 
+  #mutate(of)
+ #  .$mean_offset %>% mean
+  #mutate(mean_offset = mean_offset - sqrt(20)*0.85) %>% 
+
+  mutate(mean_from_20 = mean_offset - sqrt(20)*0.85) %>% 
+  
+  #mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  
+  mutate(mindepth = pmin(ID, name)) %>% 
+  
+  ggplot() +
+  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_bw() +
+  ggtitle("Comparing errors - normalised by arith_mean", subtitle = "10% Rare features") +
+  xlab("Within Group Error") +
+  ylab("Between Group Error")
+
+
+
+
+
+
+
+data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   <= 201) %>% 
+  filter(as.numeric(name) >  201) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup() %>% 
+  
+  mutate(mean_s1 = long_dist1$mean, 
+         mean_s2 = long_dist2$mean) %>% 
+  
+  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_c = mean_s * coefficients(lm(mean~mean_s))[2]) %>% 
+
+  mutate(mean_offset = (mean - mean_c) ) %>% 
+  
+  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  
+  mutate(mindepth = pmin(ID, name)) %>% 
+  
+  ggplot() +
+  aes(x = ID, y = name, fill = mean_from_20, label = round(mean_from_20, 1)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1.5,1.5), "Delta from true mean") +
+  theme_bw() +
+  ggtitle("Error from true distance after regressing out within-sample error", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+
+```
+
