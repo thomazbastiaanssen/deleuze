@@ -10,6 +10,9 @@ For code on single sample consistency click
 For code on two-sample consistency click
 [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/volatility.md)
 
+For code on bayesian bootstrapped two-sample consistency click
+[Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/bootstrapping_distance.md)
+
 (put on their own page as it’s slow to knit)
 
 ``` r

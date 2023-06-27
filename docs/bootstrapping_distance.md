@@ -282,7 +282,7 @@ data.frame(as.matrix(est.dist)) %>%
   geom_text(colour = "black", size = 2.5) +
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
   theme_bw() +
-  ggtitle("Estimated distance between Sample 1 and Sample 2", subtitle = "10% Rare features") +
+  ggtitle("Estimated distance, should be 10", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
 ```
@@ -306,8 +306,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401 & as.numeric(ID)   < 601) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) > 601 & as.numeric(name) < 601) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -316,10 +316,6 @@ data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s = long_dist1$mean) %>% 
-  #mutate(mean_offset = (mean +  mean_s)/2 ) %>% 
-  #mutate(mean_from_10 = mean_offset - 10) %>% 
-  
   ggplot() +
   aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
@@ -327,7 +323,7 @@ data.frame(as.matrix(est.dist)) %>%
   geom_text(colour = "black", size = 2.5) +
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
   theme_bw() +
-  ggtitle("Estimated distance between Sample 1 and Sample 2", subtitle = "10% Rare features") +
+  ggtitle("Estimated distance, should be 20", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
 ```
@@ -336,6 +332,129 @@ data.frame(as.matrix(est.dist)) %>%
     ## argument.
 
 ![](bootstrapping_distance_files/figure-gfm/prepare%20plots-2.png)<!-- -->
+
+``` r
+data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 601 & as.numeric(ID)   < 801) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) > 601 & as.numeric(name) < 801) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup() %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  theme_bw() +
+  ggtitle("Estimated distance, should be 30", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-3.png)<!-- -->
+
+``` r
+data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 801 & as.numeric(ID)   < 1001) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) > 801 & as.numeric(name) < 1001) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup() %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  theme_bw() +
+  ggtitle("Estimated distance, should be 40", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-4.png)<!-- -->
+
+``` r
+data.frame(as.matrix(est.dist)) %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  
+  filter(!str_detect(ID,"\\.")) %>% 
+  mutate(ID = str_remove(ID, "X")) %>% 
+  mutate(ID = str_remove(ID, "V")) %>% 
+  
+  
+  mutate(name = str_remove(name, "\\.")) %>% 
+  mutate(name = str_remove(name, "X")) %>% 
+  mutate(name = str_remove(name, "V")) %>% 
+  
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 1001 & as.numeric(ID)   < 1201) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) > 1001 & as.numeric(name) < 1201) %>% 
+  filter(name != ID) %>% 
+  
+  mutate(ID   = dep[ID]) %>% 
+  mutate(name = dep[name]) %>% 
+  group_by(ID,name) %>% 
+  summarise(mean = mean(value),
+            var  = var(value)) %>% 
+  ungroup() %>% 
+  ggplot() +
+  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
+  
+  geom_tile() +
+  geom_text(colour = "black", size = 2.5) +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,8), "Estimated distance") +
+  theme_bw() +
+  ggtitle("Estimated distance, should be 50", subtitle = "10% Rare features") +
+  xlab("Sampling depth of first sample") +
+  ylab("Sampling depth of second sample")
+```
+
+    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
+    ## argument.
+
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-5.png)<!-- -->
 
 ``` r
 data.frame(as.matrix(est.dist)) %>% 
@@ -380,7 +499,7 @@ data.frame(as.matrix(est.dist)) %>%
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
 
-![](bootstrapping_distance_files/figure-gfm/prepare%20plots-3.png)<!-- -->
+![](bootstrapping_distance_files/figure-gfm/prepare%20plots-6.png)<!-- -->
 
 ``` r
 #Let's see if we can find out where this bias comes from.
