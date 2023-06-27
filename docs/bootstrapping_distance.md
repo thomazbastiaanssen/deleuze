@@ -29,11 +29,39 @@ boot_dist <- function(X, n, dir_alpha, cl = NULL){
   return(out_mat)
   
 }
+
+#Perturb a clr-transformed sample by a given distance
+perturb_by <- function(x, by, prop = 1){
+  
+  #Which features to alter
+  target = sample(1:length(x), max(2, round(length(x)*prop), digits = 0))
+  
+  #Generate container fro perturnbation
+  res_perturb = vector(mode = "numeric", length = length(target))
+  
+  #Decide which features are going to be positive and negative
+  division <- c(T, F, sample(c(T, F), size = length(target)-2, replace = T))
+  
+  #Distribute half of the squared distance to the positive division
+  res_perturb[ division] =  sqrt(((by^2)/2)*(rdirichlet(n = 1, alpha = rep(1, sum(division)))))
+  
+  #Distribute half of the squared distance to the negative division
+  res_perturb[!division] = -sqrt(((by^2)/2)*(rdirichlet(n = 1, alpha = rep(1, sum(!division)))))
+  
+  #Perturb the input
+  x[target] = x[target] + res_perturb
+  
+  return(x)
+}
 ```
 
 ``` r
 b1  <-      c(rep(1, 10), rep(5, 20), rep(15, 20), rep(40, 20), rep(80, 20), rep(100, 5), rep(250, 5) )
-b1a <- b1 * c(rep(1, 10), rep(exp(1), 10), rep(1, 10),  rep(1/exp(1), 10), rep(1, 60) ) 
+b1a <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 10) %>% {exp(.) / sum(exp(.))}
+b1b <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 20) %>% {exp(.) / sum(exp(.))}
+b1c <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 30) %>% {exp(.) / sum(exp(.))}
+b1d <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 40) %>% {exp(.) / sum(exp(.))}
+b1e <-      b1 %>% {log(.) - mean(log(.))} %>% perturb_by(., by = 50) %>% {exp(.) / sum(exp(.))}
 
 res_b1 = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
   table(factor(sample(paste0("feature_",1:100), 
@@ -49,11 +77,43 @@ res_b1a = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x
   
 })
 
+res_b1b = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1a, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b1c = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1a, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b1d = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1a, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
+res_b1e = sapply(X = rep(seq(1000,20000, by = 1000), each = 10),FUN = function(x){
+  table(factor(sample(paste0("feature_",1:100), 
+                      prob = b1a, 
+                      replace = T, size = x), levels = paste0("feature_",1:100)))
+  
+})
+
 
 res_b1_prob  <- getTableMeans(res_b1,  CLR_transformed = F)
 res_b1a_prob <- getTableMeans(res_b1a, CLR_transformed = F)
+res_b1b_prob <- getTableMeans(res_b1b, CLR_transformed = F)
+res_b1c_prob <- getTableMeans(res_b1c, CLR_transformed = F)
+res_b1d_prob <- getTableMeans(res_b1d, CLR_transformed = F)
+res_b1e_prob <- getTableMeans(res_b1e, CLR_transformed = F)
 
-data = as.data.frame(cbind(res_b1_prob, res_b1a_prob))
+data = as.data.frame(cbind(res_b1_prob, res_b1a_prob, res_b1b_prob, res_b1c_prob, res_b1d_prob, res_b1e_prob))
 ```
 
 ``` r
@@ -61,8 +121,8 @@ est.dist <- boot_dist(X = data, n = 1000, dir_alpha = 4)
 ```
 
 ``` r
-dep <- rep(rep(seq(1000,20000, by = 1000), each = 10), 2)
-names(dep) <- as.character(1:400)      
+dep <- rep(rep(seq(1000,20000, by = 1000), each = 10), 6)
+names(dep) <- as.character(1:ncol(data))      
 
 long_dist1 = data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
@@ -77,8 +137,8 @@ long_dist1 = data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   >= 201) %>% 
-  filter(as.numeric(name) >= 201) %>% 
+  filter(as.numeric(ID)   < 201) %>% 
+  filter(as.numeric(name) < 201) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -105,35 +165,6 @@ plot_dist1 <- long_dist1 %>%
   xlab("Sampling depth of first sample") +
   ylab("Sampling depth of second sample")
 
-long_dist2 = data.frame(as.matrix(est.dist)) %>% 
-  rownames_to_column("ID") %>% 
-  pivot_longer(!ID) %>% 
-  
-  filter(!str_detect(ID,"\\.")) %>% 
-  mutate(ID = str_remove(ID, "X")) %>% 
-  mutate(ID = str_remove(ID, "V")) %>% 
-  
-  
-  mutate(name = str_remove(name, "\\.")) %>% 
-  mutate(name = str_remove(name, "X")) %>% 
-  mutate(name = str_remove(name, "V")) %>% 
-  
-  filter(as.numeric(ID)   < 201) %>% 
-  filter(as.numeric(name) < 201) %>% 
-  filter(name != ID) %>% 
-  
-  mutate(ID   = dep[ID]) %>% 
-  mutate(name = dep[name]) %>% 
-  group_by(ID,name) %>% 
-  summarise(mean = mean(value),
-            var  = var(value)) %>% 
-  ungroup()
-```
-
-    ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
-    ## argument.
-
-``` r
 p_geom_mean <- data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
@@ -147,8 +178,8 @@ p_geom_mean <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -157,14 +188,12 @@ p_geom_mean <- data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
   mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
-  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  mutate(mean_from_10 = mean_offset - 10) %>% 
   
   ggplot() +
-  aes(x = ID, y = name, fill = mean_from_20, label = round(mean_from_20, 1)) +
+  aes(x = ID, y = name, fill = mean_from_10, label = round(mean_from_10, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
@@ -192,8 +221,9 @@ p_arith_mean <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -202,14 +232,12 @@ p_arith_mean <- data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
   mutate(mean_offset = (mean +  mean_s)/2 ) %>% 
-  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  mutate(mean_from_10 = mean_offset - 10) %>% 
   
   ggplot() +
-  aes(x = ID, y = name, fill = mean_from_20, label = round(mean_from_20, 1)) +
+  aes(x = ID, y = name, fill = mean_from_10, label = round(mean_from_10, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
@@ -237,8 +265,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -265,19 +293,6 @@ data.frame(as.matrix(est.dist)) %>%
 ![](bootstrapping_distance_files/figure-gfm/prepare%20plots-1.png)<!-- -->
 
 ``` r
-plot_dist2 <- long_dist2 %>% 
-  ggplot() +
-  aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,7), "Delta from true mean") +
-  theme_bw() +
-  ggtitle("Within sample offset 2", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
-
-
 data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
@@ -291,8 +306,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -301,11 +316,9 @@ data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
   #mutate(mean_offset = (mean +  mean_s)/2 ) %>% 
-  #mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  #mutate(mean_from_10 = mean_offset - 10) %>% 
   
   ggplot() +
   aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
@@ -338,8 +351,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -348,14 +361,12 @@ data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
   #mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
-  mutate(mean_from_20 = mean - sqrt(20)) %>% 
+  mutate(mean_from_10 = mean - 10) %>% 
   
   ggplot() +
-  aes(x = ID, y = name, fill = mean_from_20, label = round(mean_from_20, 1)) +
+  aes(x = ID, y = name, fill = mean_from_10, label = round(mean_from_10, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
@@ -373,44 +384,16 @@ data.frame(as.matrix(est.dist)) %>%
 
 ``` r
 #Let's see if we can find out where this bias comes from.
-plot_dist1 + plot_dist2 + plot_layout(guides = 'collect')
+plot_dist1
 ```
 
 ![](bootstrapping_distance_files/figure-gfm/plot-1.png)<!-- -->
 
 ``` r
-long_dist2 %>% 
-  mutate(mean2 = long_dist1$mean) %>% 
-  mutate(diff_mean = mean - mean2) %>% 
-  ggplot() +
-  aes(x = ID, y = name, fill = diff_mean, label = round(diff_mean, 1)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-1,1), "Delta from true mean") +
-  theme_bw() +
-  ggtitle("Offset is not strongly dependent composition", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample") +
-  ylab("Sampling depth of second sample")
-```
-
-![](bootstrapping_distance_files/figure-gfm/plot-2.png)<!-- -->
-
-``` r
-long_dist2 %>% 
-  mutate(mean2 = long_dist1$mean) %>% 
-  mutate(diff_mean = mean - mean2) %>%
-  .$diff_mean %>% 
-  hist(., breaks = 30, main = "Difference between offsets of Sample 1 & 2" )
-```
-
-![](bootstrapping_distance_files/figure-gfm/plot-3.png)<!-- -->
-
-``` r
 p_geom_mean + p_arith_mean + plot_layout(guides = 'collect')
 ```
 
-![](bootstrapping_distance_files/figure-gfm/plot-4.png)<!-- -->
+![](bootstrapping_distance_files/figure-gfm/plot-2.png)<!-- -->
 
 ``` r
 cora <- data.frame(as.matrix(est.dist)) %>% 
@@ -426,8 +409,8 @@ cora <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -436,15 +419,13 @@ cora <- data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
   mutate(mean_offset = (mean +  mean_s)/2 ) %>% 
-  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  mutate(mean_from_10 = mean_offset - 10) %>% 
   mutate(mindepth = pmin(ID, name)) %>% 
   
   ggplot() +
-  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  aes(x = mean_s, y = mean_from_10, colour = mindepth) +
   
   geom_point() +
   theme_bw() +
@@ -470,8 +451,8 @@ corg <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -480,15 +461,13 @@ corg <- data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
   mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
-  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  mutate(mean_from_10 = mean_offset - 10) %>% 
   mutate(mindepth = pmin(ID, name)) %>% 
   
   ggplot() +
-  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  aes(x = mean_s, y = mean_from_10, colour = mindepth) +
   
   geom_point() +
   theme_bw() +
@@ -514,8 +493,8 @@ corc <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -524,15 +503,14 @@ corc <- data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
-  mutate(mean_offset = ((mean - sqrt(20) ) +  mean_s)/2 ) %>% 
-  mutate(mean_from_20 = mean_offset) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
+
+  mutate(mean_offset = ((mean - 10 ) +  mean_s)/2 ) %>% 
+  mutate(mean_from_10 = mean_offset) %>% 
   mutate(mindepth = pmin(ID, name)) %>% 
   
   ggplot() +
-  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  aes(x = mean_s, y = mean_from_10, colour = mindepth) +
   
   geom_point() +
   theme_bw() +
@@ -558,8 +536,8 @@ cord <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -568,16 +546,14 @@ cord <- data.frame(as.matrix(est.dist)) %>%
   summarise(mean = mean(value),
             var  = var(value)) %>% 
   ungroup() %>% 
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
 
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
-  mutate(mean_offset = sqrt(((mean - sqrt(20)) *  mean_s)) ) %>% 
-  mutate(mean_from_20 = mean_offset) %>% 
+  mutate(mean_offset = sqrt(((mean - 10) *  mean_s)) ) %>% 
+  mutate(mean_from_10 = mean_offset) %>% 
   mutate(mindepth = pmin(ID, name)) %>% 
   
   ggplot() +
-  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  aes(x = mean_s, y = mean_from_10, colour = mindepth) +
   
   geom_point() +
   theme_bw() +
@@ -589,10 +565,14 @@ cord <- data.frame(as.matrix(est.dist)) %>%
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
 
+    ## Warning in sqrt(((mean - 10) * mean_s)): NaNs produced
+
 ``` r
 (cora + corg) /
   (corc  + cord)+ plot_layout(guides = 'collect')
 ```
+
+    ## Warning: Removed 400 rows containing missing values (geom_point).
 
 ![](bootstrapping_distance_files/figure-gfm/pursue_offset-1.png)<!-- -->
 
@@ -610,8 +590,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -621,10 +601,8 @@ data.frame(as.matrix(est.dist)) %>%
             var  = var(value)) %>% 
   ungroup() %>% 
   
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
+
   mutate(mean_s = mean_s * coefficients(lm(mean~mean_s))[2]) %>% 
 
  # mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
@@ -632,16 +610,16 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(mean_offset = (mean - mean_s) ) %>% 
   #mutate(of)
  #  .$mean_offset %>% mean
-  #mutate(mean_offset = mean_offset - sqrt(20)*0.85) %>% 
+  #mutate(mean_offset = mean_offset - 10*0.85) %>% 
 
-  #mutate(mean_from_20 = mean_offset - sqrt(20)*0.85) %>% 
+  #mutate(mean_from_10 = mean_offset - 10*0.85) %>% 
   
-  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  mutate(mean_from_10 = mean_offset - 10) %>% 
   
   mutate(mindepth = pmin(ID, name)) %>% 
   
   ggplot() +
-  aes(x = mean_s, y = mean_from_20, colour = mindepth) +
+  aes(x = mean_s, y = mean_from_10, colour = mindepth) +
   
   geom_point() +
   geom_smooth(method = "lm") +
@@ -671,8 +649,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201) %>% 
-  filter(as.numeric(name) >  201) %>% 
+  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -682,20 +660,18 @@ data.frame(as.matrix(est.dist)) %>%
             var  = var(value)) %>% 
   ungroup() %>% 
   
-  mutate(mean_s1 = long_dist1$mean, 
-         mean_s2 = long_dist2$mean) %>% 
-  
-  mutate(mean_s = (mean_s1 + mean_s2)/2) %>% 
+  mutate(mean_s = long_dist1$mean) %>% 
+
   mutate(mean_c = mean_s * coefficients(lm(mean~mean_s))[2]) %>% 
 
   mutate(mean_offset = (mean - mean_c) ) %>% 
   
-  mutate(mean_from_20 = mean_offset - sqrt(20)) %>% 
+  mutate(mean_from_10 = mean_offset - 10) %>% 
   
   mutate(mindepth = pmin(ID, name)) %>% 
   
   ggplot() +
-  aes(x = ID, y = name, fill = mean_from_20, label = round(mean_from_20, 1)) +
+  aes(x = ID, y = name, fill = mean_from_10, label = round(mean_from_10, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
