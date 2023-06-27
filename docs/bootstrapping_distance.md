@@ -691,7 +691,7 @@ cord <- data.frame(as.matrix(est.dist)) %>%
   (corc  + cord)+ plot_layout(guides = 'collect')
 ```
 
-    ## Warning: Removed 400 rows containing missing values (geom_point).
+    ## Warning: Removed 335 rows containing missing values (geom_point).
 
 ![](bootstrapping_distance_files/figure-gfm/pursue_offset-1.png)<!-- -->
 
