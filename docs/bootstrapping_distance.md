@@ -1,9 +1,11 @@
-Maximally detectable aitchison distance between samples from count data
-may be bounded by 1) number of features - because big distances require
-some features to be proportionally very low, making them meaninglessly
-close to zero for sampling purposes  
-2) sequencing depth - more likely to have very low values be zero and
-thus indistinguishable from other very low values
+Maximally detectable Aitchison distance between samples from count data
+may be bounded by  
+1) number of features - because big distances require some features to
+be proportionally very low, making them meaninglessly close to zero for
+sampling purposes
+
+2)  sequencing depth - more likely to have very low values be zero and
+    thus indistinguishable from other very low values
 
 This is likely not unique to Aitchison distance but rather due to the
 nature of sampling.
@@ -20,25 +22,29 @@ library(Tjazi)
 library(vegan)
 library(LaplacesDemon)
 
-
 #Estimate distance
-boot_dist <- function(X, n, dir_alpha, cl = NULL){
+boot_dist <- function(X, n, dir_alpha, cl = NULL, verbose = T){
   
   X = as.matrix(X)
   stopifnot("bayes_boot_diff takes a matrix without zeroes" = !any(X==0))
   
   #Could be sped up with Rcpp:
+  if(verbose){print("Bootstrapping...")}
   X.arr = replicate(n = n, X  * t(rdirichlet(ncol(X), alpha = rep(dir_alpha, nrow(X)))), simplify = "array")
+
   
   #CLR each iteration
+  if(verbose){print("Applying CLR...")}  
   X.arr = apply(X = X.arr, MARGIN = 3, FUN = deleuze:::clr, simplify = "list")
+
   
   #Sum your list of matrices
+  if(verbose){print("Collecting results...")} 
   X.arr = Reduce("+", X.arr)/n
   
   #Calculate the euclidean distance over the summed CLR-transformed matrix
+  if(verbose){print("Computing distance...")}  
   out_mat = dist(t(X.arr), method = "euclidean", diag = T, upper = T)
-  
   return(out_mat)
   
 }
@@ -127,15 +133,53 @@ res_b1d_prob <- getTableMeans(res_b1d, CLR_transformed = F)
 res_b1e_prob <- getTableMeans(res_b1e, CLR_transformed = F)
 
 data = as.data.frame(cbind(res_b1_prob, res_b1a_prob, res_b1b_prob, res_b1c_prob, res_b1d_prob, res_b1e_prob))
+
+data.list = list(d10 = as.data.frame(cbind(res_b1_prob, res_b1a_prob)),
+                 d20 = as.data.frame(cbind(res_b1_prob, res_b1b_prob)),
+                 d30 = as.data.frame(cbind(res_b1_prob, res_b1c_prob)),
+                 d40 = as.data.frame(cbind(res_b1_prob, res_b1d_prob)),
+                 d50 = as.data.frame(cbind(res_b1_prob, res_b1e_prob)))
 ```
 
 ``` r
-est.dist <- boot_dist(X = data, n = 1000, dir_alpha = 4)
+#This is very heavy & we only want to compare against res_b1_prob, so let's do it in chunks 
+dist_l   <- lapply(data.list, FUN = function(x) {boot_dist(X = x, n = 1000, dir_alpha = 4)})
+```
+
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+
+``` r
+#Wrangle to matrices
+dist_l   <- lapply(dist_l, FUN = as.matrix)
+
+#Collate to large rectangular distance matrix
+est.dist <- do.call(cbind, dist_l)
 ```
 
 ``` r
-dep <- rep(rep(seq(10,200, by = 10), each = 10), 6)
-names(dep) <- as.character(1:ncol(data))      
+dep <- rep(rep(seq(10,200, by = 10), each = 10), 10)
+names(dep)         <- as.character(1:ncol(est.dist))
+colnames(est.dist) <- as.character(1:ncol(est.dist))
+
 
 long_dist1 = data.frame(as.matrix(est.dist)) %>% 
   rownames_to_column("ID") %>% 
@@ -697,14 +741,10 @@ cord <- data.frame(as.matrix(est.dist)) %>%
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
 
-    ## Warning in sqrt(((mean - 10) * mean_s)): NaNs produced
-
 ``` r
 (cora + corg) /
   (corc  + cord)+ plot_layout(guides = 'collect')
 ```
-
-    ## Warning: Removed 335 rows containing missing values (geom_point).
 
 ![](bootstrapping_distance_files/figure-gfm/pursue_offset-1.png)<!-- -->
 
@@ -763,7 +803,13 @@ data.frame(as.matrix(est.dist)) %>%
 
     ## `summarise()` has grouped output by 'ID'. You can override using the `.groups`
     ## argument.
-    ## `geom_smooth()` using formula 'y ~ x'
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: The following aesthetics were dropped during statistical transformation: colour
+    ## ℹ This can happen when ggplot fails to infer the correct grouping structure in
+    ##   the data.
+    ## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+    ##   variable into a factor?
 
 ![](bootstrapping_distance_files/figure-gfm/We%20must%20go%20deeper-1.png)<!-- -->
 
