@@ -150,22 +150,15 @@ data.list = list(d10 = as.data.frame(cbind(res_b1_prob, res_b1a_prob)),
 ```{r calculate distance matrix, fig.height=5, fig.width=5, cache=TRUE}
 #This is very heavy & we only want to compare against res_b1_prob, so let's do it in chunks 
 dist_l   <- lapply(data.list, FUN = function(x) {boot_dist(X = x, n = 1000, dir_alpha = 4)})
-
-#Wrangle to matrices
-dist_l   <- lapply(dist_l, FUN = as.matrix)
-
-#Collate to large rectangular distance matrix
-est.dist <- do.call(cbind, dist_l)
 ```
 
 
 ```{r prepare plots, fig.width = 7, fig.height = 5, cache=TRUE}
-dep <- rep(rep(seq(10,200, by = 10), each = 10), 10)
-names(dep)         <- as.character(1:ncol(est.dist))
-colnames(est.dist) <- as.character(1:ncol(est.dist))
+dep <- rep(rep(seq(10,200, by = 10), each = 10), 2)
+names(dep)         <- as.character(1:400)
 
 
-long_dist1 = data.frame(as.matrix(est.dist)) %>% 
+long_dist1 = data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -195,13 +188,13 @@ plot_dist1 <- long_dist1 %>%
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,7), "Delta from true mean") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,10), "Delta from true mean") +
   theme_bw() +
   ggtitle("Within sample offset 1", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
 
-p_geom_mean <- data.frame(as.matrix(est.dist)) %>% 
+p_geom_mean <- data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -214,8 +207,8 @@ p_geom_mean <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -240,7 +233,7 @@ p_geom_mean <- data.frame(as.matrix(est.dist)) %>%
   ylab("Sampling depth of second sample x 1K")
 
 
-p_arith_mean <- data.frame(as.matrix(est.dist)) %>% 
+p_arith_mean <- data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -253,7 +246,7 @@ p_arith_mean <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
+  filter(as.numeric(ID)   <= 200 & as.numeric(ID)   < 401) %>% 
   filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
   
   filter(name != ID) %>% 
@@ -281,7 +274,7 @@ p_arith_mean <- data.frame(as.matrix(est.dist)) %>%
 
 
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -294,8 +287,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -317,7 +310,7 @@ data.frame(as.matrix(est.dist)) %>%
 
 
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[2]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -330,8 +323,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401 & as.numeric(ID)   < 601) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) > 401 & as.numeric(name) < 601) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -351,7 +344,7 @@ data.frame(as.matrix(est.dist)) %>%
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[3]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -364,8 +357,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 601 & as.numeric(ID)   < 801) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) > 601 & as.numeric(name) < 801) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -386,7 +379,7 @@ data.frame(as.matrix(est.dist)) %>%
   ylab("Sampling depth of second sample x 1K")
 
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[4]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -399,8 +392,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 801 & as.numeric(ID)   < 1001) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) > 801 & as.numeric(name) < 1001) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -420,7 +413,7 @@ data.frame(as.matrix(est.dist)) %>%
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[5]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -433,8 +426,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 1001 & as.numeric(ID)   < 1201) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) > 1001 & as.numeric(name) < 1201) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -456,7 +449,7 @@ data.frame(as.matrix(est.dist)) %>%
 
 
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -469,8 +462,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -513,7 +506,7 @@ p_geom_mean + p_arith_mean + plot_layout(guides = 'collect')
 
 ```{r pursue_offset, fig.width = 14, fig.height = 14, cache=TRUE}
 
-cora <- data.frame(as.matrix(est.dist)) %>% 
+cora <- data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -526,8 +519,8 @@ cora <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -550,7 +543,7 @@ cora <- data.frame(as.matrix(est.dist)) %>%
   xlab("Within Group Error") +
   ylab("Between Group Error")
 
-corg <- data.frame(as.matrix(est.dist)) %>% 
+corg <- data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -563,8 +556,8 @@ corg <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -589,7 +582,7 @@ corg <- data.frame(as.matrix(est.dist)) %>%
 
 
 
-corc <- data.frame(as.matrix(est.dist)) %>% 
+corc <- data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -602,8 +595,8 @@ corc <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -627,7 +620,7 @@ corc <- data.frame(as.matrix(est.dist)) %>%
   xlab("Within Group Error") +
   ylab("Between Group Error")
 
-cord <- data.frame(as.matrix(est.dist)) %>% 
+cord <- data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -640,8 +633,8 @@ cord <- data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -672,7 +665,7 @@ cord <- data.frame(as.matrix(est.dist)) %>%
 ```
 ```{r We must go deeper, fig.width = 14, fig.height = 14, cache=TRUE}
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -685,8 +678,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
@@ -729,7 +722,7 @@ data.frame(as.matrix(est.dist)) %>%
 
 
 
-data.frame(as.matrix(est.dist)) %>% 
+data.frame(as.matrix(dist_l[[1]])) %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
   
@@ -742,8 +735,8 @@ data.frame(as.matrix(est.dist)) %>%
   mutate(name = str_remove(name, "X")) %>% 
   mutate(name = str_remove(name, "V")) %>% 
   
-  filter(as.numeric(ID)   <= 201 & as.numeric(ID)   < 401) %>% 
-  filter(as.numeric(name) >  201 & as.numeric(name) < 401) %>% 
+  filter(as.numeric(ID)   <= 200) %>% 
+  filter(as.numeric(name) >  200) %>% 
   filter(name != ID) %>% 
   
   mutate(ID   = dep[ID]) %>% 
