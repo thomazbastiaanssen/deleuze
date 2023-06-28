@@ -296,15 +296,16 @@ data.frame(as.matrix(dist_l[[1]])) %>%
   group_by(ID,name) %>% 
   summarise(mean = mean(value),
             var  = var(value)) %>% 
+  mutate(mean = mean - 10) %>% 
   ungroup() %>% 
   ggplot() +
   aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-5,5), "Estimated distance") +
   theme_bw() +
-  ggtitle("Estimated distance, should be 10", subtitle = "10% Rare features") +
+  ggtitle("Error from true distance: 10", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
 
@@ -332,15 +333,16 @@ data.frame(as.matrix(dist_l[[2]])) %>%
   group_by(ID,name) %>% 
   summarise(mean = mean(value),
             var  = var(value)) %>% 
+  mutate(mean = mean - 20) %>% 
   ungroup() %>% 
   ggplot() +
   aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-5,5), "Estimated distance") +
   theme_bw() +
-  ggtitle("Estimated distance, should be 20", subtitle = "10% Rare features") +
+  ggtitle("Error from true distance: 20", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
 
@@ -366,15 +368,16 @@ data.frame(as.matrix(dist_l[[3]])) %>%
   group_by(ID,name) %>% 
   summarise(mean = mean(value),
             var  = var(value)) %>% 
+  mutate(mean = mean - 30) %>% 
   ungroup() %>% 
   ggplot() +
   aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-5,5), "Estimated distance") +
   theme_bw() +
-  ggtitle("Estimated distance, should be 30", subtitle = "10% Rare features") +
+  ggtitle("Error from true distance: 30", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
 
@@ -401,15 +404,16 @@ data.frame(as.matrix(dist_l[[4]])) %>%
   group_by(ID,name) %>% 
   summarise(mean = mean(value),
             var  = var(value)) %>% 
+  mutate(mean = mean - 40) %>% 
   ungroup() %>% 
   ggplot() +
   aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-5,5), "Estimated distance") +
   theme_bw() +
-  ggtitle("Estimated distance, should be 40", subtitle = "10% Rare features") +
+  ggtitle("Error from true distance: 40", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
 
@@ -435,58 +439,18 @@ data.frame(as.matrix(dist_l[[5]])) %>%
   group_by(ID,name) %>% 
   summarise(mean = mean(value),
             var  = var(value)) %>% 
+  mutate(mean = mean - 50) %>% 
   ungroup() %>% 
   ggplot() +
   aes(x = ID, y = name, fill = mean, label = round(mean, 1)) +
   
   geom_tile() +
   geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(0,30), "Estimated distance") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-5,5), "Estimated distance") +
   theme_bw() +
-  ggtitle("Estimated distance, should be 50", subtitle = "10% Rare features") +
+  ggtitle("Error from true distance: 50", subtitle = "10% Rare features") +
   xlab("Sampling depth of first sample x 1K") +
   ylab("Sampling depth of second sample x 1K")
-
-
-
-data.frame(as.matrix(dist_l[[1]])) %>% 
-  rownames_to_column("ID") %>% 
-  pivot_longer(!ID) %>% 
-  
-  filter(!str_detect(ID,"\\.")) %>% 
-  mutate(ID = str_remove(ID, "X")) %>% 
-  mutate(ID = str_remove(ID, "V")) %>% 
-  
-  
-  mutate(name = str_remove(name, "\\.")) %>% 
-  mutate(name = str_remove(name, "X")) %>% 
-  mutate(name = str_remove(name, "V")) %>% 
-  
-  filter(as.numeric(ID)   <= 200) %>% 
-  filter(as.numeric(name) >  200) %>% 
-  filter(name != ID) %>% 
-  
-  mutate(ID   = dep[ID]) %>% 
-  mutate(name = dep[name]) %>% 
-  group_by(ID,name) %>% 
-  summarise(mean = mean(value),
-            var  = var(value)) %>% 
-  ungroup() %>% 
-  mutate(mean_s = long_dist1$mean) %>% 
-  #mutate(mean_offset = sqrt((mean *  mean_s)) ) %>% 
-  mutate(mean_from_10 = mean - 10) %>% 
-  
-  ggplot() +
-  aes(x = ID, y = name, fill = mean_from_10, label = round(mean_from_10, 1)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 2.5) +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limits = c(-3,3), "Error from ground truth") +
-  theme_bw() +
-  ggtitle("Error from true distance", subtitle = "10% Rare features") +
-  xlab("Sampling depth of first sample x 1K") +
-  ylab("Sampling depth of second sample x 1K")
-
 
 ```
 
