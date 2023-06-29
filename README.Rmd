@@ -13,6 +13,9 @@ For code on two-sample consistency click [Here](https://github.com/thomazbastiaa
 
 For code on bayesian bootstrapped two-sample consistency click [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/bootstrapping_distance.md)
 
+For code on mapping two-sample distance click
+[Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/mapping_distance_estimate.md)
+
 
 (put on their own page as it's slow to knit)
 

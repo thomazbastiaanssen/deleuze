@@ -1,0 +1,379 @@
+---
+output:
+  md_document:
+    variant: gfm
+---
+
+Maximally detectable Aitchison distance between samples from count data may be bounded by  
+1) number of features - because big distances require some features to be proportionally very low, making them meaninglessly close to zero for sampling purposes  
+
+2) sequencing depth - more likely to have very low values be zero and thus indistinguishable from other very low values  
+
+This is likely not unique to Aitchison distance but rather due to the nature of sampling.  
+
+q: can we determine maximum distance for a given depth and number of features?
+
+
+```{r setup, message = FALSE}
+set.seed(12345)
+library(tidyverse)
+library(deleuze)
+library(patchwork)
+library(Tjazi)
+library(vegan)
+library(LaplacesDemon)
+
+#Estimate distance
+boot_dist <- function(X, n, dir_alpha, cl = NULL, verbose = T){
+  
+  X = as.matrix(X)
+  stopifnot("bayes_boot_diff takes a matrix without zeroes" = !any(X==0))
+  
+  #Could be sped up with Rcpp:
+  if(verbose){print("Bootstrapping...")}
+  X.arr = replicate(n = n, X  * t(rdirichlet(ncol(X), alpha = rep(dir_alpha, nrow(X)))), simplify = "array")
+  
+  
+  #CLR each iteration
+  if(verbose){print("Applying CLR...")}  
+  X.arr = apply(X = X.arr, MARGIN = 3, FUN = deleuze:::clr, simplify = "list")
+  
+  
+  #Sum your list of matrices
+  if(verbose){print("Collecting results...")} 
+  X.arr = Reduce("+", X.arr)/n
+  
+  #Calculate the euclidean distance over the summed CLR-transformed matrix
+  if(verbose){print("Computing distance...")}  
+  out_mat = dist(t(X.arr), method = "euclidean", diag = T, upper = T)
+  return(out_mat)
+  
+}
+
+#Perturb a clr-transformed sample by a given distance
+perturb_by <- function(x, by, prop = 1){
+  
+  #Which features to alter
+  target = sample(1:length(x), max(2, round(length(x)*prop), digits = 0))
+  
+  #Generate container fro perturnbation
+  res_perturb = vector(mode = "numeric", length = length(target))
+  
+  #Decide which features are going to be positive and negative
+  division <- c(T, F, sample(c(T, F), size = length(target)-2, replace = T))
+  
+  #Distribute half of the squared distance to the positive division
+  res_perturb[ division] =  sqrt(((by^2)/2)*(rdirichlet(n = 1, alpha = rep(1, sum(division)))))
+  
+  #Distribute half of the squared distance to the negative division
+  res_perturb[!division] = -sqrt(((by^2)/2)*(rdirichlet(n = 1, alpha = rep(1, sum(!division)))))
+  
+  #Perturb the input
+  x[target] = x[target] + res_perturb
+  
+  return(x)
+}
+
+```
+
+With 10000 depth:
+
+```{r assess_10000, fig.width = 5, fig.height = 5, cache=TRUE}
+
+
+b1  <-      rep(0.001, 1000)
+
+
+dist_control = sapply(X = seq(0.25,100, by = 1/4), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+         }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  deleuze:::clr() %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on source distances")
+       
+
+
+dist_boot_control = sapply(X = seq(0.25,100, by = 1/4), 
+                           FUN = function(x){
+                             {log(b1) - mean(log(b1))} %>% 
+                               perturb_by(., by = x) %>% 
+                               {exp(.) / sum(exp(.))}
+                           }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  # deleuze:::clr() %>% 
+  # t() %>%   dist(., method = "euclidean") %>% 
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw() +
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on on source distances")
+
+
+
+dist_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+                       FUN = function(x){
+                         {log(b1) - mean(log(b1))} %>% 
+                           perturb_by(., by = x) %>% 
+                           {exp(.) / sum(exp(.))}
+                       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 10000, prob = x)}
+  ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on sampled distances")
+
+
+
+dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 10000, prob = x)}
+        ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = F) %>% 
+  
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on sampled distances")
+
+
+
+
+(dist_control + dist_boot_control) / 
+  (dist_sampled + dist_boot_sampled) 
+
+```
+
+
+
+Now with 100000 depth:
+
+```{r assess_100000, fig.width = 5, fig.height = 5, cache=TRUE}
+
+
+b1  <-      rep(0.001, 1000)
+
+
+dist_control = sapply(X = seq(0.25,100, by = 1/4), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+         }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  deleuze:::clr() %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on source distances")
+       
+
+
+dist_boot_control = sapply(X = seq(0.25,100, by = 1/4), 
+                           FUN = function(x){
+                             {log(b1) - mean(log(b1))} %>% 
+                               perturb_by(., by = x) %>% 
+                               {exp(.) / sum(exp(.))}
+                           }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  # deleuze:::clr() %>% 
+  # t() %>%   dist(., method = "euclidean") %>% 
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw() +
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on on source distances")
+
+
+
+dist_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+                       FUN = function(x){
+                         {log(b1) - mean(log(b1))} %>% 
+                           perturb_by(., by = x) %>% 
+                           {exp(.) / sum(exp(.))}
+                       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 100000, prob = x)}
+  ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on sampled distances")
+
+
+
+dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 100000, prob = x)}
+        ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = F) %>% 
+  
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on sampled distances")
+
+
+
+
+(dist_control + dist_boot_control) / 
+  (dist_sampled + dist_boot_sampled) 
+
+```
