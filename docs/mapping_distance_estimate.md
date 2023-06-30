@@ -74,13 +74,13 @@ perturb_by <- function(x, by, prop = 1){
 }
 ```
 
-With 10000 depth:
+With 1000 depth:
 
 ``` r
 b1  <-      rep(0.001, 1000)
 
 
-dist_control = sapply(X = seq(0.25,100, by = 1/4), 
+dist_control = sapply(X = seq(1,100, by = 1), 
        FUN = function(x){
          {log(b1) - mean(log(b1))} %>% 
            perturb_by(., by = x) %>% 
@@ -99,7 +99,7 @@ dist_control = sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1") %>% 
   
   ggplot() +
@@ -112,7 +112,7 @@ dist_control = sapply(X = seq(0.25,100, by = 1/4),
        
 
 
-dist_boot_control = sapply(X = seq(0.25,100, by = 1/4), 
+dist_boot_control = sapply(X = seq(1,100, by = 1), 
                            FUN = function(x){
                              {log(b1) - mean(log(b1))} %>% 
                                perturb_by(., by = x) %>% 
@@ -131,7 +131,7 @@ dist_boot_control = sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1") %>% 
   
   ggplot() +
@@ -149,7 +149,7 @@ dist_boot_control = sapply(X = seq(0.25,100, by = 1/4),
     ## [1] "Computing distance..."
 
 ``` r
-dist_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+dist_sampled <- sapply(X = seq(1,100, by = 1), 
                        FUN = function(x){
                          {log(b1) - mean(log(b1))} %>% 
                            perturb_by(., by = x) %>% 
@@ -160,7 +160,7 @@ dist_sampled <- sapply(X = seq(0.25,100, by = 1/4),
   
   apply(X = ., 
         MARGIN = 2, 
-        FUN = function(x){rmultinom(n = 1, size = 10000, prob = x)}
+        FUN = function(x){rmultinom(n = 1, size = 1000, prob = x)}
   ) %>% 
   
   deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
@@ -172,12 +172,12 @@ dist_sampled <- sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1") %>% 
   mutate(error = measured_distance - source_distance)
   
 
-dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+dist_boot_sampled <- sapply(X = seq(1,100, by = 1), 
        FUN = function(x){
          {log(b1) - mean(log(b1))} %>% 
            perturb_by(., by = x) %>% 
@@ -188,7 +188,7 @@ dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4),
   
   apply(X = ., 
         MARGIN = 2, 
-        FUN = function(x){rmultinom(n = 1, size = 10000, prob = x)}
+        FUN = function(x){rmultinom(n = 1, size = 1000, prob = x)}
         ) %>% 
   
   deleuze:::getTableMeans(count_table = ., CLR_transformed = F) %>% 
@@ -200,7 +200,7 @@ dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1")%>% 
   mutate(error = measured_distance - source_distance)
 ```
@@ -254,16 +254,210 @@ plot_error_boot_sampled = dist_boot_sampled %>%
 
 
 
-(dist_control + dist_boot_control) / 
+((dist_control + dist_boot_control) / 
   (plot_dist_sampled + plot_dist_boot_sampled) /
-  (plot_error_sampled + plot_error_boot_sampled)
+  (plot_error_sampled + plot_error_boot_sampled)) + plot_annotation(title = "Sampling depth = 1K")
 ```
 
     ## Warning: Removed 1 rows containing missing values (`geom_point()`).
 
-    ## Warning: Removed 190 rows containing missing values (`geom_point()`).
+    ## Warning: Removed 79 rows containing missing values (`geom_point()`).
 
-    ## Warning: Removed 214 rows containing missing values (`geom_point()`).
+    ## Warning: Removed 78 rows containing missing values (`geom_point()`).
+
+![](mapping_distance_estimate_files/figure-gfm/plot_assess_1000-1.png)<!-- -->
+
+With 10000 depth:
+
+``` r
+b1  <-      rep(0.001, 1000)
+
+
+dist_control = sapply(X = seq(1,100, by = 1), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+         }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  deleuze:::clr() %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on source distances")
+       
+
+
+dist_boot_control = sapply(X = seq(1,100, by = 1), 
+                           FUN = function(x){
+                             {log(b1) - mean(log(b1))} %>% 
+                               perturb_by(., by = x) %>% 
+                               {exp(.) / sum(exp(.))}
+                           }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  # deleuze:::clr() %>% 
+  # t() %>%   dist(., method = "euclidean") %>% 
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw() +
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on on source distances")
+```
+
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+
+``` r
+dist_sampled <- sapply(X = seq(1,100, by = 1), 
+                       FUN = function(x){
+                         {log(b1) - mean(log(b1))} %>% 
+                           perturb_by(., by = x) %>% 
+                           {exp(.) / sum(exp(.))}
+                       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 10000, prob = x)}
+  ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1") %>% 
+  mutate(error = measured_distance - source_distance)
+  
+
+dist_boot_sampled <- sapply(X = seq(1,100, by = 1), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 10000, prob = x)}
+        ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = F) %>% 
+  
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1")%>% 
+  mutate(error = measured_distance - source_distance)
+```
+
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+
+``` r
+plot_dist_sampled = dist_sampled %>% 
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on sampled distances")
+
+
+plot_error_sampled = dist_sampled %>% 
+ ggplot() +
+  aes(x = source_distance, y = error) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(-10, 10)) +
+  ggtitle("Error of dist on sampled distances")
+
+
+
+
+  
+plot_dist_boot_sampled = dist_boot_sampled %>% 
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on sampled distances")
+
+plot_error_boot_sampled = dist_boot_sampled %>% 
+  ggplot() +
+  aes(x = source_distance, y = error) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(-10, 10)) +
+  ggtitle("Error of boot_dist on sampled distances")
+
+
+
+
+((dist_control + dist_boot_control) / 
+  (plot_dist_sampled + plot_dist_boot_sampled) /
+  (plot_error_sampled + plot_error_boot_sampled)) + plot_annotation(title = "Sampling depth = 10K")
+```
+
+    ## Warning: Removed 1 rows containing missing values (`geom_point()`).
+
+    ## Warning: Removed 46 rows containing missing values (`geom_point()`).
+
+    ## Warning: Removed 53 rows containing missing values (`geom_point()`).
 
 ![](mapping_distance_estimate_files/figure-gfm/plot_assess_10000-1.png)<!-- -->
 
@@ -273,7 +467,7 @@ Now with 100000 depth:
 b1  <-      rep(0.001, 1000)
 
 
-dist_control = sapply(X = seq(0.25,100, by = 1/4), 
+dist_control = sapply(X = seq(1,100, by = 1), 
        FUN = function(x){
          {log(b1) - mean(log(b1))} %>% 
            perturb_by(., by = x) %>% 
@@ -292,7 +486,7 @@ dist_control = sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1") %>% 
   
   ggplot() +
@@ -305,7 +499,7 @@ dist_control = sapply(X = seq(0.25,100, by = 1/4),
        
 
 
-dist_boot_control = sapply(X = seq(0.25,100, by = 1/4), 
+dist_boot_control = sapply(X = seq(1,100, by = 1), 
                            FUN = function(x){
                              {log(b1) - mean(log(b1))} %>% 
                                perturb_by(., by = x) %>% 
@@ -324,7 +518,7 @@ dist_boot_control = sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1") %>% 
   
   ggplot() +
@@ -342,7 +536,7 @@ dist_boot_control = sapply(X = seq(0.25,100, by = 1/4),
     ## [1] "Computing distance..."
 
 ``` r
-dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+dist_boot_sampled <- sapply(X = seq(1,100, by = 1), 
        FUN = function(x){
          {log(b1) - mean(log(b1))} %>% 
            perturb_by(., by = x) %>% 
@@ -365,7 +559,7 @@ dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1")%>% 
   mutate(error = measured_distance - source_distance)
 ```
@@ -376,7 +570,7 @@ dist_boot_sampled <- sapply(X = seq(0.25,100, by = 1/4),
     ## [1] "Computing distance..."
 
 ``` r
-dist_sampled <- sapply(X = seq(0.25,100, by = 1/4), 
+dist_sampled <- sapply(X = seq(1,100, by = 1), 
                        FUN = function(x){
                          {log(b1) - mean(log(b1))} %>% 
                            perturb_by(., by = x) %>% 
@@ -399,7 +593,7 @@ dist_sampled <- sapply(X = seq(0.25,100, by = 1/4),
   rownames_to_column("ID") %>% 
   pivot_longer(!ID, values_to = "measured_distance") %>% 
   filter(ID == "b1") %>% 
-  mutate(source_distance = seq(0,100, by = 1/4)) %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
   filter(name != "b1") %>% 
   mutate(error = measured_distance - source_distance)
 ```
@@ -447,13 +641,202 @@ plot_error_boot_sampled = dist_boot_sampled %>%
 
 
 
-(dist_control + dist_boot_control) / 
+((dist_control + dist_boot_control) / 
   (plot_dist_sampled + plot_dist_boot_sampled) /
-  (plot_error_sampled + plot_error_boot_sampled)
+  (plot_error_sampled + plot_error_boot_sampled)) + plot_annotation(title = "Sampling depth = 100K")
 ```
 
-    ## Warning: Removed 71 rows containing missing values (`geom_point()`).
+    ## Warning: Removed 19 rows containing missing values (`geom_point()`).
 
-    ## Warning: Removed 104 rows containing missing values (`geom_point()`).
+    ## Warning: Removed 25 rows containing missing values (`geom_point()`).
 
 ![](mapping_distance_estimate_files/figure-gfm/plot_assess_100000-1.png)<!-- -->
+
+Now with 1M depth:
+
+``` r
+b1  <-      rep(0.001, 1000)
+
+
+dist_control = sapply(X = seq(1,100, by = 1), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+         }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  deleuze:::clr() %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on source distances")
+       
+
+
+dist_boot_control = sapply(X = seq(1,100, by = 1), 
+                           FUN = function(x){
+                             {log(b1) - mean(log(b1))} %>% 
+                               perturb_by(., by = x) %>% 
+                               {exp(.) / sum(exp(.))}
+                           }) %>% 
+  cbind(b1, .) %>% 
+  data.frame() %>% 
+  
+  #deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  # deleuze:::clr() %>% 
+  # t() %>%   dist(., method = "euclidean") %>% 
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1") %>% 
+  
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw() +
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on on source distances")
+```
+
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+
+``` r
+dist_boot_sampled <- sapply(X = seq(1,100, by = 1), 
+       FUN = function(x){
+         {log(b1) - mean(log(b1))} %>% 
+           perturb_by(., by = x) %>% 
+           {exp(.) / sum(exp(.))}
+       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 1000000, prob = x)}
+        ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = F) %>% 
+  
+  boot_dist(X = ., n = 1000, dir_alpha = 4) %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1")%>% 
+  mutate(error = measured_distance - source_distance)
+```
+
+    ## [1] "Bootstrapping..."
+    ## [1] "Applying CLR..."
+    ## [1] "Collecting results..."
+    ## [1] "Computing distance..."
+
+``` r
+dist_sampled <- sapply(X = seq(1,100, by = 1), 
+                       FUN = function(x){
+                         {log(b1) - mean(log(b1))} %>% 
+                           perturb_by(., by = x) %>% 
+                           {exp(.) / sum(exp(.))}
+                       }) %>% 
+  cbind(b1, .) %>% 
+  data.frame()  %>% 
+  
+  apply(X = ., 
+        MARGIN = 2, 
+        FUN = function(x){rmultinom(n = 1, size = 1000000, prob = x)}
+  ) %>% 
+  
+  deleuze:::getTableMeans(count_table = ., CLR_transformed = T) %>% 
+  t() %>% 
+  dist(., method = "euclidean") %>% 
+  as.matrix() %>% 
+  data.frame() %>% 
+  
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID, values_to = "measured_distance") %>% 
+  filter(ID == "b1") %>% 
+  mutate(source_distance = seq(0,100, by = 1)) %>% 
+  filter(name != "b1") %>% 
+  mutate(error = measured_distance - source_distance)
+```
+
+``` r
+plot_dist_sampled = dist_sampled %>% 
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("dist on sampled distances")
+
+
+plot_error_sampled = dist_sampled %>% 
+ ggplot() +
+  aes(x = source_distance, y = error) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(-10, 10)) +
+  ggtitle("Error of dist on sampled distances")
+
+
+
+  
+plot_dist_boot_sampled = dist_boot_sampled %>% 
+  ggplot() +
+  aes(x = source_distance, y = measured_distance) +
+  geom_abline(slope = 1, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(0, 100)) +
+  ggtitle("boot_dist on sampled distances")
+
+plot_error_boot_sampled = dist_boot_sampled %>% 
+  ggplot() +
+  aes(x = source_distance, y = error) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point() +
+  theme_bw()+
+  scale_y_continuous(limits = c(-10, 10)) +
+  ggtitle("Error of boot_dist on sampled distances")
+
+
+
+((dist_control + dist_boot_control) / 
+  (plot_dist_sampled + plot_dist_boot_sampled) /
+  (plot_error_sampled + plot_error_boot_sampled)) + plot_annotation(title = "Sampling depth = 1M")
+```
+
+    ## Warning: Removed 3 rows containing missing values (`geom_point()`).
+
+![](mapping_distance_estimate_files/figure-gfm/plot_assess_1000000-1.png)<!-- -->
