@@ -169,3 +169,28 @@ sampleLongitudinal <- function(samples, count_table, cols_as_features = F, adjus
   matrix(rnorm(samples * nrows, rep(mus, samples), rep(sds, samples)), nrow=nrows)
   
 }
+
+
+#' samples from the probability density function of the difference of two CLR-transformed count samples.  
+#'
+#' @param samples An integer. How many samples should be taken
+#' @param x A vector of count data.
+#' @param y A second vector of count data.
+#' @export
+#' 
+sampleCLRdiff <- function(samples, x, y){
+  sampleCLR(samples = samples, count_sample = x) - sampleCLR(samples = samples, count_sample = y)  
+}
+
+#' samples from the probability density function of the aitchison distance of two count samples.  
+#'
+#' @param samples An integer. How many samples should be taken
+#' @param x A vector of count data.
+#' @param y A second vector of count data.
+#' @export
+#' 
+sampleAitchison <- function(samples, x, y){
+  sqrt(rowSums(
+    (sampleCLRdiff(samples, x, y)^2)
+  ))
+}
