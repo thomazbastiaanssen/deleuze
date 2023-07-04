@@ -51,12 +51,13 @@ perturb_by_CLR <- function(x, by, prop = 1){
 #' @param x A vector of relative abundance data.
 #' @param by A numeric. How much aitchison distance to perturb the vector x by. 
 #' @param prop A proportion (0-1). What proportion of the features should be the perturbation be divided over.  
+#' @param alpha An numeric. The alpha parameter for rdirichlet. 
 #' 
 #' @return A perturbed vector
 #'
 #' @export
 #' 
-perturb_by_relab <- function(x, by, prop = 1){
+perturb_by_relab <- function(x, by, prop = 1, alpha = 1){
   #stopifnot("All features in x must be positive." = all(x > 0))
   stopifnot("prop must be between 0-1." = (prop <=1 & prop >=0))
   
@@ -73,13 +74,13 @@ perturb_by_relab <- function(x, by, prop = 1){
   #Distribute half of the squared distance to the positive division
   res_perturb[ division] =  exp(sqrt(
     ((by^2)/2) * 
-      rdirichlet(n = 1, alpha = rep(1, sum(division)))))
+      rdirichlet(n = 1, alpha = rep(alpha, sum(division)))))
   
     
   #Distribute half of the squared distance to the negative division
   res_perturb[!division] = exp(-sqrt(
     ((by^2)/2) * 
-      rdirichlet(n = 1, alpha = rep(1, sum(!division)))
+      rdirichlet(n = 1, alpha = rep(alpha, sum(!division)))
     ))
   
   #Perturb the input

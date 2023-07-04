@@ -4,7 +4,7 @@
 \alias{perturb_by_relab}
 \title{Perturb a relative abundance vector}
 \usage{
-perturb_by_relab(x, by, prop = 1)
+perturb_by_relab(x, by, prop = 1, alpha = 1)
 }
 \arguments{
 \item{x}{A vector of relative abundance data.}
@@ -12,6 +12,8 @@ perturb_by_relab(x, by, prop = 1)
 \item{by}{A numeric. How much aitchison distance to perturb the vector x by.}
 
 \item{prop}{A proportion (0-1). What proportion of the features should be the perturbation be divided over.}
+
+\item{alpha}{An numeric. The alpha parameter for rdirichlet.}
 }
 \value{
 A perturbed vector

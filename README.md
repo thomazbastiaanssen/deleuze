@@ -16,6 +16,9 @@ For code on bayesian bootstrapped two-sample consistency click
 For code on mapping two-sample distance click
 [Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/mapping_distance_estimate.md)
 
+For code on simulating distance estimations, click
+[Here](https://github.com/thomazbastiaanssen/deleuze/blob/main/docs/simulating_distance_estimations.md)
+
 (put on their own page as it’s slow to knit)
 
 ``` r
