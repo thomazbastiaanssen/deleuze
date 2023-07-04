@@ -57,17 +57,34 @@ perturb_by_CLR <- function(x, by, prop = 1){
 #' @export
 #' 
 perturb_by_relab <- function(x, by, prop = 1){
+  #stopifnot("All features in x must be positive." = all(x > 0))
+  stopifnot("prop must be between 0-1." = (prop <=1 & prop >=0))
   
-  #CLR transform
-  x = log(x) - mean(log(x))
+  x_nonzero = x != 0
+  #Which features to alter
+  target = sample(1:sum(x_nonzero), max(2, round(sum(x_nonzero)*prop), digits = 0))
   
-  #Perturb
-  x = perturb_by(x = x, by = by, prop = prop)
+  #Generate container for perturbation
+  res_perturb = rep(1, length(target))
   
-  #softmax to un-CLR
-  x = exp(x) / sum(exp(x))
+  #Decide which features are going to be positive and negative
+  division = c(T, F, sample(c(T, F), size = length(target)-2, replace = T))
   
-  #Return result
+  #Distribute half of the squared distance to the positive division
+  res_perturb[ division] =  exp(sqrt(
+    ((by^2)/2) * 
+      rdirichlet(n = 1, alpha = rep(1, sum(division)))))
+  
+    
+  #Distribute half of the squared distance to the negative division
+  res_perturb[!division] = exp(-sqrt(
+    ((by^2)/2) * 
+      rdirichlet(n = 1, alpha = rep(1, sum(!division)))
+    ))
+  
+  #Perturb the input
+  x[x_nonzero][target] = x[x_nonzero][target] * res_perturb
+  
   return(x)
 }
 
