@@ -4,6 +4,7 @@
 #' @param x A vector of CLR-transformed data.
 #' @param by A numeric. How much aitchison distance to perturb the vector x by. 
 #' @param prop A proportion (0-1). What proportion of the features should be the perturbation be divided over.  
+#' @importFrom dirmult rdirichlet
 #'
 perturb_by <- function(x, by, prop = 1){
   #stopifnot("All features in x must be positive." = all(x > 0))

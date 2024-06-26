@@ -1,26 +1,4 @@
-#' #' Comute the geometric mean of a vector.  
-#' #'
-#' #' @description Simply shorthand for exp(mean(log(x))).
-#' #' @param x a numeric vector that does not contain zeroes. 
-#' #' 
-#' #' @export
-#' #'
-#' g_mean <- function(x){exp(mean(log(x)))}
-#' 
-#' rescale <- function(x){
-#'   return(x / apply(x, 1, g_mean))
-#' }
-#' 
-#' #' Undo CLR transformation with softmax
-#' #' @description softmax function to transform vector to relative abundance/proportions.
-#' #' @param x A clr-transformed vector
-#' #' @return A relative abundance/proportions vector.
-#' #'
-#' softmax <- function(x) exp(x) / sum(exp(x))
-#' 
-#' perturb <- function(x, perturbation){
-#'   return(x * perturbation)
-#' }
+
 #' 
 #' library(volatility)
 #' metadata = vola_metadata[vola_metadata$cohort == "Validation",]
