@@ -7,7 +7,7 @@ Depends: R (>= 3.5.0)
 Imports:
     stats,
     dirmult
-License: GPL (>= 3) | BSD_3_clause + file LICENSE
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.1
