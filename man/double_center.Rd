@@ -2,12 +2,25 @@
 % Please edit documentation in R/scaling.R
 \name{double_center}
 \alias{double_center}
+\alias{dclr}
+\alias{dclr_c}
+\alias{dclr_p}
 \title{Double center a table.}
 \usage{
-double_center(x, log.transform = FALSE)
+double_center(x, type = "auto", m = 0.65, log.transform = FALSE)
+
+dclr(x, type = "auto", m = 0.65)
+
+dclr_c(x, m = 0.65)
+
+dclr_p(x)
 }
 \arguments{
 \item{x}{a numeric table.}
+
+\item{type}{One of c("auto", "numeric", "integer"). What type of numbers are represented in the table.}
+
+\item{m}{Defaults to 0.65. The scaling factor to impute zeroes in the non-integer case.}
 
 \item{log.transform}{A boolean. Whether to return log-transformed values.}
 }
