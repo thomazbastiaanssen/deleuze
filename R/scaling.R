@@ -67,6 +67,7 @@ double_center <- function(x, type = "auto", m = 0.65, log.transform = FALSE){
 
 #' Perform a double-centered log-ratio transformation
 #' @rdname double_center
+#' @export
 #'
 dclr <- function(x, type = "auto", m = 0.65){
   double_center(x = x, type = type, m = 0.65, log.transform = TRUE)
@@ -75,14 +76,16 @@ dclr <- function(x, type = "auto", m = 0.65){
 
 #' Perform a double-centered log-ratio transformation
 #' @rdname double_center
-#'
+#' @export
+#' 
 dclr_c <- function(x, m = 0.65){
   double_center(x = x, type = "numeric", m = 0.65, log.transform = TRUE)
 }
 
 #' Perform a double-centered log-ratio transformation
 #' @rdname double_center
-#'
+#' @export
+#' 
 dclr_p <- function(x){
   double_center(x = x, type = "int", log.transform = TRUE)
 }
@@ -94,7 +97,6 @@ dclr_p <- function(x){
 #' @param type One of c("auto", "numeric", "integer"). What type of numbers are represented
 #' @param m Defaults to 0.65. The scaling factor to impute zeroes in the non-integer case.
 #'
-#' @export
 #'
 impute_and_scale <- function(x, type = "auto", m = 0.65){
   stopifnot(type %in% c("auto", "numeric", "integer"))
