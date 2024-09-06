@@ -6,8 +6,10 @@ Description: Microbiome Oriented count data resampling framework made at the APC
 Depends: R (>= 3.5.0)
 Imports:
     stats,
-    dirmult
+    dirmult,
+    Rcpp
+LinkingTo: Rcpp
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

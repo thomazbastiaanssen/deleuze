@@ -23,10 +23,7 @@ g_center_by <- function(x, MARGIN = MARGIN){
 #' @param x A clr-transformed vector
 #' @return A relative abundance/proportions vector.
 #'
-softmax <- function(x) exp(x) / sum(exp(x))
-
-
-
+softmax <- function(x) {exp(x) / sum(exp(x))}
 
 #' Perturb vector 
 #' @noRd
