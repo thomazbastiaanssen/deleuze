@@ -22,7 +22,7 @@ pw_dist <- function(x, upper = FALSE, diag = FALSE){
   ## add attribute maxdist: the maximum value of the distance function
   attr(d, "maxdist") <- max(d)
   attr(d, "method")  <- "euclidean"
-  attr(d, "Labels")  <- colnames(x)
+  attr(d, "Labels")  <- dimnames(x)[[1]]
   attr(d, "call")    <- match.call()
   d
 }
