@@ -10,19 +10,19 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// r_dist_cpp
-NumericMatrix r_dist_cpp(const NumericMatrix x);
-RcppExport SEXP _deleuze_r_dist_cpp(SEXP xSEXP) {
+// pw_dist_cpp
+NumericMatrix pw_dist_cpp(const NumericMatrix x);
+RcppExport SEXP _deleuze_pw_dist_cpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const NumericMatrix >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(r_dist_cpp(x));
+    rcpp_result_gen = Rcpp::wrap(pw_dist_cpp(x));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_deleuze_r_dist_cpp", (DL_FUNC) &_deleuze_r_dist_cpp, 1},
+    {"_deleuze_pw_dist_cpp", (DL_FUNC) &_deleuze_pw_dist_cpp, 1},
     {NULL, NULL, 0}
 };
 
